@@ -9,4 +9,5 @@ router.get("/usuarios/:cedula", getUsuario)
 router.post("/usuarios", createUsuario)
 router.put("/usuarios/:cedula",updateUsuario)
 router.delete("/usuarios/:cedula",deleteUsuarios)
+
 export default router;

@@ -59,7 +59,7 @@ export const updateUsuario = async(req,res) => {
             },
         });
 
-        updateUsuario.cedula = cedula, 
+        updateUsuario.cedula = cedula,
         updateUsuario.usuario = usuario, 
         updateUsuario.contraseña = contraseña, 
         updateUsuario.nombres = nombres, 
