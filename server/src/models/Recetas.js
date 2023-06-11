@@ -10,24 +10,18 @@ export const Recetas = sequelize.define(
             autoIncrement: true,
         },
 
-        firma: {
-            type: DataTypes.STRING(100),
-            allowNull: true, 
-        },
-
-        diagnostico: {
-            type: DataTypes.STRING(200),
+        str_codigo: {
+            type: DataTypes.STRING(20),
             allowNull: false, 
         },
 
-        estado: {
+        txt_diagnostico: {
+            type: DataTypes.TEXT, 
+        },
+
+        bol_estado: {
             type: DataTypes.BOOLEAN,
             allowNull: false, 
-        },
-
-        fecha_exp: {
-            type: DataTypes.DATE,
-            allowNull: true, 
         },
     },
     {

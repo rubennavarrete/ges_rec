@@ -1,24 +1,25 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
-export const Roles = sequelize.define(
-    "roles",
+export const Perfiles = sequelize.define(
+    "perfiles",
     {
-        int_id_rol: {
+        int_id_perfil: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        str_nombre: {
-            type: DataTypes.STRING(50),
-            allowNull: false, 
+        int_id_rol: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
 
-        bln_estado: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false, 
+        int_id_usuario: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
+
     },
     {
         schema: "ges_recetas",

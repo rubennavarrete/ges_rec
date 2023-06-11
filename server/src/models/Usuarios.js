@@ -1,78 +1,77 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
+
 export const Usuarios = sequelize.define(
     "usuarios",
     {
-        id_usuario: {
+        int_id_usuario: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        cedula: {
+        str_cedula: {
             type: DataTypes.STRING(10),
-            allowNull: true, 
+            allowNull: false, 
         },
 
-        usuario: {
+        str_contraseña: {
             type: DataTypes.STRING(50),
-            allowNull: true, 
+            allowNull: false, 
         },
 
-        contraseña: {
-            type: DataTypes.STRING(50),
-            allowNull: true, 
-        },
-
-        nombres: {
+        str_nombres: {
             type: DataTypes.STRING(100),
-            allowNull: true, 
+            allowNull: false, 
         },
 
-        apellidos: {
+        str_apellidos: {
             type: DataTypes.STRING(100),
-            allowNull: true, 
+            allowNull: false, 
         },
 
-        fnac: {
+        dt_fecha_nac: {
             type: DataTypes.DATE,
-            allowNull: false, 
+            allowNull: true,
         },
 
-        genero: {
+        bln_genero: {
             type: DataTypes.BOOLEAN,
             allowNull: false, 
         },
 
-        correo: {
-            type: DataTypes.STRING(100),
-            allowNull: true, 
-        },
-
-        direccion: {
+        str_correo: {
             type: DataTypes.STRING(100),
             allowNull: false, 
         },
 
-        telefono: {
-            type: DataTypes.STRING(100),
-            allowNull: false, 
+        str_direccion: {
+            type: DataTypes.TEXT,
         },
 
-        estado: {
+        str_telefono: {
+            type: DataTypes.STRING(10),
+        },
+
+        str_celular: {
+            type: DataTypes.STRING(10),
+        },
+
+        bln_estado: {
             type: DataTypes.BOOLEAN,
-            allowNull: true, 
+            allowNull: false,
         },
 
-        image: {
-            type: DataTypes.STRING(100),
-            allowNull: false, 
+        txt_imagen: {
+            type: DataTypes.TEXT,
         },
 
     },
     {
+        schema: "ges_recetas",
         timestamps:false,
+        freezeTableName: true,
     }
 );
 

@@ -4,20 +4,20 @@ import { sequelize } from "../database/database.js";
 export const Medicaciones = sequelize.define(
     "medicaciones",
     {
-        id_medicacion: {
+        int_id_medicacion: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        nombre: {
+        str_nombre: {
             type: DataTypes.STRING(50),
-            allowNull: true, 
+            allowNull: false, 
         },
 
-        descrpcion: {
-            type: DataTypes.STRING(100),
-            allowNull: false, 
+        txt_descrpcion: {
+            type: DataTypes.TEXT,
+            allowNull: true, 
         },
     },
     {

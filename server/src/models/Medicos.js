@@ -1,16 +1,17 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
+
 export const Medicos = sequelize.define(
     "medicos",
     {
-        id_medico: {
+        int_id_medico: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        especialidad: {
+        str_especialidad: {
             type: DataTypes.STRING(50),
             allowNull: false,
         },

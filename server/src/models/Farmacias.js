@@ -4,44 +4,50 @@ import { sequelize } from "../database/database.js";
 export const Farmacias = sequelize.define(
     "farmacias",
     {
-        id_farmacia: {
+        int_id_farmacia: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        RUC: {
-            type: DataTypes.STRING(50),
-            allowNull: true,
+        str_RUC: {
+            type: DataTypes.STRING(13),
+            allowNull: false,
         },
 
-        nom_inst: {
-            type: DataTypes.STRING(50),
-            allowNull: true,
+        str_nom_inst: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
         },
         
-        dir_inst: {
+        str_dir_inst: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
+
+        str_correo_inst: {
             type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+
+        str_telefono_inst: {
+            type: DataTypes.STRING(10),
             allowNull: true,
         },
 
-        correo_inst: {
-            type: DataTypes.STRING(100),
-            allowNull: true,
-        },
-
-        telefono_inst: {
+        str_celular_inst: {
             type: DataTypes.STRING(10),
             allowNull: true,
         },
 
         logo: {
-            type: DataTypes.STRING(50),
-            allowNull: false,
+            type: DataTypes.TEXT,
+            allowNull: true,
         },
 
     },
     {
+        schema: "ges_recetas",
         timestamps:false,
     }
 );

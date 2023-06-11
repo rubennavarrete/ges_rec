@@ -6,7 +6,16 @@ async function main(){
     
     try{
         
-        await sequelize.sync({force:false});
+        //await sequelize.sync({force:false});
+        sequelize
+        .authenticate()
+        .then(() => {  
+            console.log('Connection has been established successfully.');
+        })
+        .catch(err => {
+            console.error('Unable to connect to the database:', err);
+        });
+
         app.listen(4000);
         console.log("El servidor estta escuchando el puerto",4000);
 

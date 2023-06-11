@@ -15,7 +15,7 @@ export const getRol = async(req, res) =>{
         const {id_rol} = req.params;
         const rol = await Roles.findOne({
             where: {
-                id_rol,
+                int_id_rol:id_rol,
             },
         });
 
@@ -30,7 +30,8 @@ export const createRol = async(req,res) => {
     const { nombre } = req.body;
     try {
         const newRol = await Roles.create({
-            nombre
+            str_nombre: nombre,
+            bln_estado: true,
         });
 
         res.json(newRol);

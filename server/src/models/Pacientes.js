@@ -4,23 +4,23 @@ import { sequelize } from "../database/database.js";
 export const Pacientes = sequelize.define(
     "pacientes",
     {
-        id_paciente: {
+        int_id_paciente: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        persona_res: {
+        str_persona_res: {
             type: DataTypes.STRING(50),
-            allowNull: false, 
+            allowNull: true, 
         },
-        alergias: {
-            type: DataTypes.STRING(500),
-            allowNull: false, 
+        str_alergias: {
+            type: DataTypes.TEXT,
+            allowNull: true, 
         },
-        cirugias: {
-            type: DataTypes.STRING(500),
-            allowNull: false, 
+        str_cirugias: {
+            type: DataTypes.TEXT,
+            allowNull: true, 
         },
     },
     {

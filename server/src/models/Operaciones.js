@@ -4,15 +4,15 @@ import { sequelize } from "../database/database.js";
 export const Operaciones = sequelize.define(
     "operaciones",
     {
-        id_operacion: {
+        int_id_operacion: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        nombre: {
+        str_nombre: {
             type: DataTypes.STRING(50),
-            allowNull: true, 
+            allowNull: false, 
         },
     },
     {
