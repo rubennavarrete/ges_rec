@@ -4,26 +4,27 @@ import { sequelize } from "../database/database.js";
 export const Pacientes = sequelize.define(
     "pacientes",
     {
-        int_id_paciente: {
+        int_id_usuario: {
             type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
+            primaryKey: true
         },
 
-        str_persona_res: {
+        str_persona_responsable: {
             type: DataTypes.STRING(50),
             allowNull: true, 
         },
-        str_alergias: {
+        txt_alergias: {
             type: DataTypes.TEXT,
             allowNull: true, 
         },
-        str_cirugias: {
+        txt_cirugias: {
             type: DataTypes.TEXT,
             allowNull: true, 
         },
     },
     {
+        schema: "ges_recetas",
         timestamps: false,
+        freezeTableName: true,
     },
 );

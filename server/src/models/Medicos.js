@@ -5,18 +5,19 @@ import { sequelize } from "../database/database.js";
 export const Medicos = sequelize.define(
     "medicos",
     {
-        int_id_medico: {
+        int_id_usuario: {
             type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
+            primaryKey: true
         },
 
         str_especialidad: {
-            type: DataTypes.STRING(50),
-            allowNull: false,
+            type: DataTypes.STRING(100),
+            allowNull: true
         },
     },
     {
-        timestamps: false,
+        schema: "ges_recetas",
+        timestamps:false,
+        freezeTableName: true,
     }
 );

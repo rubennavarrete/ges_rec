@@ -15,34 +15,29 @@ export const Farmacias = sequelize.define(
             allowNull: false,
         },
 
-        str_nom_inst: {
+        str_nombre_institucion: {
             type: DataTypes.STRING(100),
             allowNull: false,
         },
         
-        str_dir_inst: {
+        str_direccion_institucion: {
             type: DataTypes.TEXT,
             allowNull: false,
         },
 
-        str_correo_inst: {
+        str_telefono_institucion: {
+            type: DataTypes.STRING(10),
+            allowNull: false,
+        },
+
+        str_correo_institucion: {
             type: DataTypes.STRING(100),
             allowNull: false,
         },
 
-        str_telefono_inst: {
-            type: DataTypes.STRING(10),
-            allowNull: true,
-        },
-
-        str_celular_inst: {
-            type: DataTypes.STRING(10),
-            allowNull: true,
-        },
-
-        logo: {
-            type: DataTypes.TEXT,
-            allowNull: true,
+        str_nombre_representante: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
         },
 
     },

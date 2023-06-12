@@ -1,6 +1,6 @@
 import { Roles } from "../models/Roles.js";
 
-
+//RECIBIR TODOS LOS ROLES
 export const getRoles = async (req, res) => {
     try{
         const roles = await Roles.findAll();
@@ -10,6 +10,7 @@ export const getRoles = async (req, res) => {
     }
 };
 
+//RECIBIR UN ROL
 export const getRol = async(req, res) =>{
     try {
         const {id_rol} = req.params;
@@ -26,6 +27,7 @@ export const getRol = async(req, res) =>{
     }
 };
 
+//CREAR UN ROL
 export const createRol = async(req,res) => {
     const { nombre } = req.body;
     try {
@@ -41,6 +43,7 @@ export const createRol = async(req,res) => {
     }
 };
 
+//ACTUALIZAR UN ROL
 export const updateRol = async(req,res) => {
     const {id_rol} = req.params;
     const {nombre} = req.body;
@@ -61,6 +64,7 @@ export const updateRol = async(req,res) => {
     }
 };
 
+//ELIMINAR UN ROL
 export const deleteRoles = async (req, res) => {
     const {id_rol} = req.params;
     try{

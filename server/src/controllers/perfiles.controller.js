@@ -25,6 +25,22 @@ export const getPerfil = async(req, res) =>{
     }
 }
 
+//CREAR UN PERFIL
+export const createPerfil = async (id_usuario, transaction, req) => {
+    const { id_rol } = req.body;
+    try {
+        await Perfiles.create(
+        {
+            int_id_rol: id_rol,
+            int_id_usuario: id_usuario,
+        },
+        { transaction }
+    );
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
 export const deletePerfil = async (req, res) => {
     try {
         const {id_perfil} = req.params;
