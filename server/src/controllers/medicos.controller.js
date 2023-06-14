@@ -24,10 +24,7 @@ export const getMedico = async (req, res) => {
     try {
         const {cedula} = req.params;
         const query = `
-        SELECT ges_recetas.usuarios.*, ges_recetas.medicos.*
-        FROM ges_recetas.usuarios
-        INNER JOIN ges_recetas.medicos ON ges_recetas.usuarios.int_id_usuario = ges_recetas.medicos.int_id_usuario
-        WHERE ges_recetas.usuarios.str_cedula = :cedula
+        SELECT * FROM ges_recetas.listarMedico(:cedula);
         `;
 
         const medico = await sequelize.query(query, {
@@ -35,7 +32,7 @@ export const getMedico = async (req, res) => {
         replacements: { cedula } 
     });
 
-    if(medico.length === 0) return res.status(404).json({ message: "No se ha encontrado el paciente"});
+    if(medico.length === 0) return res.status(404).json({ message: "No se ha encontrado el Médico"});
 
         res.json(medico);
     } catch (error) {

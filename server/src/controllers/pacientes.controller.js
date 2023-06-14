@@ -7,7 +7,7 @@ import { Pacientes } from "../models/Pacientes.js";
 export const getPacientes = async (req, res) => {
     try {
         const query = `
-        SELECT * FROM ges_recetas.listarpacientes();
+        SELECT * FROM ges_recetas.listarPacientes();
         `;
 
         const pacientes = await sequelize.query(query, {
@@ -26,20 +26,7 @@ export const getPaciente = async (req, res) => {
     try {
         const {cedula} = req.params;
         const query = `
-        SELECT  ges_recetas.usuarios.str_cedula, 
-                ges_recetas.usuarios.str_nombres, 
-                ges_recetas.usuarios.str_apellidos, 
-                ges_recetas.usuarios.str_correo,
-                ges_recetas.usuarios.str_direccion,
-                ges_recetas.usuarios.str_telefono,
-                ges_recetas.usuarios.str_celular,
-                ges_recetas.usuarios.txt_imagen,
-                ges_recetas.pacientes.str_persona_responsable,
-                ges_recetas.pacientes.txt_alergias,
-                ges_recetas.pacientes.txt_cirugias
-        FROM ges_recetas.usuarios
-        INNER JOIN ges_recetas.pacientes ON ges_recetas.usuarios.int_id_usuario = ges_recetas.pacientes.int_id_usuario
-        WHERE ges_recetas.usuarios.str_cedula = :cedula
+        SELECT * FROM ges_recetas.listarPaciente(:cedula);
         `;
 
         const paciente = await sequelize.query(query, {

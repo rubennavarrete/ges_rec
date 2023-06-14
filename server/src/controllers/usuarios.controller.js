@@ -59,7 +59,7 @@ export const createUsuario = async (req, res) => {
                     dt_fecha_nac: fnac,
                     bln_genero: genero,
                     str_correo: correo,
-                    str_direccion: direccion,
+                    txt_direccion: direccion,
                     str_telefono: telefono,
                     str_celular: celular,
                     txt_imagen: imagen,
@@ -104,7 +104,7 @@ export const updateUsuario = async(req,res) => {
         updateUsuario.dt_fecha_nac = fnac;
         updateUsuario.bln_genero = genero;
         updateUsuario.str_correo = correo;
-        updateUsuario.str_direccion = direccion;
+        updateUsuario.txt_direccion = direccion;
         updateUsuario.str_telefono = telefono;
         updateUsuario.str_celular = celular;
         updateUsuario.txt_imagen = imagen;

@@ -46,7 +46,7 @@ export const Usuarios = sequelize.define(
             allowNull: false, 
         },
 
-        str_direccion: {
+        txt_direccion: {
             type: DataTypes.TEXT,
         },
 
