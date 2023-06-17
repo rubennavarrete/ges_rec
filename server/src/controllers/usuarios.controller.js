@@ -35,7 +35,7 @@ export const getUsuario = async(req, res) =>{
 
 //CREAR UN USUARIO Y PERFIL
 export const createUsuario = async (req, res) => {
-    const { cedula, contraseña, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular, imagen, id_rol } = req.body;
+    const { cedula, password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular, imagen, id_rol } = req.body;
     try {
         await sequelize.transaction(async (t) => {
             const usuario = await Usuarios.findOne({
@@ -53,7 +53,7 @@ export const createUsuario = async (req, res) => {
             const newUsuario = await Usuarios.create(
                 {
                     str_cedula: cedula,
-                    str_contraseña: contraseña,
+                    str_contraseña: password,
                     str_nombres: nombres,
                     str_apellidos: apellidos,
                     dt_fecha_nac: fnac,
@@ -90,7 +90,7 @@ export const createUsuario = async (req, res) => {
 //ACTUALIZAR UN USUARIO
 export const updateUsuario = async(req,res) => {
     const {cedula} = req.params;   
-    const { contraseña, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular, imagen} = req.body;
+    const { password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular, imagen} = req.body;
     try {
         const updateUsuario = await Usuarios.findOne({
             where: {
@@ -98,7 +98,7 @@ export const updateUsuario = async(req,res) => {
             },
         });
 
-        updateUsuario.str_contraseña = contraseña;
+        updateUsuario.str_contraseña = password;
         updateUsuario.str_nombres = nombres;
         updateUsuario.str_apellidos = apellidos;
         updateUsuario.dt_fecha_nac = fnac;

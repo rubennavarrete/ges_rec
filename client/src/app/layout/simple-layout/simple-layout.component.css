@@ -1,0 +1,60 @@
+.content-simple-layout {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.simple-header {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.bg-header {
+    background-color: rgba(255, 255, 255, 0.829); 
+}
+
+.content-simple-layout {
+    display: flex;
+    background-image: url("../../../assets/images/fondo-simple-layout.jpg");
+    width: 100%;
+    height: 100%;
+    top: 7%;
+    bottom: 7%;
+    margin-top: 10px; 
+}
+
+.content-main-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 80px;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    background-color: rgba(255, 255, 255, 0.253);
+    height: 40%;
+    border-radius: 45px;
+    position: relative;
+    top: 20%;
+    left: 40%;
+}
+
+.simple-footer {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.bg-footer {
+    background-color: rgba(255, 255, 255, 0.829); 
+}
+
+

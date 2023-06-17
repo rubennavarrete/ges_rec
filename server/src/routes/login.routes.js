@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { ValidacionLogin } from "../controllers/login.controller.js";
+import { login } from "../controllers/login.controller.js";
 
 const router = Router();
 
 
-router.post("/login", ValidacionLogin )
+router.post("/login", login )
 
 export default router;
