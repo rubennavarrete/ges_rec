@@ -6,7 +6,7 @@ import { LoginModule } from '../components/login/login.module';
 import { SimpleHeaderComponent } from '../components/simple-header/simple-header.component';
 import { SimpleMainComponent } from '../components/simple-main/simple-main.component';
 import { SimpleFooterComponent } from '../components/simple-footer/simple-footer.component';
-
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,8 @@ import { SimpleFooterComponent } from '../components/simple-footer/simple-footer
   ],
   imports: [
     CommonModule,
-    LoginModule
+    LoginModule,
+    RouterModule
   ],
   exports: [
     FullLayoutComponent,

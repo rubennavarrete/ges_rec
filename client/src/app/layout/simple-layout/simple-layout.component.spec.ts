@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SimpleLayoutComponent } from './simple-layout.component';
 
 describe('SimpleLayoutComponent', () => {

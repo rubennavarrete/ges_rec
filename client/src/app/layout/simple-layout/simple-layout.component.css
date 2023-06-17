@@ -32,7 +32,7 @@
 
 .content-main-text {
     font-family: 'Poppins', sans-serif;
-    font-size: 80px;
+    font-size: 5em; /* Ejemplo de tamaño de fuente inicial en em */
     align-items: center;
     text-align: center;
     width: 50%;
@@ -42,6 +42,35 @@
     position: relative;
     top: 20%;
     left: 40%;
+}
+
+@media screen and (max-width: 1024px) {
+    .content-main-text {
+        font-size: 3em; /* Tamaño de fuente más pequeño para pantallas más pequeñas */
+        top: 15%;
+        left: 30%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .content-main-text {
+        font-size: 2.5em; /* Tamaño de fuente aún más pequeño para pantallas más pequeñas */
+        display: flex;
+        justify-content: center;
+    }
+    .content-simple-layout {
+        background-image: url("../../../assets/images/fondo-responsive-simple-layout.jpg");
+    }
+    
+}
+
+@media screen and (max-width: 480px) {
+    .content-main-text {
+        font-size: 2em; /* Tamaño de fuente aún más pequeño para pantallas más pequeñas */
+        display: flex;
+        justify-content: center;
+    }
+    
 }
 
 .simple-footer {
