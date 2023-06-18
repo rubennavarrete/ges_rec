@@ -6,7 +6,9 @@ import { LoginModule } from '../components/login/login.module';
 import { SimpleHeaderComponent } from '../components/simple-header/simple-header.component';
 import { SimpleMainComponent } from '../components/simple-main/simple-main.component';
 import { SimpleFooterComponent } from '../components/simple-footer/simple-footer.component';
+import { SimpleSidebarComponent } from '../components/simple-sidebar/simple-sidebar.component';
 import { RouterModule } from '@angular/router';
+
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { RouterModule } from '@angular/router';
     SimpleLayoutComponent,
     SimpleHeaderComponent,
     SimpleMainComponent,
-    SimpleFooterComponent
+    SimpleFooterComponent,
+    SimpleSidebarComponent
+    
   ],
   imports: [
     CommonModule,
@@ -26,7 +30,9 @@ import { RouterModule } from '@angular/router';
     SimpleLayoutComponent,
     SimpleHeaderComponent,
     SimpleMainComponent,
-    SimpleFooterComponent
+    SimpleFooterComponent,
+    SimpleSidebarComponent
+    
   ]
 })
 export class LayoutModule { }
