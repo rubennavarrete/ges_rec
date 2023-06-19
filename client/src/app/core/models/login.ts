@@ -2,7 +2,7 @@ export interface DataLogin {
     success: boolean;
 }
 
-export interface DataFormLogin{
+export interface LoginRequest{
     cedula: string;
     password: string;
 }

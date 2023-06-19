@@ -10,6 +10,7 @@ import { SimpleSidebarComponent } from '../components/simple-sidebar/simple-side
 import { RouterModule } from '@angular/router';
 
 
+
 @NgModule({
   declarations: [
     FullLayoutComponent,

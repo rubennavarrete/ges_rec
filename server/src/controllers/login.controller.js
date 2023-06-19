@@ -1,24 +1,37 @@
 import { Usuarios } from "../models/Usuarios.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 
 export const login = async (req, res) => {
     const { cedula, password } = req.body;
 
-    try {
-        const usuario = await Usuarios.findOne({
+    //SI NO EXISTE EL USUARIO
+    const usuario = await Usuarios.findOne({
         where: {
             str_cedula: cedula,
-            str_contraseña: password,
+
         },
     });
 
-    if (usuario) {
-        // Retornar true si el usuario y password son correctos
-        res.status(200).json({ success: true });
-    } else {
-        res.status(400).json({ message: "Usuario o password incorrectos" });
-    }
-    } catch (error) {
-        res.status(500).json({ message: "Error al iniciar sesión" });
-    }
+    if(!usuario) return res.status(404).json({ message: "No se ha encontrado el usuario"});
+
+    //VALIDAR CONTRASEÑA
+    const passwordValid = await bcrypt.compare(password, usuario.str_contraseña) 
+    if(!passwordValid) return res.status(400).json({ message: "Contraseña incorrecta"}); 
+
+    //CREAR TOKEN
+    const token = jwt.sign(
+        {
+            nombre: usuario.str_nombres,
+            id_rol: usuario.id_rol,
+        },
+        process.env.SECRET_KEY||'secretkey',
+        {
+            expiresIn: 1000 * 60 * 60, //1 hora,
+        }
+    );
+
+    res.json({token});
+    
 }

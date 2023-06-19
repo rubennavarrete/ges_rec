@@ -2,7 +2,7 @@ import { sequelize } from "../database/database.js";
 import { Usuarios } from "../models/Usuarios.js";
 import { createPerfil } from "./perfiles.controller.js";
 import { createMedico } from "./medicos.controller.js";
-
+import bcrypt from "bcrypt";
 
 
 
@@ -14,6 +14,7 @@ export const getUsuarios = async (req, res) => {
     }catch (error){
         return res.status(500).json({message: error.message});
     }
+    
 };
 
 //RECIBIR UN USUARIO
@@ -50,10 +51,11 @@ export const createUsuario = async (req, res) => {
             }
 
             // Crea el usuario
+            const hashedPasss = await bcrypt.hash(password, 10);
             const newUsuario = await Usuarios.create(
                 {
                     str_cedula: cedula,
-                    str_contraseña: password,
+                    str_contraseña: hashedPasss,
                     str_nombres: nombres,
                     str_apellidos: apellidos,
                     dt_fecha_nac: fnac,

@@ -2,9 +2,15 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginService } from './core/services/login.service';
+
+
+//MODULES
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+
+//LAYOUT
 import { LayoutModule } from "./layout/layout.module";
 
 
@@ -12,9 +18,11 @@ import { LayoutModule } from "./layout/layout.module";
 @NgModule({
     declarations: [
         AppComponent,
+        
     ],
     providers: [
-        LoginService
+        LoginService,
+
     ],
     bootstrap: [AppComponent],
     imports: [
@@ -23,7 +31,8 @@ import { LayoutModule } from "./layout/layout.module";
         HttpClientModule,
         FormsModule,
         ReactiveFormsModule,
-        LayoutModule
+        LayoutModule,
+        
     ]
 })
 export class AppModule { }
