@@ -17,8 +17,7 @@ import { LayoutModule } from "./layout/layout.module";
 
 @NgModule({
     declarations: [
-        AppComponent,
-        
+        AppComponent,     
     ],
     providers: [
         LoginService,

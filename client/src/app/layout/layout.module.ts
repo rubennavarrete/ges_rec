@@ -7,6 +7,7 @@ import { SimpleHeaderComponent } from '../components/simple-header/simple-header
 import { SimpleMainComponent } from '../components/simple-main/simple-main.component';
 import { SimpleFooterComponent } from '../components/simple-footer/simple-footer.component';
 import { SimpleSidebarComponent } from '../components/simple-sidebar/simple-sidebar.component';
+import{ UsuarioComponent } from '../components/usuario/usuario.component';
 import { RouterModule } from '@angular/router';
 
 
@@ -18,8 +19,9 @@ import { RouterModule } from '@angular/router';
     SimpleHeaderComponent,
     SimpleMainComponent,
     SimpleFooterComponent,
-    SimpleSidebarComponent
-    
+    SimpleSidebarComponent,
+    UsuarioComponent
+
   ],
   imports: [
     CommonModule,
@@ -32,8 +34,8 @@ import { RouterModule } from '@angular/router';
     SimpleHeaderComponent,
     SimpleMainComponent,
     SimpleFooterComponent,
-    SimpleSidebarComponent
-    
+    SimpleSidebarComponent ,
+    UsuarioComponent
   ]
 })
 export class LayoutModule { }
