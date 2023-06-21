@@ -63,10 +63,6 @@ export const Usuarios = sequelize.define(
             allowNull: false,
         },
 
-        txt_imagen: {
-            type: DataTypes.TEXT,
-        },
-
     },
     {
         schema: "ges_recetas",

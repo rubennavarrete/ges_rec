@@ -1,2 +1,30 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    flex: 1 1 100%;
+    
+}
 
+.content-main{
+    display: flex;
+    flex-grow: 2;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    height: 80vh;
+}
 
+.content {
+    display: flex;
+    padding: 30px;
+    overflow-y: auto;
+    width: calc(100vw - 16rem);
+    justify-content: center;
+    
+}
+.main-dash{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}

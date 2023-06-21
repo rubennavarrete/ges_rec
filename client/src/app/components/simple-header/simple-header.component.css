@@ -1,8 +1,12 @@
-.main-header{
-    display: flex;
+:host {
     background-color: #7000a2;
-    width: 100%;
-    height: 6%;
-    position: fixed;
-    align-items: center;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
 }
+  
+.menu{
+    display: flex;
+    gap: 16px;
+}
+  

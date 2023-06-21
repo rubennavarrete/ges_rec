@@ -4,11 +4,13 @@ import { FullLayoutComponent } from './full-layout/full-layout.component';
 import { SimpleLayoutComponent } from './simple-layout/simple-layout.component';
 import { LoginModule } from '../components/login/login.module';
 import { SimpleHeaderComponent } from '../components/simple-header/simple-header.component';
-import { SimpleMainComponent } from '../components/simple-main/simple-main.component';
 import { SimpleFooterComponent } from '../components/simple-footer/simple-footer.component';
 import { SimpleSidebarComponent } from '../components/simple-sidebar/simple-sidebar.component';
-import{ UsuarioComponent } from '../components/usuario/usuario.component';
+import { ListUserComponent } from '../components/list-user/list-user.component';
 import { RouterModule } from '@angular/router';
+import { UsuarioComponent } from '../components/usuario/usuario.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 
 
@@ -17,25 +19,21 @@ import { RouterModule } from '@angular/router';
     FullLayoutComponent,
     SimpleLayoutComponent,
     SimpleHeaderComponent,
-    SimpleMainComponent,
     SimpleFooterComponent,
     SimpleSidebarComponent,
-    UsuarioComponent
+    ListUserComponent,
+    UsuarioComponent,
 
   ],
   imports: [
     CommonModule,
     LoginModule,
-    RouterModule
+    RouterModule.forChild([]),
+    ReactiveFormsModule,
   ],
   exports: [
     FullLayoutComponent,
     SimpleLayoutComponent,
-    SimpleHeaderComponent,
-    SimpleMainComponent,
-    SimpleFooterComponent,
-    SimpleSidebarComponent ,
-    UsuarioComponent
   ]
 })
 export class LayoutModule { }

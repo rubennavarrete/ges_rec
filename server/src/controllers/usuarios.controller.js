@@ -36,7 +36,7 @@ export const getUsuario = async(req, res) =>{
 
 //CREAR UN USUARIO Y PERFIL
 export const createUsuario = async (req, res) => {
-    const { cedula, password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular, imagen, id_rol } = req.body;
+    const { cedula, password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular, id_rol } = req.body;
     try {
         await sequelize.transaction(async (t) => {
             const usuario = await Usuarios.findOne({
@@ -64,7 +64,6 @@ export const createUsuario = async (req, res) => {
                     txt_direccion: direccion,
                     str_telefono: telefono,
                     str_celular: celular,
-                    txt_imagen: imagen,
                     bln_estado: true,
                 },
                 { transaction: t }
@@ -79,7 +78,6 @@ export const createUsuario = async (req, res) => {
             } else if (id_rol === 4) {
                 await createPaciente(newUsuario.int_id_usuario, t, req);
             }
-
             res.json(newUsuario);
         });
     } catch (error) {
