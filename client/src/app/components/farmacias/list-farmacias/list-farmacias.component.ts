@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-list-user',
-  templateUrl: './list-user.component.html',
-  styleUrls: ['./list-user.component.css']
+  selector: 'app-list-farmacias',
+  templateUrl: './list-farmacias.component.html',
+  styleUrls: ['./list-farmacias.component.css']
 })
-export class ListUserComponent implements OnInit {
+export class ListFarmaciasComponent implements OnInit {
   showWindow1: boolean = true;
   showWindow2: boolean = false;
   constructor() { }
@@ -14,6 +14,5 @@ export class ListUserComponent implements OnInit {
     this.showWindow1 = !this.showWindow1;
     this.showWindow2 = !this.showWindow2;
   }
-  ngOnInit(): void {    
-  }
+  ngOnInit(): void {}
 }

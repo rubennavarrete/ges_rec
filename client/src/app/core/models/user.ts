@@ -4,15 +4,15 @@ export interface User {
     apellidos: string;
     correo: string;
     password: string;
-    fecha_nac: string;
+    fecha_nac: Date;
     genero: boolean;
     telefono: string;
     celular: string;
     direccion: string;
-    rol: string;
+    rol: number;
 }
 
 export interface DataUser {
-    success: boolean;
+    status: string;
     data: User;
 }

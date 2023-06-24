@@ -30,25 +30,28 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   private destroy$ = new Subject<any>();
   constructor(private fb: FormBuilder, private srvLogin: LoginService, private router:Router) {}
+  ngOnInit(): void {}
   login() {
     if(this.loginForm.valid){
-      this.srvLogin.getLogin(this.loginForm.value as LoginRequest).pipe(takeUntil(this.destroy$)).subscribe(
-        (data: DataLogin) => {
+      this.srvLogin.getLogin(this.loginForm.value as LoginRequest).pipe(takeUntil(this.destroy$)).subscribe({
+        next: (data: DataLogin) => {
           console.log(data);
           localStorage.setItem('token', JSON.stringify(data));
           this.router.navigate(['/dashboard']);
           this.loginForm.reset();
         },
-        (error) => {
+        error: (error) => {
           console.log(error);
-          this.LoginError = error.error.message;
+          this.LoginError = error;
         }
-      );
+      });
     }else{
       this.loginForm.markAllAsTouched();
       alert("Debe ingresar los datos correctamente");
     }
   }
-  ngOnInit(): void {}
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.unsubscribe();
+  }
 }

@@ -12,12 +12,15 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 //LAYOUT
 import { LayoutModule } from "./layout/layout.module";
+import { UpdateUserComponent } from './components/usuarios/modals/update-user/update-user.component';
+
 
 
 
 @NgModule({
     declarations: [
-        AppComponent,   
+        AppComponent,
+    
     ],
     providers: [
         LoginService,
