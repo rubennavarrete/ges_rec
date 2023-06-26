@@ -1,10 +1,9 @@
+import { formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DataUser } from 'src/app/core/models/user';
 import { AddUserService } from 'src/app/core/services/add-user.service';
-import { Location } from '@angular/common';
 import Swal from 'sweetalert2';
 
 
@@ -20,6 +19,7 @@ export class UsuarioComponent implements OnInit, OnDestroy{
   private destroy$ = new Subject<any>();
   userform: FormGroup;
   UserError: string = '';
+
 
   get nombres() {
     return this.userform.controls['nombres'];
@@ -50,22 +50,36 @@ export class UsuarioComponent implements OnInit, OnDestroy{
   }
 
 
-  constructor(private fb: FormBuilder, private srvUser: AddUserService, private router:Router, private location: Location) {
+  constructor(private fb: FormBuilder, private srvUser: AddUserService) {
     this.userform = this.fb.group({
       cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
       nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
       apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
       correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
       password: ['', Validators.required],
-      fecha_nac: ['', Validators.required],
+      fecha_nac: ['', [Validators.required, this.fechaMaximaActual]],
       genero: ['', Validators.required],
       telefono: ['', [Validators.minLength(7), Validators.maxLength(9), Validators.pattern(/^[0-9]+$/)]],
       celular: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
       direccion: [''],
       rol: [2],
     });
+    
   }
+
+  fechaMaximaActual(control: AbstractControl): { [key: string]: any } | null {
+    const fechaIngresada = new Date(control.value);
+    const fechaActual = new Date();
+  
+    if (fechaIngresada > fechaActual) {
+      return { fechaMaximaActual: true };
+    }
+  
+    return null;
+  }
+
   addUsuario() {
+
     Swal.fire({
       title: '¿Está seguro que desea agregar este Usuario?',
       showDenyButton: true,
@@ -81,6 +95,7 @@ export class UsuarioComponent implements OnInit, OnDestroy{
           },
         });
         if(this.userform.valid){
+          this.userform.value.fecha_nac = formatDate(this.userform.value.fecha_nac, 'yyyy-MM-dd', 'en-US');
           this.srvUser.postUsuario(this.userform.value).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: DataUser) => {
               console.log(data);

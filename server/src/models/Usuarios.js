@@ -16,7 +16,7 @@ export const Usuarios = sequelize.define(
             allowNull: false, 
         },
 
-        str_contraseña: {
+        str_password: {
             type: DataTypes.STRING(50),
             allowNull: false, 
         },

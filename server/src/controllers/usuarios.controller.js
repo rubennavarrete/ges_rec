@@ -36,7 +36,7 @@ export const getUsuario = async(req, res) =>{
 
 //CREAR UN USUARIO Y PERFIL
 export const createUsuario = async (req, res) => {
-    const { cedula, password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular, rol } = req.body;
+    const { cedula, password, nombres, apellidos, fecha_nac, genero, correo, direccion, telefono, celular, rol } = req.body;
     try {
         await sequelize.transaction(async (t) => {
             const usuario = await Usuarios.findOne({
@@ -55,10 +55,10 @@ export const createUsuario = async (req, res) => {
             const newUsuario = await Usuarios.create(
                 {
                     str_cedula: cedula,
-                    str_contraseña: hashedPasss,
+                    str_password: hashedPasss,
                     str_nombres: nombres,
                     str_apellidos: apellidos,
-                    dt_fecha_nac: fnac,
+                    dt_fecha_nac: fecha_nac,
                     bln_genero: genero,
                     str_correo: correo,
                     txt_direccion: direccion,
@@ -95,15 +95,15 @@ export const createUsuario = async (req, res) => {
 //ACTUALIZAR UN USUARIO
 export const updateUsuario = async(req,res) => {
     const {cedula} = req.params;   
-    const { password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular, imagen} = req.body;
+    const { password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular} = req.body;
     try {
         const updateUsuario = await Usuarios.findOne({
             where: {
                 str_cedula: cedula,
             },
         });
-
-        updateUsuario.str_contraseña = password;
+        const hashedPasss = await bcrypt.hash(password, 10);
+        updateUsuario.str_password = password;
         updateUsuario.str_nombres = nombres;
         updateUsuario.str_apellidos = apellidos;
         updateUsuario.dt_fecha_nac = fnac;
@@ -112,10 +112,12 @@ export const updateUsuario = async(req,res) => {
         updateUsuario.txt_direccion = direccion;
         updateUsuario.str_telefono = telefono;
         updateUsuario.str_celular = celular;
-        updateUsuario.txt_imagen = imagen;
 
         await updateUsuario.save();
-        res.json(updateUsuario);
+        res.json({
+            status: "success",
+            data: updateUsuario,
+        });
 
     } catch (error) {
         return res.status(500).json({ message: error.message});

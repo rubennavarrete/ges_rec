@@ -10,6 +10,29 @@ export interface User {
     celular: string;
     direccion: string;
     rol: number;
+    str_cedula: string;
+    str_nombres: string;
+    str_apellidos: string;
+    str_correo: string;
+    str_password: string;
+    dt_fecha_nac: Date;
+    bln_genero: boolean;
+    str_telefono: string;
+    str_celular: string;
+    txt_direccion: string;
+}
+
+export interface EditUser {
+    str_cedula: string;
+    str_nombres: string;
+    str_apellidos: string;
+    str_correo: string;
+    str_password: string;
+    dt_fecha_nac: Date;
+    bln_genero: boolean;
+    str_telefono: string;
+    str_celular: string;
+    txt_direccion: string;
 }
 
 export interface DataUser {

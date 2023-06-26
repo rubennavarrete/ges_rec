@@ -8,3 +8,8 @@
     width: 80vw;
 }
 
+.btn-regresar{
+    display: flex;
+    justify-content: right;
+}
+
