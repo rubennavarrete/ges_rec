@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit, OnDestroy{
         },
         error: (error) => {
           console.log(error);
-          this.LoginError = error;
+          this.LoginError = error.error.message;
         }
       });
     }else{

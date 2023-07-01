@@ -10,17 +10,18 @@ export const Medicaciones = sequelize.define(
             autoIncrement: true,
         },
 
-        str_nombre: {
-            type: DataTypes.STRING(50),
+        str_nombre_comercial: {
+            type: DataTypes.STRING(100),
             allowNull: false, 
         },
 
-        txt_descrpcion: {
-            type: DataTypes.TEXT,
-            allowNull: true, 
+        str_nombre_generico: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
         },
     },
     {
-        timestamps: false,
+        schema: "ges_recetas",
+        timestamps:false,
     },
 );

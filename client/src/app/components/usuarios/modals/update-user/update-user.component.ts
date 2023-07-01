@@ -111,7 +111,6 @@ export class UpdateUserComponent implements OnInit, OnDestroy{
   
   
   ngOnInit(): void {
-    console.log("");
     this.srvUser.SeleccionarConfirmEdit$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({

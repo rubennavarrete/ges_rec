@@ -19,12 +19,13 @@
     display: flex;
     padding: 30px;
     overflow-y: auto;
-    width: calc(100vw - 16rem);
+    /* width: calc(100vw - 16rem); */
+    width: 100vw;
     justify-content: center;
     
 }
 .main-dash{
     display: flex;
     justify-content: center;
-    height: 100vh;
+    height: 80vh;
 }

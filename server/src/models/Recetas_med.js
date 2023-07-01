@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
-export const Modulos = sequelize.define(
-    "modulos",
+export const Recetas_medicacion = sequelize.define(
+    "recetas_medicacion",
     {
         id_receta_med: {
             type: DataTypes.INTEGER,
@@ -10,22 +10,28 @@ export const Modulos = sequelize.define(
             autoIncrement: true,
         },
 
-        unidades: {
+        int_id_medicacion: {
             type: DataTypes.INTEGER,
-            allowNull: true, 
+            allowNull: false,
         },
 
-        pauta: {
+        str_dosis: {
             type: DataTypes.INTEGER,
             allowNull: false, 
         },
 
-        duracion: {
-            type: DataTypes.INTEGER,
-            allowNull: false, 
+        str_duracion: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+
+        str_indicacion: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
         },
     },
     {
-        timestamps: false,
+        schema: "ges_recetas",
+        timestamps:false,
     },
 );

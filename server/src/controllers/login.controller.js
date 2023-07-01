@@ -25,6 +25,7 @@ export const login = async (req, res) => {
         {
             nombre: usuario.str_nombres,
             id_rol: usuario.id_rol,
+            id_usuario: usuario.id_usuario,
         },
         process.env.SECRET_KEY||'secretkey',
         {

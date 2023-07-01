@@ -10,7 +10,12 @@ export const Farmacias = sequelize.define(
             autoIncrement: true,
         },
 
-        str_RUC: {
+        int_id_rol: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+
+        str_ruc: {
             type: DataTypes.STRING(13),
             allowNull: false,
         },
@@ -20,7 +25,7 @@ export const Farmacias = sequelize.define(
             allowNull: false,
         },
         
-        str_direccion_institucion: {
+        txt_direccion_institucion: {
             type: DataTypes.TEXT,
             allowNull: false,
         },
@@ -36,6 +41,15 @@ export const Farmacias = sequelize.define(
         },
 
         str_nombre_representante: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+
+        str_celular_representante: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+        str_password: {
             type: DataTypes.STRING(100),
             allowNull: false,
         },

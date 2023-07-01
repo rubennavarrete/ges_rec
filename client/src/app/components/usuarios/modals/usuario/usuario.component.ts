@@ -53,8 +53,8 @@ export class UsuarioComponent implements OnInit, OnDestroy{
   constructor(private fb: FormBuilder, private srvUser: AddUserService) {
     this.userform = this.fb.group({
       cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
-      nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
-      apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]],
+      nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
+      apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
       correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
       password: ['', Validators.required],
       fecha_nac: ['', [Validators.required, this.fechaMaximaActual]],

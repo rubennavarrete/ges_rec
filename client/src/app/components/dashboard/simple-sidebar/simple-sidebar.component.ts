@@ -9,7 +9,7 @@ import { Component ,ElementRef, ViewChild } from '@angular/core';
 export class SimpleSidebarComponent {
   constructor(private elementRef: ElementRef) {}
   
-  isSidebarOpen = false;
+  isSidebarOpen: boolean = false;
   isDropdownPagesOpen = false;
   isDropdownSalesOpen = false;
 
@@ -26,4 +26,6 @@ export class SimpleSidebarComponent {
   isDropdownOpen(id: string) {
     return this.dropdownsOpen[id];
   }
+
+  
 }

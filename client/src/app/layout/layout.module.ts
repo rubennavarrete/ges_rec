@@ -13,7 +13,7 @@ import { LoginModule } from '../components/login/login.module';
 import { UserModule} from '../components/usuarios/user.module';
 import { FarmModule } from '../components/farmacias/farm.module';
 import { DashboardModule } from '../components/dashboard/dashboard.module';
-
+import { MedicoModule } from '../components/medicos/medico.module';
 
 
 
@@ -29,7 +29,9 @@ import { DashboardModule } from '../components/dashboard/dashboard.module';
     ReactiveFormsModule,
     FarmModule,
     UserModule,
-    DashboardModule
+    DashboardModule,
+    MedicoModule
+
   ],
   exports: [
     FullLayoutComponent,

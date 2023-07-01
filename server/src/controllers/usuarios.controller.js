@@ -2,6 +2,7 @@ import { sequelize } from "../database/database.js";
 import { Usuarios } from "../models/Usuarios.js";
 import { createPerfil } from "./perfiles.controller.js";
 import { createMedico } from "./medicos.controller.js";
+import { createPaciente } from "./pacientes.controller.js";
 import bcrypt from "bcrypt";
 
 

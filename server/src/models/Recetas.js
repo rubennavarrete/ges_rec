@@ -4,27 +4,39 @@ import { sequelize } from "../database/database.js";
 export const Recetas = sequelize.define(
     "recetas",
     {
-        id_receta: {
+        int_id_receta: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        str_codigo: {
-            type: DataTypes.STRING(20),
-            allowNull: false, 
+        int_id_paciente: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+
+        int_id_medico: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
 
         txt_diagnostico: {
             type: DataTypes.TEXT, 
+            allowNull: false,
         },
 
-        bol_estado: {
+        dt_fecha_exp_rec : {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+
+        bln_estado:{
             type: DataTypes.BOOLEAN,
-            allowNull: false, 
+            allowNull: false,
         },
     },
     {
-        timestamps: false,
+        schema: "ges_recetas",
+        timestamps:false,
     },
 );
