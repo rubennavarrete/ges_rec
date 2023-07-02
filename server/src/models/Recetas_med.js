@@ -2,9 +2,9 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
 export const Recetas_medicacion = sequelize.define(
-    "recetas_medicacion",
+    "receta_medicacion",
     {
-        id_receta_med: {
+        int_id_receta: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,

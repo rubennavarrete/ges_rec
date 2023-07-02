@@ -48,7 +48,8 @@ export const createReceta = async (req, res) => {
         );
 
         // Crea la lista de medicamentos
-        await createReceta_med(newReceta.int_id_receta,req);
+        const medicamentosArray = Array.isArray(medicamento) ? medicamento : [medicamento];
+        await createReceta_med(newReceta.int_id_receta, req, medicamentosArray);
 
         res.json({ 
             status: 'success',

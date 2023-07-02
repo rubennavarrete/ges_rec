@@ -30,26 +30,28 @@ export const getReceta_med = async(req, res) =>{
 }
 
 //CREAR LISTA DE MEDICAMENTOS
-export const createReceta_med = async (id_receta,req) => {
+export const createReceta_med = async (id_receta, req, medicamentos) => {
     const t = await sequelize.transaction();
-    const { medicamentos } = req.body;
     try {
-    for (const medicamento of medicamentos) {
-        await Recetas_medicacion.create(
-        {
-            int_id_receta: id_receta,
-            int_id_medicacion: medicamento.id_medicacion,
-            str_dosis: medicamento.dosis,
-            str_duracion: medicamento.duracion,
-            str_indicacion: medicamento.indicacion
-        },
-        { transaction: t }
-        );
-    }
+        for (const medicamento of medicamentos) {
+            await Recetas_medicacion.create(
+                {
+                    int_id_receta: id_receta,
+                    int_id_medicacion: medicamento.id_medicacion,
+                    str_dosis: medicamento.dosis,
+                    str_duracion: medicamento.duracion,
+                    str_indicacion: medicamento.indicacion
+                },
+                { transaction: t }
+            );
+        }
+        await t.commit();
     } catch (error) {
-    throw new Error(error.message);
+        await t.rollback();
+        throw new Error(error.message);
     }
 };
+
 
 
 
