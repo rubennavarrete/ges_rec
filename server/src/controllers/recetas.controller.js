@@ -33,30 +33,31 @@ export const getReceta = async(req, res) =>{
 //CREAR UNA RECETA Y LISTA DE MEDICAMENTOS
 
 export const createReceta = async (req, res) => {
-    const { id_paciente, id_medico, diagnostico, fecha_exp_rec, medicamento } = req.body;
+    const { id_paciente, diagnostico, medicamento } = req.body;
     const t = await sequelize.transaction();
     try {
         const newReceta = await Recetas.create(
-        {
-            int_id_paciente: id_paciente,
-            int_id_medico: id_medico,
-            txt_diagnostico: diagnostico,
-            dt_fecha_exp_rec: fecha_exp_rec,
-            bln_estado: true,
-        },
-        { transaction: t }
+            {
+                int_id_paciente: id_paciente,
+                int_id_medico: req.usuario.id_usuario,
+                txt_diagnostico: diagnostico,
+                bln_estado: true,
+            },
+            { transaction: t }
         );
 
         // Crea la lista de medicamentos
         const medicamentosArray = Array.isArray(medicamento) ? medicamento : [medicamento];
-        await createReceta_med(newReceta.int_id_receta, req, medicamentosArray);
+        await createReceta_med(newReceta.int_id_receta, req, medicamentosArray, t);
 
-        res.json({ 
-            status: 'success',
-            data: newReceta,
+        await t.commit();
+
+        return res.json({
+            status: 'success'
         });
     } catch (error) {
         console.error('Error al crear la receta médica', error);
+        await t.rollback();
         return res.status(500).json({ error: 'Error al crear la receta médica' });
     }
 };

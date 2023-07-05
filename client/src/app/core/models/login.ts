@@ -1,6 +1,5 @@
 export interface DataLogin {
     success: boolean;
-    token: string;
 }
 
 export interface LoginRequest{

@@ -16,6 +16,8 @@ export const Recetas_com = sequelize.define(
         },
     },
     {
-        timestamps: false,
+        schema: "ges_recetas",
+        timestamps:false,
+        freezeTableName: true,
     },
 );

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createUsuario, getUsuarios, getUsuario, updateUsuario, deleteUsuario } from "../controllers/usuarios.controller.js";
-import { validateToken } from "../controllers/validate-token.js";
+
 
 const router = Router();
 

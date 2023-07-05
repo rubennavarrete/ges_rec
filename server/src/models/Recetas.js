@@ -25,18 +25,21 @@ export const Recetas = sequelize.define(
             allowNull: false,
         },
 
-        dt_fecha_exp_rec : {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-
         bln_estado:{
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
+
+        dt_fecha_creacion : {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
+        },
+            
     },
     {
         schema: "ges_recetas",
         timestamps:false,
+        freezeTableName: true,
     },
 );
