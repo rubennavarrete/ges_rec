@@ -9,19 +9,20 @@ import medicosRoutes from "./routes/medicos.routes.js"
 import loginRoutes  from "./routes/login.routes.js";
 import farmaciasRoutes from "./routes/farmacias.routes.js";
 import recetasRoutes from "./routes/recetas.routes.js";
+import cookiesParser from "cookie-parser";
+import { validateToken } from "./controllers/validate-token.js";
 
 //MIDDLEWARES
 import cors from "cors";
-
 const app=express();
-
-
+app.use(cookiesParser());
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:4200'
 }));
 
 app.use(loginRoutes);
+// app.use(validateToken)
 app.use(usuariosRoutes);
 app.use(rolesRoutes);
 app.use(perfilesRoutes);

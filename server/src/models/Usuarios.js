@@ -63,6 +63,12 @@ export const Usuarios = sequelize.define(
             allowNull: false,
         },
 
+        dt_fecha_creacion: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
+        },
+
     },
     {
         schema: "ges_recetas",

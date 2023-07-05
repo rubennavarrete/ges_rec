@@ -7,6 +7,7 @@ import { Data } from '@angular/router';
 
 const confirmAdd:boolean = false;
 const confirmEdit:EditUser = {
+  int_id_usuario: 0,
   str_cedula: '',
   str_nombres: '',
   str_apellidos: '',

@@ -24,8 +24,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
         {
             nombre: usuario.str_nombres,
-            id_rol: usuario.id_rol,
-            id_usuario: usuario.id_usuario,
+            id_usuario: usuario.int_id_usuario,
         },
         process.env.SECRET_KEY||'secretkey',
         {
@@ -33,6 +32,13 @@ export const login = async (req, res) => {
         }
     );
 
-    res.json({token});
+    // res.cookie("token", token, {
+    //     httpOnly: false,
+    //     secure: true,
+    //     sameSite: "none",
+    //     expires: new Date(Date.now() + 99999999),
+    // });
+
+    res.json(token);
     
 }

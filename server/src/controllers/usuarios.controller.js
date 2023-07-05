@@ -79,7 +79,7 @@ export const createUsuario = async (req, res) => {
             } else if (rol === 4) {
                 await createPaciente(newUsuario.int_id_usuario, t, req);
             }
-            res.json(
+            return  res.json(
                 {
                     status: "success",
                     data: newUsuario,

@@ -45,7 +45,6 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
     )
     .subscribe({
       next: (data) => {
-        console.log(data);
         this.dataUser = data;
       },
       error: (error) => {
