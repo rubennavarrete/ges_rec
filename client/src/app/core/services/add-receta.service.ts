@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Medicamentos, Receta, RecetaResponse } from '../models/receta';
 import { EditUser } from '../models/user';
+import config from 'config/config';
 
 
 const confirmAdd:boolean = false;
@@ -25,7 +26,7 @@ const confirmEdit:EditUser = {
 })
 export class AddRecetaService {
 
-  URL_API = 'http://localhost:4000/recetas';
+  private URL_API: string = config.URL_API_BASE + 'recetas';
 
   constructor(private http: HttpClient) { }
 

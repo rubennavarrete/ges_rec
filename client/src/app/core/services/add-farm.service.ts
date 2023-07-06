@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DataFarm, EditFarm, Farm } from '../models/farm';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import config from 'config/config';
 
 
 
@@ -21,7 +22,7 @@ const confirmEdit:EditFarm = {
   providedIn: 'root'
 })
 export class AddFarmService {
-  URL_API = 'http://localhost:4000/farmacias';
+  private URL_API:string = config.URL_API_BASE + 'farmacias';
 
   //BEHAVIOR SUBJECT
   private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);
