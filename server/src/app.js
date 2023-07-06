@@ -1,5 +1,5 @@
 import express from "express";
-
+import cookieParser from "cookie-parser";
 //RUTAS
 import usuariosRoutes from "./routes/usuarios.routes.js"
 import rolesRoutes from "./routes/roles.routes.js"
@@ -13,14 +13,15 @@ import recetasRoutes from "./routes/recetas.routes.js";
 //MIDDLEWARES
 import cors from "cors";
 
-const app=express();
+const app = express();
 
 
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:4200'
+    origin: 'http://localhost:4200',
 }));
 
+app.use(cookieParser());
 app.use(loginRoutes);
 app.use(usuariosRoutes);
 app.use(rolesRoutes);
@@ -29,7 +30,6 @@ app.use(pacientesRoutes);
 app.use(medicosRoutes);
 app.use(farmaciasRoutes);
 app.use(recetasRoutes);
-
 
 
 export default app;
