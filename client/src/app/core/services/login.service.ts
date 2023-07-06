@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { LoginRequest} from '../models/login';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import config from 'config/config';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  URL_API = 'http://localhost:4000/login';
+  private URL_API: string = config.URL_API_BASE + 'login';
 
 
 
