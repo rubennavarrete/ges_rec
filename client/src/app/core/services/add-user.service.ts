@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DataUser, User, EditUser } from '../models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Data } from '@angular/router';
 import config from 'config/config';
 
 
