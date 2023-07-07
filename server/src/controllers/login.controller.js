@@ -39,6 +39,10 @@ export const login = async (req, res) => {
         sameSite: 'none' // Restricción estricta de envío de cookies en solicitudes cruzadas
     });
 
-    res.json({token});
+    res.json({
+        message: "Usuario logueado correctamente",
+        status: 'success',
+        token,
+    });
     
 }
