@@ -28,6 +28,28 @@ export const getMedicacion= async (req, res) => {
     }
 }
 
+//RECIBIR UN MEDICAMENTO POR NOMBRE
+export const getMedicacionByName= async (req, res) => {
+    try {
+        const { nombre } = req.query;
+        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%')`;
+
+        const medicamento = await sequelize.query(query, {
+            type: sequelize.QueryTypes.SELECT
+        });
+        console.log(nombre);
+        if (medicamento.length === 0) return res.json({status: "error", message: "No se ha encontrado el medicamento"});
+        
+        return res.json({
+            data: medicamento,
+            status: "success",
+            message: "Se ha encontrado el medicamento"
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 //CREAR UN MEDICAMENTO
 export const createMedicacion = async (req, res) => {
     const { nombre_comercial, nombre_generico} = req.body;
