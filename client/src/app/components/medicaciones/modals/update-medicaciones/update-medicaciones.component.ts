@@ -30,7 +30,7 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
   }
   private destroy$ = new Subject<any>();
   
-  updateUsuario() {
+  updateMedicacion() {
     Swal.fire({
       title: '¿Está seguro que desea modificar este Medicamento?',
       showDenyButton: true,

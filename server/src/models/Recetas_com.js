@@ -2,17 +2,32 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
 export const Recetas_com = sequelize.define(
-    "recetas_com",
+    "recetas_comentario",
     {
-        id_receta_com: {
+        int_id_receta_com: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
 
-        comentario: {
-            type: DataTypes.STRING(200),
-            allowNull: tue, 
+        int_id_receta: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+
+        int_id_farmacia: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+
+        txt_comentario: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+
+        fl_precio: {
+            type: DataTypes.FLOAT,
+            allowNull: true,
         },
     },
     {
