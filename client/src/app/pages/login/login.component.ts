@@ -38,9 +38,11 @@ export class LoginComponent implements OnInit, OnDestroy{
       this.srvLogin.getLogin(this.loginForm.value as LoginRequest).pipe(takeUntil(this.destroy$)).subscribe({
         next: (data: DataLogin) => {
           console.log(data);
-          this.cookieService.set('token', data.token);
-          this.router.navigate(['/dashboard']);
-          this.loginForm.reset();
+          if(data.status == "success"){
+            this.cookieService.set('token', data.token);
+            this.router.navigate(['/dashboard']);
+            this.loginForm.reset();
+          }
         },
         error: (error) => {
           console.log(error);

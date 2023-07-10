@@ -14,6 +14,7 @@ import { UserModule} from '../components/usuarios/user.module';
 // import { FarmModule } from '../components/farmacias/farm.module';
 import { DashboardModule } from '../shared/dashboard.module';
 import { MedicoModule } from '../components/medicos/medico.module';
+import { MedicacionesModule } from '../components/medicaciones/medicaciones.module';
 
 
 

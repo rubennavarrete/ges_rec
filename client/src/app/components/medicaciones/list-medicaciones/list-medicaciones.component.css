@@ -5,11 +5,6 @@
 }
 
 .content-list {
-    width: 100%;
-}
-
-.btn-regresar{
-    display: flex;
-    justify-content: right;
+    width: 80vw;
 }
 
