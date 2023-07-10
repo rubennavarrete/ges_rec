@@ -23,5 +23,6 @@ export const Medicaciones = sequelize.define(
     {
         schema: "ges_recetas",
         timestamps:false,
+        freezeTableName: true,
     },
 );

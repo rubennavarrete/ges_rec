@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 import { DataUser, User, EditUser } from '../models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Data } from '@angular/router';
+import config from 'config/config';
 
 
 const confirmAdd:boolean = false;
 const confirmEdit:EditUser = {
+  int_id_usuario: 0,
   str_cedula: '',
   str_nombres: '',
   str_apellidos: '',
@@ -23,7 +25,7 @@ const confirmEdit:EditUser = {
   providedIn: 'root'
 })
 export class AddUserService {
-  URL_API = 'http://localhost:4000/usuarios';
+  private URL_API: string = config.URL_API_BASE + 'usuarios';
 
   //BEHAVIOR SUBJECT
   private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);

@@ -10,6 +10,7 @@ export interface User {
     celular: string;
     direccion: string;
     rol: number;
+    int_id_usuario: number;
     str_cedula: string;
     str_nombres: string;
     str_apellidos: string;
@@ -23,6 +24,7 @@ export interface User {
 }
 
 export interface EditUser {
+    int_id_usuario: number;
     str_cedula: string;
     str_nombres: string;
     str_apellidos: string;
