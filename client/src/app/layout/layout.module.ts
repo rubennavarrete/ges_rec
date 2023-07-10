@@ -9,10 +9,10 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 //MODULOS
-import { LoginModule } from '../components/login/login.module';
+import { LoginModule } from '../pages/login/login.module';
 import { UserModule} from '../components/usuarios/user.module';
-import { FarmModule } from '../components/farmacias/farm.module';
-import { DashboardModule } from '../components/dashboard/dashboard.module';
+// import { FarmModule } from '../components/farmacias/farm.module';
+import { DashboardModule } from '../shared/dashboard.module';
 import { MedicoModule } from '../components/medicos/medico.module';
 
 
@@ -24,13 +24,15 @@ import { MedicoModule } from '../components/medicos/medico.module';
   ],
   imports: [
     CommonModule,
-    LoginModule,
+    // LoginModule,
+    
+    // ReactiveFormsModule,
+    // FarmModule,
+    // UserModule,
+    // DashboardModule,
+    // MedicoModule
     RouterModule.forChild([]),
-    ReactiveFormsModule,
-    FarmModule,
-    UserModule,
-    DashboardModule,
-    MedicoModule
+    DashboardModule
 
   ],
   exports: [
