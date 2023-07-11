@@ -12,6 +12,13 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 //LAYOUT
 import { LayoutModule } from "./layout/layout.module";
+import { HomeComponent } from './pages/home/home.component';
+import { LoginModule } from './pages/login/login.module';
+import { FarmaciasComponent } from './pages/admin/farmacias/farmacias.component';
+import { MedicosComponent } from './pages/admin/medicos/medicos.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { AdminModule } from './pages/admin/admin.module';
+
 
 
 
@@ -19,6 +26,10 @@ import { LayoutModule } from "./layout/layout.module";
 @NgModule({
     declarations: [
         AppComponent,
+        // HomeComponent,
+        // FarmaciasComponent,
+        // MedicosComponent,
+        // AdminModule,
     
     ],
     providers: [
@@ -33,6 +44,8 @@ import { LayoutModule } from "./layout/layout.module";
         FormsModule,
         ReactiveFormsModule,
         LayoutModule,
+        LoginModule,
+        AdminModule
         
     ]
 })

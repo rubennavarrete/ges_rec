@@ -1,5 +1,5 @@
 export interface DataLogin {
-    success: boolean;
+    status: string;
     message: string;
     token: string;
 }
