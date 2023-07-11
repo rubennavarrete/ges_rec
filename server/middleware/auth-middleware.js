@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 
 const  verificarToken = (req, res, next) => {
+    console.log('verificando token');
     // Obtener el token de la cookie
     const token = req.cookies.token;
     console.log(token);

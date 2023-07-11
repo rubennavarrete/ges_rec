@@ -24,21 +24,15 @@ export const login = async (req, res) => {
     const usuarioToken = {
         nombre: usuario.str_nombres,
         cedula: usuario.str_cedula,
-        //id_usuario: usuario.id_usuario,
     };
     console.log('datos del usuario',usuarioToken)
     const token = jwt.sign(usuarioToken,
-        /*{
-            nombre: usuario.str_nombres,
-            id_usuario: usuario.id_usuario,
-        }*/
         process.env.SECRET_KEY || 'secretkey',
         {
         expiresIn: '12h', // Token y cookie expiran en 12 horas
         }
     );
 
-    
 
     /*res.cookie('token', token, {
         httpOnly: false, // La cookie solo es accesible a través de HTTP
@@ -47,13 +41,16 @@ export const login = async (req, res) => {
         sameSite: 'none' // Restricción estricta de envío de cookies en solicitudes cruzadas
     });*/
 
-    console.log(token)
+     //cambiar nombre del token
+     res.cookie("token2023", token, {
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // que sea misma hora que el token
+        httpOnly: false,
+        sameSite: "none",
+        secure: true,
+        damin:"localhost"
+      });
 
-    /*res.json({
-        status: true,
-        message: 'Token generado correctamente',
-        token: token
-    });*/
+    console.log(token)
 
     res.json({
         message: "Usuario logueado correctamente",
@@ -62,12 +59,3 @@ export const login = async (req, res) => {
     });
     
 }
-
-/*export const validarLogin = async (req, res) => {
-    const { cedula, password } = req.body;
-
-    //Información del token
-    const usuarioToken = {
-        cedula:
-    };
-};*/
