@@ -5,6 +5,7 @@ import { DataLogin, LoginRequest} from '../../core/models/login';
 import { Subject, takeUntil } from 'rxjs';
 import { Data, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import config from 'config/config';
 
 
 
@@ -40,7 +41,8 @@ export class LoginComponent implements OnInit, OnDestroy{
           console.log(data);
           if(data.status == "success"){
             this.cookieService.set('token', data.token);
-            this.router.navigate(['/dashboard']);
+            // this.router.navigate(['/admin']);
+            window.location.href = config.URL_BASE_PATH + '/admin';
             this.loginForm.reset();
           }
         },

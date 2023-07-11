@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import config from 'config/config';
 
 @Component({
   selector: 'app-home',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-
+  baseUrl = config.URL_BASE_PATH;
+  url = '/admin/' + this.baseUrl + 'login'
 }
