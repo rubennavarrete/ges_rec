@@ -93,8 +93,9 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
     ).subscribe({
       next: (data) => {
         this.editFormMed = this.fb.group({
-          str_nombre_comercial: [data.str_nombre_comercial, Validators.required],
-          str_nombre_generico: [data.str_nombre_generico, Validators.required],
+          id_medicacion: [data.int_id_medicacion],
+          nombre_comercial: [data.str_nombre_comercial, Validators.required],
+          nombre_generico: [data.str_nombre_generico, Validators.required],
         });
       },
       error: (err) => {

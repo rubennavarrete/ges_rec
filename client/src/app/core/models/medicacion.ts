@@ -1,4 +1,5 @@
 export interface Medicacion {
+    id_medicacion: number;
     nombre_comercial: string;
     nombre_generico: string;
     int_id_medicacion: number;
