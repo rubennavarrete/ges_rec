@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { FarmaciasRoutingModule } from './farmacias-routing.module';
 import { FarmModule } from 'src/app/components/farmacias/farm.module';
-import { MedicacionesModule } from 'src/app/components/medicaciones/medicaciones.module';
 import { FarmaciasComponent } from './farmacias.component';
 
 

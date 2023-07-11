@@ -14,4 +14,4 @@ import { UpdateMedicacionesComponent } from "./modals/update-medicaciones/update
     exports: [AddMedicacionesComponent, UpdateMedicacionesComponent, ListMedicacionesComponent]
 })
 
-export class MedicacionesModule { }
+export class Medicaciones1Module { }
