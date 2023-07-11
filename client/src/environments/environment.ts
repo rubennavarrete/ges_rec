@@ -7,8 +7,8 @@ export const environment = {
   // urlOneDriveService:
   //   'https://pruebas.espoch.edu.ec:8181/WebCorreoInstitucional/ServiciosCorreos/TokenOneDrive',
 
-   urlApi: 'http://26.63.14.26:4000/',    
-    // urlApi: 'http://localhost:4000/',               //Local 
+   //urlApi: 'http://26.63.14.26:4000/',    
+    urlApi: 'http://localhost:4000/',               //Local 
  
 
   // CodigoSistemaOneDrive: 'ARCHPOLI',
