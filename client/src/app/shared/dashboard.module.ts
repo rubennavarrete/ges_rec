@@ -5,6 +5,7 @@ import { SimpleFooterComponent } from './simple-footer/simple-footer.component';
 import { SimpleSidebarComponent } from './simple-sidebar/simple-sidebar.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PaginationComponent } from './pagination/pagination.component';
 
 
 
@@ -13,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         SimpleHeaderComponent,
         SimpleFooterComponent,
         SimpleSidebarComponent,
+        PaginationComponent,
     ],
     imports: [
         CommonModule,
@@ -23,6 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         SimpleHeaderComponent,
         SimpleFooterComponent,
         SimpleSidebarComponent,
+        PaginationComponent
     ]
 })
 
