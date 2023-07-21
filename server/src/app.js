@@ -21,8 +21,6 @@ import verificarToken from "../middleware/auth-middleware.js";
 
 const app = express();
 
-app.use(cookiesParser());
-
 app.use(express.json());
 app.use(cors({
     origin: [

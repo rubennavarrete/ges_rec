@@ -7,7 +7,7 @@ async function main(){
     
     try{
         
-        //await sequelize.sync({force:false});
+        await sequelize.sync({force:false});
         sequelize
         .authenticate()
         .then(() => {  

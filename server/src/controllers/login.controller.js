@@ -1,6 +1,7 @@
 import { Usuarios } from "../models/Usuarios.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import  { jwtVariables } from "../config/variables.config.js"
 
 export const login = async (req, res) => {
     const { cedula, password } = req.body;
@@ -25,34 +26,34 @@ export const login = async (req, res) => {
         nombre: usuario.str_nombres,
         cedula: usuario.str_cedula,
     };
-    console.log('datos del usuario',usuarioToken)
-    const token = jwt.sign(usuarioToken,
-        process.env.SECRET_KEY || 'secretkey',
+    console.log('Usuario Token',usuarioToken)
+    const token = jwt.sign(usuarioToken, jwtVariables.jwtSecret,
+        //process.env.SECRET_KEY || 'secretkey',
         {
-        expiresIn: '12h', // Token y cookie expiran en 12 horas
+        expiresIn: "7d", // Token y cookie expiran en 12 horas
         }
     );
 
 
-    /*res.cookie('token', token, {
+    res.cookie('token', token, {
         httpOnly: false, // La cookie solo es accesible a través de HTTP
         maxAge: 12 * 60 * 60 * 1000, // Tiempo de expiración de la cookie en milisegundos (12 horas)
         secure: false, // Solo se envía la cookie a través de conexiones HTTPS
         sameSite: 'none' // Restricción estricta de envío de cookies en solicitudes cruzadas
-    });*/
+    });
 
      //cambiar nombre del token
-     res.cookie("token2023", token, {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // que sea misma hora que el token
+     /*res.cookie("token", token, {
+        expires: new Date(Date.now() + 99999999), // que sea misma hora que el token
         httpOnly: false,
         sameSite: "none",
-        secure: true,
+        secure: false,
         damin:"localhost"
-      });
+      });*/
 
     console.log(token)
 
-    res.json({
+    res.json({ 
         message: "Usuario logueado correctamente",
         status: 'success',
         token,

@@ -1,16 +1,57 @@
 import { sequelize } from "../database/database.js";
 import { Farmacias } from "../models/Farmacias.js";
+import { paginarDatos } from "../utils/paginacion.utils.js";
 import bcrypt from "bcrypt";
 
 //RECIBIR TODAS LAS FARMACIAS
 export const getFarmacias = async (req, res) => {
+
+    console.log(req.query);
     try{
         const farmacias = await Farmacias.findAll();
         res.json(farmacias);
     }catch (error){
         return res.status(500).json({message: error.message});
     }
-    
+
+    /*try {
+        const paginationData = req.query;
+
+        if(paginationData.page === "undefined") {
+            const { datos, total } = await paginarDatos(1, 10, Bienes, '', '');
+            return res.json({
+                status: true,
+                message:  "Farmacias obtenidas correctamente",
+                body: datos,
+                total: total
+            });
+        }
+
+        const farmacias = await Farmacias.findAll();
+        if(farmacias.length === 0 || !farmacias) {
+            return res.json({
+                status: false,
+                message: "No se encontraron farmacias"
+            });
+        } else {
+            const { datos, total } = await paginarDatos(
+                paginationData.page,
+                paginationData.size,
+                Farmacias,
+                paginationData.parameter,
+                paginationData.data
+            );
+
+            return res.json({
+                status: true,
+                message: "Farmacias obtenidas correctamente",
+                body: datos,
+                total: total
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }*/
 }
 
 //RECIBIR UNA FARMACIA
