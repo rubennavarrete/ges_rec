@@ -11,12 +11,13 @@ import { AddMedicacionesService } from 'src/app/core/services/add-medicaciones.s
 })
 export class ListMedicacionesComponent implements OnInit, OnDestroy {
 
-  cedulaSeleccionada: string = '';
+  medicacionSeleccionada: string = '';
+
   
   
   showWindow1: boolean = true;
   showWindow2: boolean = false;
-  showWindow3: boolean = false;
+  
   dataMed: any;
   
 
@@ -24,23 +25,23 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
   constructor(public srvMed: AddMedicacionesService) { }
   
   toggleWindows() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow2 = !this.showWindow2;
+    this.showWindow1 = false;
+    this.showWindow2 = true;
   }
   toggleWindows2() {
     this.showWindow1 = !this.showWindow1;
-    this.showWindow3 = !this.showWindow3;
+    this.showWindow2 = !this.showWindow2;
   }
+
+
   ngOnInit(): void { 
     this.srvMed.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
         if(data){
-          this.showWindow1 = data;
           this.getMedicaciones(); 
-          // this.showWindow2 = !data; 
-          this.showWindow3 = !data;
+          this.toggleWindows2();
         }
       }
     });
@@ -66,8 +67,8 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
   }
 
 
-  editarMedicacion(int_id_medicacion: number): void {
-    this.srvMed.getMedicacion(int_id_medicacion)
+  editarMedicacion(id_medicacion:number): void {
+    this.srvMed.getMedicacion(id_medicacion)
     .pipe(
       takeUntil(this.destroy$)
     )
@@ -75,7 +76,6 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
       next: (data) => {
         console.log(data);
         this.srvMed.setConfirmEdit(data);
-        this.toggleWindows();
       },
       error: (error) => {
         console.log(error);

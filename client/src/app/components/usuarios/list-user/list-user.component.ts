@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AddUserService } from '../../../core/services/add-user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { EditUser } from 'src/app/core/models/user';
+import { PaginacionService } from 'src/app/core/services/paginacion.service';
 
 
 
@@ -15,6 +16,22 @@ import { EditUser } from 'src/app/core/models/user';
 
 export class ListUserComponent implements OnInit,  OnDestroy {
   
+  elementPagina: {
+    dataLength: number,
+    metaData: number,
+    currentPage: number
+  } = {
+      dataLength: 0,
+      metaData: 0,
+      currentPage: 0
+    }
+
+  currentPage = 1;
+  metadata: any;
+  mapFiltersToRequest: any = {};
+  
+ 
+ 
   cedulaSeleccionada: string = '';
   
   
@@ -25,7 +42,8 @@ export class ListUserComponent implements OnInit,  OnDestroy {
   
 
   private destroy$ = new Subject<any>();
-  constructor(public srvUser: AddUserService) { }
+  constructor(public srvUser: AddUserService,
+    public srvPaginacion: PaginacionService) { }
   
   toggleWindows() {
     this.showWindow1 = !this.showWindow1;
@@ -36,6 +54,7 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     this.showWindow3 = !this.showWindow3;
   }
   ngOnInit(): void { 
+    this.pasarPagina(1)
     this.srvUser.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
@@ -49,19 +68,22 @@ export class ListUserComponent implements OnInit,  OnDestroy {
       }
     });
 
-    this.getUsuarios();
+    // this.getUsuarios();
 
   }
   
   getUsuarios() {
-    this.srvUser.getUsuarios()
+    this.srvUser.getUsuarios(this.mapFiltersToRequest)
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe({
-      next: (data) => {
+      next: (data: any) => {
         console.log(data);
-        this.dataUser = data;
+        this.srvUser.dataU = data.body
+        this.metadata = data.total
+        this.dataUser = data.body;
+        this.dataPagina()
       },
       error: (error) => {
         console.log(error);
@@ -88,6 +110,20 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     });
   }
 
+
+
+  dataPagina() {
+    this.elementPagina.dataLength = this.srvUser.dataU ? this.srvUser.dataU.length : 0;
+    this.elementPagina.metaData = this.metadata;
+    this.elementPagina.currentPage = this.mapFiltersToRequest.page
+    this.srvPaginacion.setPagination(this.elementPagina)
+  }
+
+  pasarPagina(page: number) {
+    this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
+    console.log('mapFiltersToRequest', this.mapFiltersToRequest);
+    this.getUsuarios();
+  }
 
 
   ngOnDestroy(): void {

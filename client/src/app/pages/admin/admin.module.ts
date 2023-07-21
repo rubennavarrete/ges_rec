@@ -4,6 +4,7 @@ import { FarmaciasComponent } from './farmacias/farmacias.component';
 import { MedicosComponent } from './medicos/medicos.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { RouterModule, Routes } from '@angular/router';
+import { MedicacionesComponent } from './medicaciones/medicaciones.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,13 @@ const routes: Routes = [
         import('./farmacias/farmacias.module').then(
           (m) => m.FarmaciasModule
         )
+      },
+      {
+        path: 'medicaciones',
+        loadChildren: () =>
+        import('./medicaciones/medicaciones.module').then(
+          (m) => m.MedicacionesModule
+          )
       }
     ]
   }
@@ -40,6 +48,8 @@ const routes: Routes = [
     // FarmaciasComponent,
     // MedicosComponent,
     // UsuariosComponent
+  
+    // MedicacionesComponent
   ],
   imports: [
     CommonModule,

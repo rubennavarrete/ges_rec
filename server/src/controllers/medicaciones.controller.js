@@ -14,10 +14,10 @@ export const getMedicaciones = async (req, res) => {
 //RECIBIR UN MEDICAMENTO
 export const getMedicacion= async (req, res) => {
     try {
-        const { id_medicamento } = req.params;
+        const { id_medicacion } = req.params;
         const medicamento = await Medicaciones.findOne({
             where: {
-                int_id_medicamento: id_medicamento,
+                int_id_medicacion: id_medicacion,
             },
         });
 
@@ -31,13 +31,13 @@ export const getMedicacion= async (req, res) => {
 //RECIBIR UN MEDICAMENTO POR NOMBRE
 export const getMedicacionByName= async (req, res) => {
     try {
-        const { nombre } = req.query;
-        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%')`;
+        const { nombre_comercial } = req.query;
+        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre_comercial}%')`;
 
         const medicamento = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT
         });
-        console.log(nombre);
+        console.log(nombre_comercial);
         if (medicamento.length === 0) return res.json({status: "error", message: "No se ha encontrado el medicamento"});
         
         return res.json({
@@ -70,19 +70,28 @@ export const createMedicacion = async (req, res) => {
 
 //ACTUALIZAR UN MEDICAMENTO
 export const updateMedicacion= async (req, res) => {
-    const { id_medicamento } = req.params;
+    const { id_medicacion } = req.params;
     const { nombre_comercial, nombre_generico } = req.body;
     try {
-        const updateMedicamento = await Medicaciones.findOne({
+        const medicamento = await Medicaciones.findOne({
             where: {
-                int_id_medicamento: id_medicamento,
+                int_id_medicacion: id_medicacion,
             },
         });
 
-        updateMedicamento.str_nombre_comercial = nombre_comercial;
-        updateMedicamento.str_nombre_generico = nombre_generico;
+        if (medicamento.length === 0) return res.status(404).json({ message: "No se ha encontrado el medicamento" });
 
-        await updateMedicamento.save();
+        const updateMedicamento = await Medicaciones.update(
+            {
+                str_nombre_comercial: nombre_comercial,
+                str_nombre_generico: nombre_generico,
+            },
+            {
+                where: {
+                    int_id_medicacion: id_medicacion,
+                },
+            }
+        );
         
         res.json({ 
             message: "Se ha actualizado el medicamento",
@@ -96,11 +105,11 @@ export const updateMedicacion= async (req, res) => {
 
 //ELIMINAR UN MEDICAMENTO
 export const deleteMedicacion = async (req, res) => {
-    const { id_medicamento } = req.params;
+    const { id_medicacion } = req.params;
     try {
         const deleteRowCount = await Medicaciones.destroy({
             where: {
-                int_id_medicamento: id_medicamento,
+                int_id_medicamento: id_medicacion,
             },
         });
         res.json({ message: "Se ha eliminado el medicamento"});

@@ -1,20 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 //COMPONENTES
 import { FullLayoutComponent } from './full-layout/full-layout.component';
 import { SimpleLayoutComponent } from './simple-layout/simple-layout.component';
 
-import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
 
 //MODULOS
-import { LoginModule } from '../pages/login/login.module';
-import { UserModule} from '../components/usuarios/user.module';
-// import { FarmModule } from '../components/farmacias/farm.module';
 import { DashboardModule } from '../shared/dashboard.module';
-import { MedicoModule } from '../components/medicos/medico.module';
-import { MedicacionesModule } from '../components/medicaciones/medicaciones.module';
+
 
 
 
@@ -25,13 +20,6 @@ import { MedicacionesModule } from '../components/medicaciones/medicaciones.modu
   ],
   imports: [
     CommonModule,
-    // LoginModule,
-    
-    // ReactiveFormsModule,
-    // FarmModule,
-    // UserModule,
-    // DashboardModule,
-    // MedicoModule
     RouterModule.forChild([]),
     DashboardModule
 
