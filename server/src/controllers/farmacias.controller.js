@@ -7,14 +7,8 @@ import bcrypt from "bcrypt";
 export const getFarmacias = async (req, res) => {
 
     console.log(req.query);
-    try{
-        const farmacias = await Farmacias.findAll();
-        res.json(farmacias);
-    }catch (error){
-        return res.status(500).json({message: error.message});
-    }
 
-    /*try {
+    try {
         const paginationData = req.query;
 
         if(paginationData.page === "undefined") {
@@ -51,7 +45,7 @@ export const getFarmacias = async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({ message: error.message });
-    }*/
+    }
 }
 
 //RECIBIR UNA FARMACIA
