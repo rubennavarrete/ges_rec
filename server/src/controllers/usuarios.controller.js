@@ -10,7 +10,7 @@ import bcrypt from "bcrypt";
 
 //RECIBIR TODOS LOS USUARIOS
 export const getUsuarios = async (req, res) => {
-    console.log(req.query);
+    //console.log(req.query);
     try{
         const paginationData = req.query;
 
