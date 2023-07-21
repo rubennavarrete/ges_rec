@@ -1,6 +1,7 @@
 import { Usuarios } from "../models/Usuarios.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import  { jwtVariables } from "../config/variables.config.js"
 
 export const login = async (req, res) => {
     const { cedula, password } = req.body;
@@ -21,16 +22,18 @@ export const login = async (req, res) => {
         return res.status(400).json({ message: "Contraseña incorrecta" });
 
     // CREAR TOKEN
-    const token = jwt.sign(
+    const usuarioToken = {
+        nombre: usuario.str_nombres,
+        cedula: usuario.str_cedula,
+    };
+    console.log('Usuario Token',usuarioToken)
+    const token = jwt.sign(usuarioToken, jwtVariables.jwtSecret,
+        //process.env.SECRET_KEY || 'secretkey',
         {
-            nombre: usuario.str_nombres,
-            id_usuario: usuario.id_usuario,
-        },
-        process.env.SECRET_KEY || 'secretkey',
-        {
-        expiresIn: '12h', // Token y cookie expiran en 12 horas
+        expiresIn: "7d", // Token y cookie expiran en 12 horas
         }
     );
+
 
     res.cookie('token', token, {
         httpOnly: false, // La cookie solo es accesible a través de HTTP
@@ -39,7 +42,18 @@ export const login = async (req, res) => {
         sameSite: 'none' // Restricción estricta de envío de cookies en solicitudes cruzadas
     });
 
-    res.json({
+     //cambiar nombre del token
+     /*res.cookie("token", token, {
+        expires: new Date(Date.now() + 99999999), // que sea misma hora que el token
+        httpOnly: false,
+        sameSite: "none",
+        secure: false,
+        damin:"localhost"
+      });*/
+
+    console.log(token)
+
+    res.json({ 
         message: "Usuario logueado correctamente",
         status: 'success',
         token,
