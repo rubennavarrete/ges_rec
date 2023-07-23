@@ -25,7 +25,7 @@ export const login = async (req, res) => {
     // CREAR TOKEN
     const usuarioToken = {
         nombre: usuario.str_nombres,
-        cedula: usuario.str_cedula,
+        id_usuario: usuario.int_id_usuario,
     };
     console.log('Usuario Token',usuarioToken)
     const token = jwt.sign(usuarioToken, jwtVariables.jwtSecret,
@@ -34,8 +34,6 @@ export const login = async (req, res) => {
         expiresIn: "7d", // Token y cookie expiran en 12 horas
         }
     );
-
-
 
     res.cookie('token', token, {
         httpOnly: false, // La cookie solo es accesible a través de HTTP

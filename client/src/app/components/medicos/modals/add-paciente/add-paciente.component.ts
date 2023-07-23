@@ -92,7 +92,7 @@ export class AddPacienteComponent implements OnInit, OnDestroy {
           this.userform.value.fecha_nac = formatDate(this.userform.value.fecha_nac, 'yyyy-MM-dd', 'en-US');
           this.srvUser.postUsuario(this.userform.value).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: DataUser) => {
-              console.log(data);
+              //console.log(data);
               if(data.status == "success"){
                 Swal.close();
                 Swal.fire({

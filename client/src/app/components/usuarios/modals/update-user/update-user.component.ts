@@ -96,7 +96,6 @@ export class UpdateUserComponent implements OnInit, OnDestroy{
             complete: () => {
               this.srvUser.setConfirmAdd(true);
               this.editform.reset();
-              console.log('complete');
 
             }
           });

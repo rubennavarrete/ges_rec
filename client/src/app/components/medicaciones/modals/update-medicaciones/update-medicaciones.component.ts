@@ -73,7 +73,7 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
             complete: () => {
               this.srvMed.setConfirmAdd(true);
               this.editFormMed.reset();
-              console.log('complete');
+              
 
             }
           });

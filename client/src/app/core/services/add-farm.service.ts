@@ -57,7 +57,7 @@ export class AddFarmService {
   // }
 
   getFarmacias( pagination: any) {
-    console.log('en el servicio ->', pagination)
+    // console.log('en el servicio ->', pagination)
     
     const params = new HttpParams()
         .set('page', pagination.page)

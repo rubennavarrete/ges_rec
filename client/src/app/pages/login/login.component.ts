@@ -41,10 +41,10 @@ export class LoginComponent implements OnInit, OnDestroy{
     if(this.loginForm.valid){
       this.srvLogin.getLogin(this.loginForm.value as LoginRequest).pipe(takeUntil(this.destroy$)).subscribe({
         next: (data: DataLogin) => {
-          console.log(data);
+          //console.log(data);
           if(data.status == "success"){
 
-            this.cookieService.set('token', data.token, 1, '/');
+            this.cookieService.set('token', data.token);
             // this.router.navigate(['/admin']);
             window.location.href = config.URL_BASE_PATH + '/admin';
             this.loginForm.reset();

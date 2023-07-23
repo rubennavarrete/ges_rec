@@ -66,7 +66,7 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
     this.srvFarm.getFarmacias(this.mapFiltersToRequest)
     .subscribe({
       next: (data: any) => {
-        console.log('lo que llega ->', data)
+        // console.log('lo que llega ->', data)
         this.srvFarm.dataF = data.body
         this.metadata = data.total
         this.dataFarmacia = data.body;
@@ -86,7 +86,7 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (data) => {
-        console.log(data);
+        //console.log(data);
         this.srvFarm.setConfirmEdit(data);
         
       },
