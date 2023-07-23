@@ -80,7 +80,7 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
     )
     .subscribe({
       next: (data) => {
-        console.log(data);
+        // //console.log(data);
         this.srvUser.setConfirmEdit(data);
       },
       error: (error) => {
@@ -98,7 +98,6 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
     )
     .subscribe({
       next: (data) => {
-        console.log(data);
         this.srvUser.setConfirmEdit(data);
       },
       error: (error) => {
@@ -135,7 +134,7 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
 
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
-    console.log('mapFiltersToRequest', this.mapFiltersToRequest);
+    // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
     this.getUsuarios();
   }
 

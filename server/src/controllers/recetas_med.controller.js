@@ -30,17 +30,18 @@ export const getReceta_med = async(req, res) =>{
 }
 
 // CREAR LISTA DE MEDICAMENTOS
-export const createReceta_med = async (id_receta, req, medicamentos, t) => {
+export const createReceta_med = async (id_receta, req, t) => {
+    const { medicamentos } = req.body;
     try {
         for (const medicamento of medicamentos) {
             await Recetas_medicacion.create(
                 {
                     int_id_receta: id_receta,
                     int_id_medicacion: medicamento.id_medicacion,
-                    int_cantidad: medicamento.cantidad,
+                    str_cantidad: medicamento.cantidad,
                     str_dosis: medicamento.dosis,
                     str_duracion: medicamento.duracion,
-                    str_indicacion: medicamento.indicacion,
+                    str_indicacion: medicamento.indicaciones,
                 },
                 { transaction: t }
             );

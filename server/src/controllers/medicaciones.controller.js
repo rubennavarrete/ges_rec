@@ -31,13 +31,13 @@ export const getMedicacion= async (req, res) => {
 //RECIBIR UN MEDICAMENTO POR NOMBRE
 export const getMedicacionByName= async (req, res) => {
     try {
-        const { nombre_comercial } = req.query;
-        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre_comercial}%')`;
+        const { nombre } = req.query;
+        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%')`;
 
         const medicamento = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT
         });
-        console.log(nombre_comercial);
+        console.log(nombre);
         if (medicamento.length === 0) return res.json({status: "error", message: "No se ha encontrado el medicamento"});
         
         return res.json({

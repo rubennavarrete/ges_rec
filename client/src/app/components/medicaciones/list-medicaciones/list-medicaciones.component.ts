@@ -57,7 +57,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (data) => {
-        console.log(data);
+        //console.log(data);
         this.dataMed = data;
       },
       error: (error) => {
@@ -74,7 +74,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (data) => {
-        console.log(data);
+        //console.log(data);
         this.srvMed.setConfirmEdit(data);
       },
       error: (error) => {

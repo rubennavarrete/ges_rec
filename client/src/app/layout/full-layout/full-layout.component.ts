@@ -14,7 +14,7 @@ export class FullLayoutComponent implements OnInit{
 
   ngOnInit(): void {
     if(window.innerWidth > 640){
-      console.log("ventana grande");
+      // console.log("ventana grande");
       let content = document.querySelector(".content")
       content?.classList.toggle("closeC")
     }

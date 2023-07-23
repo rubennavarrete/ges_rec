@@ -79,7 +79,7 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     )
     .subscribe({
       next: (data: any) => {
-        console.log(data);
+        //console.log(data);
         this.srvUser.dataU = data.body
         this.metadata = data.total
         this.dataUser = data.body;
@@ -101,7 +101,7 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     )
     .subscribe({
       next: (data) => {
-        console.log(data);
+        //console.log(data);
         this.srvUser.setConfirmEdit(data);
       },
       error: (error) => {
@@ -121,7 +121,7 @@ export class ListUserComponent implements OnInit,  OnDestroy {
 
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
-    console.log('mapFiltersToRequest', this.mapFiltersToRequest);
+    // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
     this.getUsuarios();
   }
 

@@ -10,7 +10,7 @@ export interface Medicacion {
 export interface MedicacionResponse {
     status: string;
     message: string;
-    data: Medicacion;
+    data: Medicacion [];
 }
 
 export interface EditMedicacion {
