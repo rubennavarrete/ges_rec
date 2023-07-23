@@ -32,7 +32,7 @@ app.use(cors({
 
 app.use(cookieParser());
 app.use(loginRoutes);
-//app.use(verificarToken);
+app.use(verificarToken);
 app.use(usuariosRoutes);
 app.use(rolesRoutes);
 app.use(perfilesRoutes);
