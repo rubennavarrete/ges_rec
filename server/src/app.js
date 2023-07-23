@@ -1,5 +1,5 @@
 import express from "express";
-
+import cookieParser from "cookie-parser";
 //RUTAS
 import usuariosRoutes from "./routes/usuarios.routes.js"
 import rolesRoutes from "./routes/roles.routes.js"
@@ -19,9 +19,7 @@ import cookiesParser from "cookie-parser";
 import cors from "cors";
 import verificarToken from "../middleware/auth-middleware.js";
 
-const app=express();
-
-app.use(cookiesParser());
+const app = express();
 
 app.use(express.json());
 app.use(cors({
@@ -32,6 +30,7 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use(cookieParser());
 app.use(loginRoutes);
 app.use(verificarToken);
 app.use(usuariosRoutes);

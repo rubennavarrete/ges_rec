@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-
-
+import  { jwtVariables } from "../src/config/variables.config.js"
+import cookieParser from 'cookie-parser';
 
 const  verificarToken = async (req, res, next) => {
     try{
