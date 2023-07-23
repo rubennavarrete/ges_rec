@@ -2,6 +2,7 @@ import { Usuarios } from "../models/Usuarios.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
+
 export const login = async (req, res) => {
     const { cedula, password } = req.body;
 
@@ -32,17 +33,18 @@ export const login = async (req, res) => {
         }
     );
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
         httpOnly: false, // La cookie solo es accesible a través de HTTP
         maxAge: 12 * 60 * 60 * 1000, // Tiempo de expiración de la cookie en milisegundos (12 horas)
-        secure: false, // Solo se envía la cookie a través de conexiones HTTPS
-        sameSite: 'none' // Restricción estricta de envío de cookies en solicitudes cruzadas
+        secure: true, // Solo se envía la cookie a través de conexiones HTTPS
+        sameSite: 'none', // Restricción estricta de envío de cookies en solicitudes cruzadas
     });
+
 
     res.json({
         message: "Usuario logueado correctamente",
         status: 'success',
         token,
     });
-    
+
 }

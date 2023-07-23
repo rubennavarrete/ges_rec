@@ -7,17 +7,15 @@ import { LoginService } from './core/services/login.service';
 
 
 //MODULES
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 
 //LAYOUT
 import { LayoutModule } from "./layout/layout.module";
-import { HomeComponent } from './pages/home/home.component';
 import { LoginModule } from './pages/login/login.module';
-import { FarmaciasComponent } from './pages/admin/farmacias/farmacias.component';
-import { MedicosComponent } from './pages/admin/medicos/medicos.component';
-import { AdminComponent } from './pages/admin/admin.component';
 import { AdminModule } from './pages/admin/admin.module';
+import { CookieService } from 'ngx-cookie-service';
+import { InjectSessionInterceptor } from './core/interceptors/inject-session.interceptor';
 
 
 
@@ -34,6 +32,13 @@ import { AdminModule } from './pages/admin/admin.module';
     ],
     providers: [
         LoginService,
+        CookieService,
+        [
+            { provide:HTTP_INTERCEPTORS,
+                useClass: InjectSessionInterceptor,
+                multi: true,
+            }
+        ]
 
     ],
     bootstrap: [AppComponent],
