@@ -33,13 +33,13 @@ export const getReceta = async(req, res) =>{
 //CREAR UNA RECETA Y LISTA DE MEDICAMENTOS
 
 export const createReceta = async (req, res) => {
-    const { id_paciente, diagnostico, medicamento } = req.body;
+    const { id_paciente, id_medico, diagnostico, medicamentos } = req.body;
     const t = await sequelize.transaction();
     try {
         const newReceta = await Recetas.create(
             {
                 int_id_paciente: id_paciente,
-                int_id_medico: req.usuario.id_usuario,
+                int_id_medico: id_medico,
                 txt_diagnostico: diagnostico,
                 bln_estado: true,
             },
@@ -47,8 +47,8 @@ export const createReceta = async (req, res) => {
         );
 
         // Crea la lista de medicamentos
-        const medicamentosArray = Array.isArray(medicamento) ? medicamento : [medicamento];
-        await createReceta_med(newReceta.int_id_receta, req, medicamentosArray, t);
+    
+        await createReceta_med(newReceta.int_id_receta, req, t);
 
         await t.commit();
 

@@ -1,0 +1,14 @@
+.title{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.content-list {
+    width: 80vw;
+}
+
+.btn-regresar{
+    display: flex;
+    justify-content: right;
+}

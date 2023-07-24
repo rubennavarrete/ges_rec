@@ -3,19 +3,52 @@ import { Usuarios } from "../models/Usuarios.js";
 import { createPerfil } from "./perfiles.controller.js";
 import { createMedico } from "./medicos.controller.js";
 import { createPaciente } from "./pacientes.controller.js";
+import { paginarDatos } from "../utils/paginacion.utils.js";
 import bcrypt from "bcrypt";
 
 
 
 //RECIBIR TODOS LOS USUARIOS
 export const getUsuarios = async (req, res) => {
+    //console.log(req.query);
     try{
+        const paginationData = req.query;
+
+        if(paginationData.page === "undefined"){
+            const { datos, total } = await paginarDatos(1, 10, Usuarios, '', '');
+            return res.json({
+                status: true,
+                message: "Usuarios obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
+
         const usuarios = await Usuarios.findAll();
-        res.json(usuarios);
-    }catch (error){
-        return res.status(500).json({message: error.message});
+        if(usuarios.length === 0 || !usuarios){
+            return res.json({
+                status: false,
+                message: "No se encontraron usuarios"
+            });
+        }else {
+            const { datos, total } = await paginarDatos(
+                paginationData.page,
+                paginationData.size,
+                Usuarios,
+                paginationData.parameter,
+                paginationData.data
+            );
+
+            return res.json({
+                status: true,
+                message: "Usuarios obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-    
 };
 
 //RECIBIR UN USUARIO

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DataFarm, EditFarm, Farm } from '../models/farm';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import config from 'config/config';
 
 
 
@@ -21,7 +22,10 @@ const confirmEdit:EditFarm = {
   providedIn: 'root'
 })
 export class AddFarmService {
-  URL_API = 'http://localhost:4000/farmacias';
+
+  dataF!: any[]
+
+  private URL_API:string = config.URL_API_BASE + 'farmacias';
 
   //BEHAVIOR SUBJECT
   private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);
@@ -48,8 +52,24 @@ export class AddFarmService {
 
   constructor(private http: HttpClient) { }
 
-  getFarmacias() {
-    return this.http.get<EditFarm[]>(this.URL_API);
+  // getFarmacias() {
+  //   return this.http.get<EditFarm[]>(this.URL_API);
+  // }
+
+  getFarmacias( pagination: any) {
+    // console.log('en el servicio ->', pagination)
+    
+    const params = new HttpParams()
+        .set('page', pagination.page)
+        .set('size', pagination.size)
+        .set('parameter', pagination.parameter)
+        .set('data', pagination.data);
+    
+      return this.http.get<EditFarm>(this.URL_API + '?' +params,
+        {
+          withCredentials: true,
+        }
+        );
   }
 
   getFarmacia(ruc: string) {

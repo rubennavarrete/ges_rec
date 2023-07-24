@@ -1,20 +1,23 @@
-<app-simple-header></app-simple-header>
-
-
-<div class="content-main">
-    <div>
-
+<div class="pFather">
+    <div class="pHeard">
+         <app-simple-header></app-simple-header>
     </div>
-    <app-simple-sidebar></app-simple-sidebar>
-    <div class="content">
-        <div class="main-dash">
-            <app-list-pacientes></app-list-pacientes>
+   
+    <div class="content-main">
+        <div class="pAside" id="idAside" [ngClass]="{'-translate-x-full': !isSidebarOpen}">
+            <app-simple-sidebar style="height: 100%;"></app-simple-sidebar>
         </div>
-        
+
+        <div class="content">
+            <div class="main-dash">
+                <router-outlet></router-outlet>
+            </div>
+
+        </div>
     </div>
+    <div class="pFooter">
+        <app-simple-footer></app-simple-footer>
+    </div>
+
+    
 </div>
-
-
-<app-simple-footer></app-simple-footer>
-
-

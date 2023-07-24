@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DataUser, User, EditUser } from '../models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Data } from '@angular/router';
+import config from 'config/config';
 
 
 const confirmAdd:boolean = false;
@@ -24,7 +24,10 @@ const confirmEdit:EditUser = {
   providedIn: 'root'
 })
 export class AddUserService {
-  URL_API = 'http://localhost:4000/usuarios';
+
+  dataU!: any[]
+
+  private URL_API: string = config.URL_API_BASE + 'usuarios';
 
   //BEHAVIOR SUBJECT
   private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);
@@ -51,8 +54,22 @@ export class AddUserService {
 
   constructor( private http: HttpClient) {}
 
-  getUsuarios() {
-    return this.http.get<User[]>(this.URL_API);
+  // getUsuarios() {
+  //   return this.http.get<User[]>(this.URL_API);
+  // }
+
+  getUsuarios(pagination: any) {
+    const params = new HttpParams()
+        .set('page', pagination.page)
+        .set('size', pagination.size)
+        .set('parameter', pagination.parameter)
+        .set('data', pagination.data);
+    
+      return this.http.get<User>(this.URL_API + '?' +params,
+        {
+          withCredentials: true,
+        }
+        );
   }
 
   getUsuario(cedula: string) {

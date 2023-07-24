@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { AddFarmService } from 'src/app/core/services/add-farm.service';
+import { PaginacionService } from 'src/app/core/services/paginacion.service';
 
 @Component({
   selector: 'app-list-farmacias',
@@ -8,6 +9,20 @@ import { AddFarmService } from 'src/app/core/services/add-farm.service';
   styleUrls: ['./list-farmacias.component.css']
 })
 export class ListFarmaciasComponent implements OnInit, OnDestroy {
+
+  elementPagina: {
+    dataLength: number,
+    metaData: number,
+    currentPage: number
+  } = {
+      dataLength: 0,
+      metaData: 0,
+      currentPage: 0
+    }
+
+  currentPage = 1;
+  metadata: any;
+  mapFiltersToRequest: any = {};
   
   rucSeleccionado: string = '';
   
@@ -17,7 +32,8 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
   dataFarmacia: any;  
 
   private destroy$ = new Subject<any>();
-  constructor(public srvFarm: AddFarmService) { }
+  constructor(public srvFarm: AddFarmService,
+    public srvPaginacion: PaginacionService) { }
   
   toggleWindows() {
     this.showWindow1 = !this.showWindow1;
@@ -28,6 +44,8 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
     this.showWindow3 = !this.showWindow3;
   }
   ngOnInit(): void {
+    this.pasarPagina(1)
+
     this.srvFarm.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
@@ -41,14 +59,18 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.getFarmacias();
+    // this.getFarmacias();
   }
 
   getFarmacias() {
-    this.srvFarm.getFarmacias()
+    this.srvFarm.getFarmacias(this.mapFiltersToRequest)
     .subscribe({
-      next: (data) => {
-        this.dataFarmacia = data;
+      next: (data: any) => {
+        // console.log('lo que llega ->', data)
+        this.srvFarm.dataF = data.body
+        this.metadata = data.total
+        this.dataFarmacia = data.body;
+        this.dataPagina()
       },
       error: (err) => {
         console.log(err);
@@ -64,8 +86,9 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (data) => {
-        console.log(data);
+        //console.log(data);
         this.srvFarm.setConfirmEdit(data);
+        
       },
       error: (err) => {
         console.log(err);
@@ -73,7 +96,18 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
     });
   }
 
+  dataPagina() {
+    this.elementPagina.dataLength = this.srvFarm.dataF ? this.srvFarm.dataF.length : 0;
+    this.elementPagina.metaData = this.metadata;
+    this.elementPagina.currentPage = this.mapFiltersToRequest.page
+    this.srvPaginacion.setPagination(this.elementPagina)
+  }
 
+  pasarPagina(page: number) {
+    this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
+    console.log('mapFiltersToRequest', this.mapFiltersToRequest);
+    this.getFarmacias();
+  }
 
 
   

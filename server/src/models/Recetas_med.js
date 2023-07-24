@@ -19,13 +19,13 @@ export const Recetas_medicacion = sequelize.define(
             allowNull: false,
         },
 
-        int_cantidad: {
-            type: DataTypes.INTEGER,
+        str_cantidad: {
+            type: DataTypes.STRING(100),
             allowNull: false,
         },
 
         str_dosis: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING(100),
             allowNull: false, 
         },
 

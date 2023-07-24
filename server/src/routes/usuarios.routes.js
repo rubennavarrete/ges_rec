@@ -4,6 +4,8 @@ import { createUsuario, getUsuarios, getUsuario, updateUsuario, deleteUsuario } 
 
 const router = Router();
 
+
+
 router.get("/usuarios", getUsuarios)
 router.get("/usuarios/:cedula", getUsuario)
 router.post("/usuarios", createUsuario)
