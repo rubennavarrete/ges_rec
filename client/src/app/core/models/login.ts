@@ -9,3 +9,19 @@ export interface LoginRequest{
     password: string;
 }
 
+export interface Reset {
+    correo: string;
+}
+
+export interface ResetResponse {
+    status: string;
+    token: string;
+}
+
+export interface Change {
+    password: string;
+}
+
+export interface ChangeResponse {
+    status: string;
+}
