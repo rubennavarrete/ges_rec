@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 
 import { ChangePasswordRoutingModule } from './change-password-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ChangePasswordComponent } from './change-password.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [ChangePasswordComponent],
   imports: [
     CommonModule,
     ChangePasswordRoutingModule,
     ReactiveFormsModule,
     
-  ]
+  ],
+  exports: [ChangePasswordComponent]
 })
 export class ChangePasswordModule { }

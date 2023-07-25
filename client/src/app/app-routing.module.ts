@@ -9,6 +9,7 @@ import { LoginModule } from './pages/login/login.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { SessionGuard } from './core/guards/session.guard';
 import { ResetPasswordModule } from './components/reset-password/reset-password.module';
+import { ChangePasswordModule } from './components/change-password/change-password.module';
 
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
     children:[
       {path:'', loadChildren:() => HomeModule},
       {path:'login', loadChildren:() => LoginModule},
-      {path:'reset', loadChildren:() => ResetPasswordModule}
+      {path:'reset', loadChildren:() => ResetPasswordModule},
+      {path:'reset_password', loadChildren:() => ChangePasswordModule},
     ]
     // component: SimpleLayoutComponent,
   },
