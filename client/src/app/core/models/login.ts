@@ -20,6 +20,7 @@ export interface ResetResponse {
 
 export interface Change {
     password: string;
+    confirm_password: string;
 }
 
 export interface ChangeResponse {

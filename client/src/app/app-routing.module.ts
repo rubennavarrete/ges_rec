@@ -8,6 +8,7 @@ import { HomeModule } from './pages/home/home.module';
 import { LoginModule } from './pages/login/login.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { SessionGuard } from './core/guards/session.guard';
+import { ResetPasswordModule } from './components/reset-password/reset-password.module';
 
 
 const routes: Routes = [
@@ -16,7 +17,8 @@ const routes: Routes = [
     data: {layout: Layouts.Simple},
     children:[
       {path:'', loadChildren:() => HomeModule},
-      {path:'login', loadChildren:() => LoginModule}
+      {path:'login', loadChildren:() => LoginModule},
+      {path:'reset', loadChildren:() => ResetPasswordModule}
     ]
     // component: SimpleLayoutComponent,
   },
