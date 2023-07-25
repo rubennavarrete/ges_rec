@@ -35,6 +35,11 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
     changePassword() {
       if (this.resetPass.valid) {
+        if (this.resetPass.value.password != this.resetPass.value.confirm_password) {
+          alert('Las contraseñas no coinciden');
+          return;
+        }
+    
         // Mostrar el SweetAlert para confirmar el cambio de contraseña
         Swal.fire({
           title: '¿Estás seguro?',
@@ -50,7 +55,16 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
             this.srvReset.changePassword(this.resetPass.value as Change).pipe(takeUntil(this.destroy$)).subscribe({
               next: (data: ChangeResponse) => {
                 if (data.status == "success") {
-                  this.router.navigate(['/login']);
+                  // SweetAlert para informar que la contraseña ha sido cambiada
+                  Swal.fire({
+                    title: 'Contraseña cambiada',
+                    text: 'Tu contraseña ha sido cambiada exitosamente.',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                  }).then(() => {
+                    this.router.navigate(['/login']);
+                  });
                 }
               },
               error: (error) => {
