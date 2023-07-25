@@ -16,6 +16,7 @@ import { LoginModule } from './pages/login/login.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { CookieService } from 'ngx-cookie-service';
 import { InjectSessionInterceptor } from './core/interceptors/inject-session.interceptor';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 
 
@@ -24,6 +25,7 @@ import { InjectSessionInterceptor } from './core/interceptors/inject-session.int
 @NgModule({
     declarations: [
         AppComponent,
+        ChangePasswordComponent,
         // HomeComponent,
         // FarmaciasComponent,
         // MedicosComponent,

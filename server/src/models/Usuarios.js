@@ -63,11 +63,17 @@ export const Usuarios = sequelize.define(
             allowNull: false,
         },
 
+        str_token: {
+            type: DataTypes.STRING(200),
+            allowNull: true,
+        },
+
         dt_fecha_creacion: {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
+
 
     },
     {

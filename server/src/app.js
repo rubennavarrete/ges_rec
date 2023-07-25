@@ -10,6 +10,7 @@ import loginRoutes  from "./routes/login.routes.js";
 import farmaciasRoutes from "./routes/farmacias.routes.js";
 import recetasRoutes from "./routes/recetas.routes.js";
 import medicacionesRoutes from "./routes/medicaciones.routes.js";
+import resetPasswordRoutes from "./routes/reset_password.routes.js";
 import cookiesParser from "cookie-parser";
 
 
@@ -18,6 +19,7 @@ import cookiesParser from "cookie-parser";
 //MIDDLEWARES
 import cors from "cors";
 import verificarToken from "../middleware/auth-middleware.js";
+
 
 const app = express();
 
@@ -31,7 +33,9 @@ app.use(cors({
 }));
 
 app.use(cookieParser());
+
 app.use(loginRoutes);
+app.use(resetPasswordRoutes);
 app.use(verificarToken);
 app.use(usuariosRoutes);
 app.use(rolesRoutes);
