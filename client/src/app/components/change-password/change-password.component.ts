@@ -1,19 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Change, ChangeResponse } from 'src/app/core/models/login';
 import { ResetPasswordService } from 'src/app/core/services/reset-password.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-change_password',
-  templateUrl: './change_password.component.html',
-  styleUrls: ['./change_password.component.css']
+  selector: 'app-change-password',
+  templateUrl: './change-password.component.html',
+  styleUrls: ['./change-password.component.css']
 })
-export class Change_passwordComponent implements OnInit, OnDestroy {
-  
+export class ChangePasswordComponent implements OnInit, OnDestroy {
   ResetPasswordError: string = '';
   private destroy$ = new Subject<any>();
 
@@ -75,5 +74,4 @@ export class Change_passwordComponent implements OnInit, OnDestroy {
     this.destroy$.next({});
     this.destroy$.unsubscribe();
   }
-
 }
