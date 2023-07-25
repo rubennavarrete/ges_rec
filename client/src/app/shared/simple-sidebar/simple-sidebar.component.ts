@@ -1,5 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import config from 'config/config';
 import { SidebarService } from 'src/app/core/services/sidebar.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-simple-sidebar',
@@ -9,7 +13,9 @@ import { SidebarService } from 'src/app/core/services/sidebar.service';
 
 export class SimpleSidebarComponent implements OnInit {
   constructor(private elementRef: ElementRef,
-    private srvSideBar: SidebarService) { }
+    private srvSideBar: SidebarService,
+    private cookieService: CookieService, 
+    private router: Router) { }
 
   isSidebarOpen: boolean = false;
   isDropdownPagesOpen = false;
@@ -126,6 +132,26 @@ export class SimpleSidebarComponent implements OnInit {
   isDropdownOpen(id: string) {
     return this.dropdownsOpen[id];
   }
+
+  logout() {
+    Swal.fire({
+      title: 'Cerrar sesión',
+      text: '¿Estás seguro de que deseas cerrar sesión?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Eliminar la cookie con nombre "token"
+        this.cookieService.delete('token');
+        window.location.href = config.URL_BASE_PATH + '/login';
+      }
+    });
+  }
+  
+
 
 
 }
