@@ -133,9 +133,6 @@ export class UpdatePacienteComponent {
       },
       error: (err) => {
         console.log(err);
-      },
-      complete: () => {
-        console.log('complete');
       }
     });
   }

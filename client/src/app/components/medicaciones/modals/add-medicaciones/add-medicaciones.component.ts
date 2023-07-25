@@ -51,7 +51,7 @@ export class AddMedicacionesComponent implements OnDestroy, OnInit {
         if(this.medicamentoform.valid){
           this.srvMed.postMedicacion(this.medicamentoform.value).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: MedicacionResponse) => {
-              console.log(data);
+              //console.log(data);
               if(data.status == "success"){
                 Swal.close();
                 Swal.fire({

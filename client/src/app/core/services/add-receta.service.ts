@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Medicamentos, Receta, RecetaResponse } from '../models/receta';
+import { BehaviorSubject, EMPTY, Observable, catchError, map } from 'rxjs';
+import { Receta, RecetaResponse } from '../models/receta';
 import { EditUser } from '../models/user';
 import config from 'config/config';
+import { Medicacion, MedicacionResponse } from '../models/medicacion';
 
 
 const confirmAdd:boolean = false;
@@ -27,6 +28,7 @@ const confirmEdit:EditUser = {
 export class AddRecetaService {
 
   private URL_API: string = config.URL_API_BASE + 'recetas';
+  private URL_API2: string = config.URL_API_BASE + 'medicacion/busqueda?nombre';
 
   constructor(private http: HttpClient) { }
 
@@ -44,10 +46,20 @@ export class AddRecetaService {
       this.confirmAdd$.next(data);
     }
   
+    //ENVIAR RECETA
 
     postReceta(dataFormReceta: Receta): Observable<RecetaResponse> {
       return this.http.post<RecetaResponse>(this.URL_API, dataFormReceta);
     }
 
+    //RECIBIR MEDICAMENTOS
+
+    getMedicamentos(nombre : string):Observable<Medicacion[]>{
+      return this.http.get<MedicacionResponse>(`${this.URL_API2}=${nombre}`).pipe(
+        map((res:MedicacionResponse)=> res?.data),
+        catchError(() => EMPTY)
+      );
+    }
+    
 
   }

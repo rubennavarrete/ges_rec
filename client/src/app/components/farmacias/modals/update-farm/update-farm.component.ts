@@ -94,7 +94,7 @@ export class UpdateFarmComponent implements OnInit, OnDestroy {
             complete: () => {
               this.srvFarm.setConfirmAdd(true);
               this.editfarm.reset();
-              console.log('complete');
+              
 
             }
           });

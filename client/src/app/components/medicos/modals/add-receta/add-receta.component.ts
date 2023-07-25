@@ -1,6 +1,9 @@
+import { query } from '@angular/animations';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl, Form } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
+import { Subject, debounceTime, finalize, takeUntil } from 'rxjs';
+import { Medicacion } from 'src/app/core/models/medicacion';
 import { Medicamentos, Receta, RecetaResponse } from 'src/app/core/models/receta';
 import { AddRecetaService } from 'src/app/core/services/add-receta.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
@@ -12,7 +15,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add-receta.component.css']
 })
 export class AddRecetaComponent implements OnInit, OnDestroy {
-
+  public isLoading = false;
+  public src: string = '';
+  public data$: any;
+  searchStarted: boolean = false;
   RecError: string = '';
   FarmError: string = '';
   medicamentoform: FormGroup;
@@ -22,6 +28,9 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
 
   medicamentoSeleccionado: Medicamentos | null = null;
 
+  idseleccionada: number = 0;
+
+  tokenData: any;
 
   get nombreM() {
     return this.medicamentoform.controls['nombreM'];
@@ -45,7 +54,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<any>();
   
-  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService) {
+  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService) {
     this.recetaform = this.fb.group({
       id_medico: [''] ,
       id_paciente: [''],
@@ -60,6 +69,59 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     });
   }
 
+  //OBTENER TOKEN
+  getTokenData() {
+    const token = this.cookieService.get('token'); // Reemplaza 'nombre_de_la_cookie' con el nombre real de tu cookie
+    if (token) {
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      this.tokenData = tokenPayload;
+      // console.log('Valores del token:', this.tokenData);
+    } else {
+      // console.log('Token no encontrado en las cookies.');
+    }
+  }
+
+  //Buscar medicamento
+  buscarMedicamento(value: string) {
+    // console.log(value);
+    this.isLoading = true;
+    this.srvRec.getMedicamentos(value).pipe(
+      takeUntil(this.destroy$),
+      finalize(() => {
+        this.isLoading = false;
+      }
+      )
+    ).subscribe({
+      next: (data) => {
+        this.data$ = data;
+        // //console.log(data);
+      },
+      error: (error) => {
+        console.log(error);
+        this.FarmError = error;
+      }
+
+    });
+  }
+  private searchInputSubject = new Subject<string>();
+
+  onSearchInputChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value.trim();
+    this.searchInputSubject.next(value);
+    this.searchStarted = value.length > 0;
+  }
+
+  medicacionSelec: Medicacion | null = null;
+
+  select(item: Medicacion) {
+    this.medicacionSelec = item;
+    this.src = item.str_nombre_comercial;
+    this.idseleccionada = item.int_id_medicacion;
+    this.searchStarted = false; // Oculta la lista de medicamentos después de seleccionar uno
+  }
+
+
+  //Agregar medicamento
   addMedicamento() {
     if (this.medicamentoSeleccionado) {
       // Editar el objeto seleccionado
@@ -74,7 +136,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       // Crear un nuevo objeto y agregarlo al array
       const nuevoMedicamento: Medicamentos = {
         nombre: this.medicamentoform.value.nombreM,
-        id_medicacion: 1,
+        id_medicacion:  this.idseleccionada,
         cantidad: this.medicamentoform.value.cantidadM,
         dosis: this.medicamentoform.value.dosisM,
         duracion: this.medicamentoform.value.duracionM,
@@ -83,11 +145,12 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       this.medicamento.push(nuevoMedicamento);
     }
 
-    console.log(this.medicamento);
+    // console.log(this.medicamento);
   
     this.medicamentoform.reset();
   }
 
+    //Editar medicamento
   editarMedicamento(med: Medicamentos) {
     this.medicamentoSeleccionado = med;
     this.medicamentoform.patchValue({
@@ -98,11 +161,13 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     });
   }
 
+  //Eliminar medicamento
   eliminarMedicamento(index: number) {
     this.medicamento.splice(index, 1);
     console.log(this.medicamento);
   }
 
+  //Crear receta
   postReceta() {
     Swal.fire({
       title: '¿Está seguro que desea crear esta Receta?',
@@ -120,10 +185,9 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
         });
         this.recetaform.value.medicamentos = this.medicamento;
         console.log(this.recetaform.value);
-        if (this.recetaform.valid) {
           this.srvRec.postReceta(this.recetaform.value).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: RecetaResponse) => {
-              console.log(data);
+              //console.log(data);
               if (data.status === 'success') {
               Swal.fire({
                 title: 'Receta registrada',
@@ -150,18 +214,27 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
               this.medicamentoform.reset();
             }
           });
-        }
       }
     });
   }
 
   ngOnInit(): void {
+
+    this.getTokenData();
+
+    // Buscar medicamento
+    this.searchInputSubject.pipe(
+      debounceTime(300) // Ajusta el valor en milisegundos según lo necesario
+    ).subscribe((value) => {
+      this.buscarMedicamento(value);
+    });
+    
     this.srvUser.SeleccionarConfirmEdit$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
         this.recetaform = this.fb.group({
-          id_medico: [''] ,
+          id_medico: [this.tokenData.id_usuario] ,
           id_paciente: [data.int_id_usuario],
           diagnostico: ['', Validators.required],
           medicamentos: this.medicamentoform = this.fb.group({
@@ -175,9 +248,6 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.log(err);
-      },
-      complete: () => {
-        console.log('complete');
       }
     });
   }

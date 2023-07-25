@@ -72,7 +72,7 @@ export class FarmaciaComponent implements OnInit, OnDestroy {
         if (this.farmform.valid) {
           this.srvFarm.postFarmacia(this.farmform.value).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: DataFarm) => {
-              console.log(data);
+              //console.log(data);
               if(data.status=="success"){
                 Swal.close();
                 Swal.fire({

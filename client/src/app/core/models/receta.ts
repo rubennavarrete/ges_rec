@@ -1,7 +1,7 @@
 export interface Medicamentos {
     nombre: string;
     id_medicacion: number;
-    cantidad: number;
+    cantidad: string;
     dosis: string;
     duracion: string;
     indicaciones: string;
@@ -19,3 +19,4 @@ export interface Receta {
 export interface RecetaResponse {
     status: string;
 }
+

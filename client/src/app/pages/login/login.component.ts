@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Data, Router } from '@angular/router';
 // import { CookieService } from 'ngx-cookie-service';
 import config from 'config/config';
+import { CookieService } from 'ngx-cookie-service';
 
 
 
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   private destroy$ = new Subject<any>();
   constructor(private fb: FormBuilder, private srvLogin: LoginService, private router:Router, 
-    // private cookieService: CookieService
+    private cookieService: CookieService
     ) {}
   ngOnInit(): void {}
   
@@ -40,9 +41,10 @@ export class LoginComponent implements OnInit, OnDestroy{
     if(this.loginForm.valid){
       this.srvLogin.getLogin(this.loginForm.value as LoginRequest).pipe(takeUntil(this.destroy$)).subscribe({
         next: (data: DataLogin) => {
-          console.log(data);
+          //console.log(data);
           if(data.status == "success"){
-            // this.cookieService.set('token', data.token);
+
+            this.cookieService.set('token', data.token);
             // this.router.navigate(['/admin']);
             window.location.href = config.URL_BASE_PATH + '/admin';
             this.loginForm.reset();
