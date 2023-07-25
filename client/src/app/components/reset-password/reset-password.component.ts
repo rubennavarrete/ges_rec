@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject, takeUntil } from 'rxjs';
@@ -16,9 +16,10 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   
   LoginError: string = '';
   private destroy$ = new Subject<any>();
-  resetForm = this.fb.group({
-    correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
-  });
+  resetForm: FormGroup
+  // resetForm = this.fb.group({
+  //   correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
+  // });
 
   get correo() {
     return this.resetForm.get('correo');
