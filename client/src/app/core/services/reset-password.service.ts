@@ -10,6 +10,7 @@ import { CookieService } from 'ngx-cookie-service'; //
 })
 export class ResetPasswordService {
   private URL_API: string = config.URL_API_BASE + 'reset_password';
+  token = this.cookieService.get('tokenReset');
 
 constructor(private http: HttpClient, private cookieService: CookieService) { }
 
@@ -18,8 +19,8 @@ resetPassword(dataFormResetPassword: Reset): Observable<ResetResponse> {
 }
 
 changePassword(dataFormChangePassword: Change): Observable<ChangeResponse> {
-  const token = this.cookieService.get('token'); // Obtén el valor del token de la cookie
-  return this.http.post<ChangeResponse>(`${this.URL_API}/${token}`, dataFormChangePassword)
+   // Obtén el valor del token de la cookie
+  return this.http.put<ChangeResponse>(`${this.URL_API}/${this.token}`, dataFormChangePassword)
 }
 
 }

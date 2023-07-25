@@ -38,7 +38,7 @@ export const ResetPassword = async (req, res) => {
         from: process.env.EMAIL,
         to: correo,
         subject: 'Recuperación de contraseña',
-        html: '<h1>Recuperación de contraseña</h1><p>Para recuperar su contraseña haga click en el siguiente enlace: </p><a href="http://localhost:4200/reset_password/'+token+'">Recuperar contraseña</a>'
+        html: '<h1>Recuperación de contraseña</h1><p>Para recuperar su contraseña haga click en el siguiente enlace: </p><a href="http://localhost:4200/reset_password/">Recuperar contraseña</a>'
     };
 
     const updateUsuario = await Usuarios.findOne({
@@ -77,15 +77,19 @@ export const ChangePassword = async (req, res) => {
     if (!usuario)
         return res.status(404).json({ message: "No se ha encontrado el usuario" });
     const hashedPasss = await bcrypt.hash(password, 10);
-    const updateUsuario = await Usuarios.findOne({
+    const ChangePass= await Usuarios.findOne({
         where: {
             str_cedula: usuario.str_cedula,
         },
     });
-    updateUsuario.str_password = hashedPasss;
-    updateUsuario.str_token = null;
-    await updateUsuario.save();
-    res.status(200).json({ message: "Se ha cambiado la contraseña correctamente" });
+    
+    ChangePass.str_password = hashedPasss;
+    console.log(ChangePass.str_password);
+    ChangePass.str_token = null;
+    await ChangePass.save();
+    res.json({
+        status: "success"
+    });
 }
 
 

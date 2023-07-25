@@ -5,7 +5,7 @@ const router = Router();
 
 
 router.post("/reset_password", ResetPassword ),
-router.post("/reset_password/:token", ChangePassword )
+router.put("/reset_password/:token", ChangePassword )
 
 export default router;
 

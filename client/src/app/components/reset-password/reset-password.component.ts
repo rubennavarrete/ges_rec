@@ -45,7 +45,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
               text: 'Se ha enviado un correo para recuperar la contraseña',
               confirmButtonText: 'Aceptar',
             });
-            this.cookieService.set('token', data.token);
+            this.cookieService.set('tokenReset', data.token);
             this.resetForm.reset();
           }
         },
