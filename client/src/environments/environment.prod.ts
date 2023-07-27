@@ -2,10 +2,7 @@ const baseUrl = '';
 export const environment = {
   production: true,
   baseUrl: baseUrl,
-  url: 'https://inventario-espoch.rubenvn.com/' + baseUrl,
-  urlLogOut: 'https://inventario-espoch.rubenvn.com/' + baseUrl,
-  urlOneDriveService:
-    'https://pruebas.espoch.edu.ec:8181/WebCorreoInstitucional/ServiciosCorreos/TokenOneDrive',
-  urlApi: 'https://api-inventario.rubenvn.com/',
-  CodigoSistemaOneDrive: 'ARCHPOLI',
+  url: 'https://ges-rec.vercel.app/' + baseUrl,
+  urlLogOut: 'https://ges-rec.vercel.app/' + baseUrl,
+  urlApi: 'https://gesrec-production.up.railway.app/',
 };
