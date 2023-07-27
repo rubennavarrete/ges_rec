@@ -4,12 +4,14 @@ import { FarmaciaComponent } from "./modals/farmacia/farmacia.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { UpdateFarmComponent } from "./modals/update-farm/update-farm.component";
 import { ListFarmaciasComponent } from "./list-farmacias/list-farmacias.component";
+import { DashboardModule } from "src/app/shared/dashboard.module";
 
 @NgModule({
     declarations: [FarmaciaComponent, UpdateFarmComponent, ListFarmaciasComponent],
     imports: [
         CommonModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        DashboardModule
     ],
     exports: [FarmaciaComponent, UpdateFarmComponent, ListFarmaciasComponent]
 })

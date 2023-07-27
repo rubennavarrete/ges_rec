@@ -1,4 +1,5 @@
 import app from "./app.js";   
+import cookieParser from "cookie-parser";
 import { sequelize } from "./database/database.js";
 
 
@@ -6,7 +7,7 @@ async function main(){
     
     try{
         
-        //await sequelize.sync({force:false});
+        await sequelize.sync({force:false});
         sequelize
         .authenticate()
         .then(() => {  
