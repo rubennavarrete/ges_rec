@@ -4,9 +4,8 @@ import { DataUser, User, EditUser } from '../models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
 import config from 'config/config';
 
-
-const confirmAdd:boolean = false;
-const confirmEdit:EditUser = {
+const confirmAdd: boolean = false;
+const confirmEdit: EditUser = {
   int_id_usuario: 0,
   str_cedula: '',
   str_nombres: '',
@@ -17,15 +16,14 @@ const confirmEdit:EditUser = {
   bln_genero: false,
   str_telefono: '',
   str_celular: '',
-  txt_direccion: ''
+  txt_direccion: '',
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AddUserService {
-
-  dataU!: any[]
+  dataU!: any[];
 
   private URL_API: string = config.URL_API_BASE + 'usuarios';
 
@@ -42,7 +40,6 @@ export class AddUserService {
     this.confirmAdd$.next(data);
   }
 
-
   //METODO PARA ENVIAR DATOS AL COMPONENTE EDITAR USUARIO
   get SeleccionarConfirmEdit$(): Observable<EditUser> {
     return this.confirmEdit$.asObservable();
@@ -52,7 +49,7 @@ export class AddUserService {
     this.confirmEdit$.next(data);
   }
 
-  constructor( private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   // getUsuarios() {
   //   return this.http.get<User[]>(this.URL_API);
@@ -60,16 +57,14 @@ export class AddUserService {
 
   getUsuarios(pagination: any) {
     const params = new HttpParams()
-        .set('page', pagination.page)
-        .set('size', pagination.size)
-        .set('parameter', pagination.parameter)
-        .set('data', pagination.data);
-    
-      return this.http.get<User>(this.URL_API + '?' +params,
-        {
-          withCredentials: true,
-        }
-        );
+      .set('page', pagination.page)
+      .set('size', pagination.size)
+      .set('parameter', pagination.parameter)
+      .set('data', pagination.data);
+
+    return this.http.get<User>(this.URL_API + '?' + params, {
+      withCredentials: true,
+    });
   }
 
   getUsuario(cedula: string) {
@@ -81,6 +76,9 @@ export class AddUserService {
   }
 
   updateUsuario(dataFormUser: User): Observable<DataUser> {
-    return this.http.put<DataUser>(`${this.URL_API}/${dataFormUser.cedula}`, dataFormUser);
+    return this.http.put<DataUser>(
+      `${this.URL_API}/${dataFormUser.cedula}`,
+      dataFormUser
+    );
   }
 }
