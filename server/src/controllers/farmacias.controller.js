@@ -6,7 +6,6 @@ import bcrypt from "bcrypt";
 //RECIBIR TODAS LAS FARMACIAS
 export const getFarmacias = async (req, res) => {
 
-    console.log(req.query);
 
     try {
         const paginationData = req.query;

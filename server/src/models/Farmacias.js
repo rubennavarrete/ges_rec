@@ -58,6 +58,6 @@ export const Farmacias = sequelize.define(
     {
         schema: "ges_recetas",
         timestamps:false,
-        freezeTableName: true,
+        freezeTableName: true,  //evitar plurarizar las tablas
     }
 );
