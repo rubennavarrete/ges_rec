@@ -1,5 +1,5 @@
 {
-  "name": "gesback",
+  "name": "server",
   "version": "v1",
   "description": "Desarrollo de la parte back del sistema de gestion de recetas ",
   "main": "index.js",
