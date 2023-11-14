@@ -35,3 +35,20 @@ body {
   .pAside.close {
     width: 56px;
   }
+
+  .modal-dialog {
+    margin: 0 !important;
+    padding: 0 !important;
+    
+  }
+  .modal {
+    --bs-modal-border-color: none;
+  }
+
+  @media (min-width: 576px) {
+    .modal-dialog {
+      margin-right: auto !important;
+      margin-left: auto !important;
+      top: 5% !important;
+  }
+  }

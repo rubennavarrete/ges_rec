@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { AddUserService } from 'src/app/core/services/add-user.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
 
 @Component({
@@ -28,32 +29,16 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
   cedulaSeleccionada: string = '';
   private destroy$ = new Subject<any>();
   
-  showWindow1: boolean = true;
-  showWindow2: boolean = false;
-  showWindow3: boolean = false;
-  showWindow4: boolean = false;
+
   dataUser: any;
 
-  constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService) { }
+  constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService) { }
 
-
-  toggleWindows() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow2 = !this.showWindow2;
+  imputModal(title: string, name: string) {
+    this.srvModals.setFormModal({ title, name });
+    this.srvModals.openModal();
   }
-
-  toggleWindows2() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow3 = !this.showWindow3;
-  }
-
-  toggleWindows3() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow4 = !this.showWindow4;
-  }
-
-
-
+  
   getUsuarios() {
     this.srvUser.getUsuarios(this.mapFiltersToRequest)
     .pipe(
@@ -113,11 +98,7 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
     ).subscribe({
       next: (data) => {
         if(data){
-          this.showWindow1 = data;
           this.getUsuarios(); 
-          this.showWindow2 = !data; 
-          this.showWindow3 = !data;
-          this.showWindow4 = !data;
         }
       }
     });

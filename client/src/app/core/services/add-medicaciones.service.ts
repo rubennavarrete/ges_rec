@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { EditMedicacion, Medicacion, MedicacionResponse } from '../models/medicacion';
@@ -7,6 +7,7 @@ import config from 'config/config';
 
 
 const confirmAdd: boolean = false;
+
 const confirmEdit: EditMedicacion = {
   int_id_medicacion: 0,
   str_nombre_comercial: '',
@@ -17,6 +18,9 @@ const confirmEdit: EditMedicacion = {
   providedIn: 'root'
 })
 export class AddMedicacionesService {
+
+  dataM!: any[]
+
   private URL_API: string = config.URL_API_BASE + 'medicaciones';
 
   //BEHAVIOR SUBJECT
@@ -44,8 +48,18 @@ export class AddMedicacionesService {
 
   constructor(private http: HttpClient) { }
 
-  getMedicaciones() {
-    return this.http.get<Medicacion[]>(this.URL_API);
+  getMedicaciones(pagination:any) {
+    const params = new HttpParams()
+        .set('page', pagination.page)
+        .set('size', pagination.size)
+        .set('parameter', pagination.parameter)
+        .set('data', pagination.data);
+    
+      return this.http.get<EditMedicacion>(this.URL_API + '?' +params,
+        {
+          withCredentials: true,
+        }
+        );
   }
 
   getMedicacion(id_medicacion: number) {
