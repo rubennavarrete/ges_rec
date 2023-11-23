@@ -136,8 +136,11 @@ export const updateUsuario = async(req,res) => {
                 str_cedula: cedula,
             },
         });
-        const hashedPasss = await bcrypt.hash(password, 10);
-        updateUsuario.str_password = password;
+        
+        if(password){
+            const hashedPasss = await bcrypt.hash(password, 10);
+            updateUsuario.str_password = hashedPasss;
+        }
         updateUsuario.str_nombres = nombres;
         updateUsuario.str_apellidos = apellidos;
         updateUsuario.dt_fecha_nac = fnac;
@@ -146,7 +149,6 @@ export const updateUsuario = async(req,res) => {
         updateUsuario.txt_direccion = direccion;
         updateUsuario.str_telefono = telefono;
         updateUsuario.str_celular = celular;
-
         await updateUsuario.save();
         res.json({
             status: "success",

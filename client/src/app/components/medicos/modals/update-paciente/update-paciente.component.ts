@@ -27,6 +27,16 @@ export class UpdatePacienteComponent {
   get correo() {
     return this.editform.controls['correo'];
   }
+  get nombres() {
+    return this.editform.controls['nombres'];
+  }
+  get apellidos() {
+    return this.editform.controls['apellidos'];
+  }
+  get cedula() {
+    return this.editform.controls['cedula'];
+  }
+
 
   editform: FormGroup;
   UserError: string = '';
@@ -61,11 +71,6 @@ export class UpdatePacienteComponent {
           allowOutsideClick: false
         });
         if (this.editform.valid) {
-          this.editform.get('nombres')?.enable();
-          this.editform.get('apellidos')?.enable();
-          this.editform.get('cedula')?.enable();
-          this.editform.get('fecha_nac')?.enable();
-          this.editform.get('password')?.enable();
           this.srvUser.updateUsuario(this.editform.value).pipe(
             takeUntil(this.destroy$)
           ).subscribe({
@@ -118,18 +123,13 @@ export class UpdatePacienteComponent {
           nombres: [data.str_nombres,],
           apellidos: [data.str_apellidos,],
           correo: [data.str_correo, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
-          password: [data.str_password, ],
+          password: [''],
           fecha_nac: [data.dt_fecha_nac],
           genero: [data.bln_genero, Validators.required],
           telefono: [data.str_telefono, [Validators.minLength(7), Validators.maxLength(9), Validators.pattern(/^[0-9]+$/)]],
           celular: [data.str_celular, [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
           direccion: [data.txt_direccion],
         });
-        this.editform.get('nombres')?.disable();
-        this.editform.get('apellidos')?.disable();
-        this.editform.get('cedula')?.disable();
-        this.editform.get('fecha_nac')?.disable();
-        this.editform.get('password')?.disable();
       },
       error: (err) => {
         console.log(err);

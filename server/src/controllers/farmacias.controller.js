@@ -114,38 +114,29 @@ export const updateFarmacia = async (req, res) => {
     try {
         const {ruc} = req.params;
         const { nombre, direccion, telefono, celular, correo, representante, celular_representante, password } = req.body;
-        const farmacia = await Farmacias.findOne({
+        const updateFarmacia= await Farmacias.findOne({
             where: {
                 str_ruc: ruc,
             },
         });
 
-        if (!farmacia) {
-            return res.status(404).json({ message: 'La farmacia no existe' });
+        if(password){
+            const hashedPasss = await bcrypt.hash(password, 10);
+            updateFarmacia.str_password = hashedPasss;
         }
-
-        const hashedPasss = await bcrypt.hash(password, 10);
-        const updatedFarmacia = await Farmacias.update(
-            {
-                str_nombre_institucion: nombre,
-                txt_direccion_institucion: direccion,
-                str_telefono_institucion: telefono,
-                str_celular_institucion: celular,
-                str_correo_institucion: correo,
-                str_nombre_representante: representante,
-                str_celular_representante: celular_representante,
-                str_password: hashedPasss,
-            },
-            {
-                where: {
-                    str_ruc: ruc,
-                },
-            }
-        );
-        return res.json({
-            status:"success",
-            data: updatedFarmacia,
+        updateFarmacia.str_nombre_institucion = nombre;
+        updateFarmacia.txt_direccion_institucion = direccion;
+        updateFarmacia.str_telefono_institucion = telefono;
+        updateFarmacia.str_celular_institucion = celular;
+        updateFarmacia.str_correo_institucion = correo;
+        updateFarmacia.str_nombre_representante = representante;
+        updateFarmacia.str_celular_representante = celular_representante;
+        await updateFarmacia.save();
+        res.json({
+            status: "success",
+            data: updateFarmacia,
         });
+        
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
