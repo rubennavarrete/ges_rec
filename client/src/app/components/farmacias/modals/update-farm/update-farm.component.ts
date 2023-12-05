@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, pipe, takeUntil } from 'rxjs';
 import { DataFarm } from 'src/app/core/models/farm';
 import { AddFarmService } from 'src/app/core/services/add-farm.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -35,7 +36,7 @@ export class UpdateFarmComponent implements OnInit, OnDestroy {
 
   editfarm: FormGroup;
   farmError: string = '';
-  constructor(private fb:FormBuilder, public srvFarm:AddFarmService) {
+  constructor(private fb:FormBuilder, public srvFarm:AddFarmService, private srvModal: ModalsService) {
     this.editfarm = this.fb.group({
           nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
           direccion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
@@ -89,6 +90,7 @@ export class UpdateFarmComponent implements OnInit, OnDestroy {
             },
             complete: () => {
               this.srvFarm.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.editfarm.reset();
               
 

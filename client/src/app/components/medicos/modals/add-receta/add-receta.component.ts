@@ -6,6 +6,7 @@ import { Medicacion } from 'src/app/core/models/medicacion';
 import { Medicamentos, RecetaResponse } from 'src/app/core/models/receta';
 import { AddRecetaService } from 'src/app/core/services/add-receta.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -87,7 +88,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     });
   }
 
-  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService) {
+  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, private srvModal: ModalsService) {
     this.recetaform = this.fb.group({
       id_medico: [''] ,
       id_paciente: [''],
@@ -245,6 +246,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             },
             complete: () => {
               this.srvRec.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.recetaform.reset();
               this.medicamentoform.reset();
             }

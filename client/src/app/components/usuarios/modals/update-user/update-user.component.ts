@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DataUser, EditUser, User } from 'src/app/core/models/user';
 import { AddUserService } from 'src/app/core/services/add-user.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -50,7 +51,7 @@ export class UpdateUserComponent implements OnInit, OnDestroy{
 
   editform: FormGroup;
   UserError: string = '';
-  constructor(private fb:FormBuilder, public srvUser:AddUserService) {
+  constructor(private fb:FormBuilder, public srvUser:AddUserService, private srvModal: ModalsService) {
     this.editform = this.fb.group({
           cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)] ],
           nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
@@ -108,6 +109,7 @@ export class UpdateUserComponent implements OnInit, OnDestroy{
             },
             complete: () => {
               this.srvUser.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.editform.reset();
 
             }

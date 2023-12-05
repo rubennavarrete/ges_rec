@@ -4,6 +4,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { Subject, takeUntil } from 'rxjs';
 import { DataUser } from 'src/app/core/models/user';
 import { AddUserService } from 'src/app/core/services/add-user.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -45,7 +46,7 @@ export class AddPacienteComponent implements OnInit, OnDestroy {
     return this.userform.controls['telefono'];
   }
 
-  constructor(private fb: FormBuilder, private srvUser: AddUserService) { 
+  constructor(private fb: FormBuilder, private srvUser: AddUserService, private srvModal: ModalsService) { 
     this.userform = this.fb.group({
       cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
       nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
@@ -117,6 +118,7 @@ export class AddPacienteComponent implements OnInit, OnDestroy {
             },
             complete: () => {
               this.srvUser.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.userform.reset();
               // this.location.back();
             }

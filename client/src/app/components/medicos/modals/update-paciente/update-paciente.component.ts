@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DataUser } from 'src/app/core/models/user';
 import { AddUserService } from 'src/app/core/services/add-user.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -40,7 +41,7 @@ export class UpdatePacienteComponent {
 
   editform: FormGroup;
   UserError: string = '';
-  constructor(private fb:FormBuilder, public srvUser:AddUserService) {
+  constructor(private fb:FormBuilder, public srvUser:AddUserService, private srvModal: ModalsService) {
     this.editform = this.fb.group({
           cedula: ['', ],
           nombres: ['',],
@@ -98,6 +99,7 @@ export class UpdatePacienteComponent {
             },
             complete: () => {
               this.srvUser.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.editform.reset();
               console.log('complete');
 

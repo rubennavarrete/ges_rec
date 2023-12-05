@@ -48,12 +48,10 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     ).subscribe({
       next: (data) => {
         if(data){
-          this.getUsuarios(); 
+          this.getUsuarios({}); 
         }
       }
     });
-
-    // this.getUsuarios();
 
   }
 
@@ -62,8 +60,8 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     this.srvModals.openModal();
   }
   
-  getUsuarios() {
-    this.srvUser.getUsuarios(this.mapFiltersToRequest)
+  getUsuarios(usuario: any) {
+    this.srvUser.getUsuarios(usuario)
     .pipe(
       takeUntil(this.destroy$)
     )
@@ -81,7 +79,11 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     });
   }
 
-
+changeUser(event: any) {
+  this.mapFiltersToRequest.data = event.target.value;
+  this.mapFiltersToRequest.parameter = 'str_cedula';
+  this.getUsuarios(this.mapFiltersToRequest);
+}
 
   editarUsuario(cedula: string): void {
     this.cedulaSeleccionada = cedula;
@@ -112,7 +114,7 @@ export class ListUserComponent implements OnInit,  OnDestroy {
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
 /*     console.log('mapFiltersToRequest', this.mapFiltersToRequest);*/ 
-    this.getUsuarios();
+    this.getUsuarios(this.mapFiltersToRequest);
   }
 
   ngOnDestroy(): void {

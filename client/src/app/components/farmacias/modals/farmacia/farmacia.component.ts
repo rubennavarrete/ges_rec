@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DataFarm } from 'src/app/core/models/farm';
 import { AddFarmService } from 'src/app/core/services/add-farm.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -40,7 +41,7 @@ export class FarmaciaComponent implements OnInit, OnDestroy {
     return this.farmform.controls['celular_representante'];
   }
 
-  constructor(private fb: FormBuilder, private srvFarm: AddFarmService ) { 
+  constructor(private fb: FormBuilder, private srvFarm: AddFarmService, private srvModal: ModalsService ) { 
     this.farmform = this.fb.group({
       nombre: ['',[Validators.required]],
       direccion: ['',[Validators.required]],
@@ -97,6 +98,7 @@ export class FarmaciaComponent implements OnInit, OnDestroy {
             },
             complete: () => {
               this.farmform.reset();
+              this.srvModal.closeModal();
               this.srvFarm.setConfirmAdd(true);
             }
           });

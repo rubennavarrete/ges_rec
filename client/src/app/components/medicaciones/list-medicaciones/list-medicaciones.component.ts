@@ -45,7 +45,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: (data) => {
         if(data){
-          this.getMedicaciones(); 
+          this.getMedicaciones({}); 
         }
       }
     });
@@ -59,8 +59,8 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
     this.srvModals.openModal();
   }
   
-  getMedicaciones() {
-    this.srvMed.getMedicaciones(this.mapFiltersToRequest)
+  getMedicaciones(medicacion: any) {
+    this.srvMed.getMedicaciones(medicacion)
     .pipe(
       takeUntil(this.destroy$)
     )
@@ -76,6 +76,12 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
         console.log(error);
       }
     });
+  }
+
+  changeMed(event: any) {
+    this.mapFiltersToRequest.data = event.target.value;
+    this.mapFiltersToRequest.parameter = 'str_nombre_generico';
+    this.getMedicaciones(this.mapFiltersToRequest);
   }
 
   editarMedicacion(id_medicacion:number): void {
@@ -104,7 +110,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
     console.log('mapFiltersToRequest', this.mapFiltersToRequest);
-    this.getMedicaciones();
+    this.getMedicaciones(this.mapFiltersToRequest);
   }
 
   ngOnDestroy(): void {

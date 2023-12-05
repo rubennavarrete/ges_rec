@@ -34,27 +34,48 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
 
   constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService) { }
 
+  ngOnInit(): void {
+    this.pasarPagina(1)
+    this.srvUser.SeleccionarConfirmAdd$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (data) => {
+        if(data){
+          this.getUsuarios({}); 
+        }
+      }
+    });
+
+  }
+
   imputModal(title: string, name: string) {
     this.srvModals.setFormModal({ title, name });
     this.srvModals.openModal();
   }
   
-  getUsuarios() {
-    this.srvUser.getUsuarios(this.mapFiltersToRequest)
+  getUsuarios(usuario: any) {
+    this.srvUser.getUsuarios(usuario)
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe({
       next: (data: any) => {
-        this.dataUser = data.body;
+        //console.log(data);
         this.srvUser.dataU = data.body
         this.metadata = data.total
+        this.dataUser = data.body;
         this.dataPagina()
       },
       error: (error) => {
         console.log(error);
       }
     });
+  }
+
+  changeUser(event: any) {
+    this.mapFiltersToRequest.data = event.target.value;
+    this.mapFiltersToRequest.parameter = 'str_cedula';
+    this.getUsuarios(this.mapFiltersToRequest);
   }
 
   editarUsuario(cedula: string): void {
@@ -91,21 +112,6 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
     });
   }
 
-  ngOnInit(): void {
-    this.pasarPagina(1)
-    this.srvUser.SeleccionarConfirmAdd$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (data) => {
-        if(data){
-          this.getUsuarios(); 
-        }
-      }
-    });
-
-    this.getUsuarios();
-  }
-
   dataPagina() {
     this.elementPagina.dataLength = this.srvUser.dataU ? this.srvUser.dataU.length : 0;
     this.elementPagina.metaData = this.metadata;
@@ -116,7 +122,7 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
     // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
-    this.getUsuarios();
+    this.getUsuarios(this.mapFiltersToRequest);
   }
 
   ngOnDestroy(): void {

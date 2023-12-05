@@ -1,5 +1,7 @@
 import { sequelize } from "../database/database.js";
 import { Medicaciones } from "../models/Medicaciones.js";
+import { paginarDatos } from "../utils/paginacion.utils.js";
+
 
 //RECIBIR TODOS LOS MEDICAMENTOS
 export const getMedicaciones = async (req, res) => {
@@ -16,6 +18,8 @@ export const getMedicaciones = async (req, res) => {
             });
         }
         const medicamentos = await Medicaciones.findAll();
+
+        
         if(medicamentos.length === 0 || !medicamentos){
             return res.json({
                 status: false,
