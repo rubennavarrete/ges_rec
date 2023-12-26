@@ -31,11 +31,21 @@ export class AddUserService {
 
   //BEHAVIOR SUBJECT
   private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);
+  private confirmAddProfile$ = new BehaviorSubject<boolean>(confirmAdd);
   private confirmEdit$ = new BehaviorSubject<EditUser>(confirmEdit);
+  private confirmEditProfile$ = new BehaviorSubject<EditUser>(confirmEdit);
 
   //METODOS
   get SeleccionarConfirmAdd$(): Observable<boolean> {
     return this.confirmAdd$.asObservable();
+  }
+
+  setConfirmAddProfile(data: boolean): void {
+    this.confirmAdd$.next(data);
+  }
+
+  get SeleccionarConfirmAddProfile$(): Observable<boolean> {
+    return this.confirmAddProfile$.asObservable();
   }
 
   setConfirmAdd(data: boolean): void {
@@ -50,6 +60,15 @@ export class AddUserService {
 
   setConfirmEdit(data: EditUser): void {
     this.confirmEdit$.next(data);
+  }
+
+  //METODO PARA ENVIAR DATOS AL COMPONENTE EDITAR PERFIL
+  get SeleccionarConfirmEditProfile$(): Observable<EditUser> {
+    return this.confirmEditProfile$.asObservable();
+  }
+
+  setConfirmEditProfile(data: EditUser): void {
+    this.confirmEditProfile$.next(data);
   }
 
   constructor( private http: HttpClient) {}

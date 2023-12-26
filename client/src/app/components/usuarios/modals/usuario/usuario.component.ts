@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./usuario.component.css']
 })
 export class UsuarioComponent implements OnInit, OnDestroy{
-  
+  showPassword: boolean = false;
   private destroy$ = new Subject<any>();
   userform: FormGroup;
   UserError: string = '';
@@ -49,7 +49,6 @@ export class UsuarioComponent implements OnInit, OnDestroy{
   get telefono() {
     return this.userform.controls['telefono'];
   }
-
   get confirmPassword() {
     return this.userform.controls['confirmPassword'];
   }
@@ -73,6 +72,10 @@ export class UsuarioComponent implements OnInit, OnDestroy{
     });
     
   }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
 
   fechaMaximaActual(control: AbstractControl): { [key: string]: any } | null {
     const fechaIngresada = new Date(control.value);
@@ -85,20 +88,6 @@ export class UsuarioComponent implements OnInit, OnDestroy{
     return null;
   }
 
-  validarPassword(){
-  
-    const password = this.userform.value.password;
-    const confirmPassword = this.userform.value.confirmPassword;
-
-    if (password === confirmPassword) {
-      return true;
-    }else{
-
-      return false;
-
-    }
-  
-  }
 
   addUsuario() {
 
@@ -116,53 +105,56 @@ export class UsuarioComponent implements OnInit, OnDestroy{
             Swal.showLoading();
           },
         });
-        if(this.userform.valid && this.userform.value.password == this.userform.value.confirmarPassword){
-          this.userform.value.fecha_nac = formatDate(this.userform.value.fecha_nac, 'yyyy-MM-dd', 'en-US');
-          this.srvUser.postUsuario(this.userform.value).pipe(takeUntil(this.destroy$)).subscribe({
-            next: (data: DataUser) => {
-              //console.log(data);
-              if(data.status == "success"){
-                Swal.close();
-                Swal.fire({
-                  title: 'Usuario registrado',
-                  text: 'El usuario se ha registrado correctamente',
-                  icon: 'success',
-                  confirmButtonText: 'Aceptar'
-                });
-              }else{
-                Swal.close();
-                Swal.fire({
-                  title: 'Error',
-                  text: 'El usuario no se ha registrado correctamente',
-                  icon: 'error',
-                  confirmButtonText: 'Aceptar'
-                });
-              }
-            },
-            error: (error) => {
-              console.log(error);
-              this.UserError = error;
-            },
-            complete: () => {
-              this.srvUser.setConfirmAdd(true);
-              this.srvModal.closeModal();
-              this.userform.reset();
-              
-              // this.location.back();
+        if(this.userform.value.password != this.userform.value.confirmPassword){
+          Swal.close();
+          alert("Las contraseñas no coinciden");
+          }else{
+            if(this.userform.valid){
+              this.userform.value.fecha_nac = formatDate(this.userform.value.fecha_nac, 'yyyy-MM-dd', 'en-US');
+              this.srvUser.postUsuario(this.userform.value).pipe(takeUntil(this.destroy$)).subscribe({
+                next: (data: DataUser) => {
+                  //console.log(data);
+                  if(data.status == "success"){
+                    Swal.close();
+                    Swal.fire({
+                      title: 'Usuario registrado',
+                      text: 'El usuario se ha registrado correctamente',
+                      icon: 'success',
+                      confirmButtonText: 'Aceptar'
+                    });
+                  }else{
+                    Swal.close();
+                    Swal.fire({
+                      title: 'Error',
+                      text: 'El usuario no se ha registrado correctamente',
+                      icon: 'error',
+                      confirmButtonText: 'Aceptar'
+                    });
+                  }
+                },
+                error: (error) => {
+                  console.log(error);
+                  this.UserError = error;
+                },
+                complete: () => {
+                  this.srvUser.setConfirmAdd(true);
+                  this.srvModal.closeModal();
+                  this.userform.reset();
+                  
+                  // this.location.back();
+                }
+              });
+            }else{
+              this.userform.markAllAsTouched();
+              alert("Debe ingresar los datos correctamente");
             }
-          });
-        }else{
-          this.userform.markAllAsTouched();
-          alert("Debe ingresar los datos correctamente");
-        }
-
+          }
       } else if (result.isDenied) {
         Swal.fire('No se agrego el Usuario', '', 'info');
 
         
       }
     });
-
   }
   ngOnInit(): void {
     

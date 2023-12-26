@@ -37,6 +37,9 @@
             <div *ngSwitchCase="'editarListaUsuario'">
               <app-update-user></app-update-user>
             </div>
+            <div *ngSwitchCase="'editarPerfil'">
+              <app-edit-profile></app-edit-profile>
+            </div>
             <div *ngSwitchCase="'editarListaPaciente'">
               <app-update-paciente></app-update-paciente>
             </div>
@@ -46,6 +49,8 @@
             <div *ngSwitchCase="'editarListaMedicamento'">
               <app-update-medicaciones></app-update-medicaciones>
             </div>
+
+
             <div *ngSwitchCase="'clear'"></div>
           </container-element>
         </div>

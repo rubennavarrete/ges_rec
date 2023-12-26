@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add-paciente.component.css']
 })
 export class AddPacienteComponent implements OnInit, OnDestroy {
-
+  showPassword: boolean = false;
   private destroy$ = new Subject<any>();
   userform: FormGroup;
   UserError: string = '';
@@ -71,6 +71,9 @@ export class AddPacienteComponent implements OnInit, OnDestroy {
     }
   
     return null;
+  }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   addUsuario() {
