@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { Medicacion } from 'src/app/core/models/medicacion';
-import { EditUser, User } from 'src/app/core/models/user';
 import { AddMedicacionesService } from 'src/app/core/services/add-medicaciones.service';
 import { ModalsService } from 'src/app/core/services/modals.service';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
