@@ -3,6 +3,7 @@ import { AddUserService } from '../../../core/services/add-user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { EditUser } from 'src/app/core/models/user';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 
 
 
@@ -29,30 +30,17 @@ export class ListUserComponent implements OnInit,  OnDestroy {
   currentPage = 1;
   metadata: any;
   mapFiltersToRequest: any = {};
-  
- 
- 
+
   cedulaSeleccionada: string = '';
-  
-  
-  showWindow1: boolean = true;
-  showWindow2: boolean = false;
-  showWindow3: boolean = false;
   dataUser: any;
   
 
   private destroy$ = new Subject<any>();
+
   constructor(public srvUser: AddUserService,
-    public srvPaginacion: PaginacionService) { }
+  public srvPaginacion: PaginacionService,
+  public srvModals: ModalsService) { }
   
-  toggleWindows() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow2 = !this.showWindow2;
-  }
-  toggleWindows2() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow3 = !this.showWindow3;
-  }
   ngOnInit(): void { 
     this.pasarPagina(1)
     this.srvUser.SeleccionarConfirmAdd$.pipe(
@@ -60,20 +48,20 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     ).subscribe({
       next: (data) => {
         if(data){
-          this.showWindow1 = data;
-          this.getUsuarios(); 
-          this.showWindow2 = !data; 
-          this.showWindow3 = !data;
+          this.getUsuarios({}); 
         }
       }
     });
 
-    // this.getUsuarios();
+  }
 
+  imputModal(title: string, name: string) {
+    this.srvModals.setFormModal({ title, name });
+    this.srvModals.openModal();
   }
   
-  getUsuarios() {
-    this.srvUser.getUsuarios(this.mapFiltersToRequest)
+  getUsuarios(usuario: any) {
+    this.srvUser.getUsuarios(usuario)
     .pipe(
       takeUntil(this.destroy$)
     )
@@ -91,7 +79,11 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     });
   }
 
-
+changeUser(event: any) {
+  this.mapFiltersToRequest.data = event.target.value;
+  this.mapFiltersToRequest.parameter = 'str_cedula';
+  this.getUsuarios(this.mapFiltersToRequest);
+}
 
   editarUsuario(cedula: string): void {
     this.cedulaSeleccionada = cedula;
@@ -121,10 +113,9 @@ export class ListUserComponent implements OnInit,  OnDestroy {
 
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
-    // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
-    this.getUsuarios();
+/*     console.log('mapFiltersToRequest', this.mapFiltersToRequest);*/ 
+    this.getUsuarios(this.mapFiltersToRequest);
   }
-
 
   ngOnDestroy(): void {
     this.destroy$.next({});

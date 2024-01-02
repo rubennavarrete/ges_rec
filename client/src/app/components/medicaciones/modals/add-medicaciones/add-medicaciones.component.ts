@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { MedicacionResponse } from 'src/app/core/models/medicacion';
 import { AddMedicacionesService } from 'src/app/core/services/add-medicaciones.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +27,7 @@ export class AddMedicacionesComponent implements OnDestroy, OnInit {
   }
 
 
-  constructor(private fb: FormBuilder, public srvMed:AddMedicacionesService ) {
+  constructor(private fb: FormBuilder, public srvMed:AddMedicacionesService, private srvModal: ModalsService ) {
     this.medicamentoform = this.fb.group({
       nombre_generico: ['', Validators.required],
       nombre_comercial: ['', Validators.required],
@@ -76,6 +77,7 @@ export class AddMedicacionesComponent implements OnDestroy, OnInit {
             },
             complete: () => {
               this.srvMed.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.medicamentoform.reset();
               // this.location.back();
             }

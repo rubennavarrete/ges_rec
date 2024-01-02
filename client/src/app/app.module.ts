@@ -8,6 +8,7 @@ import { LoginService } from './core/services/login.service';
 
 //MODULES
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ModalModule } from './modal/modal.module';
 
 
 //LAYOUT
@@ -16,7 +17,6 @@ import { LoginModule } from './pages/login/login.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { CookieService } from 'ngx-cookie-service';
 import { InjectSessionInterceptor } from './core/interceptors/inject-session.interceptor';
-import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 
 
@@ -24,12 +24,7 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 
 @NgModule({
     declarations: [
-        AppComponent,
-        // HomeComponent,
-        // FarmaciasComponent,
-        // MedicosComponent,
-        // AdminModule,
-    
+        AppComponent,    
     ],
     providers: [
         LoginService,
@@ -51,7 +46,9 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
         ReactiveFormsModule,
         LayoutModule,
         LoginModule,
-        AdminModule
+        AdminModule,
+        ModalModule
+
         
     ]
 })

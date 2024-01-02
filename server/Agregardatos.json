@@ -1,14 +1,13 @@
 {
-    "cedula": "9876543210",
-    "contraseña": "admin2",
+    "cedula": "0000000000",
+    "password": "admadminin2",
     "nombres": "Teddy Geordelan",
     "apellidos": "Rayos Ponce",
-    "fnac": null,
+    "fecha_nac": null,
     "genero": 1,
     "correo": "teddy.rayos@espoch.edu.ec",
     "direccion": "Avenida Milton Reyes y Francisco de Marcos",
     "telefono": "0987098962",
     "celular": "0987098962",
-    "id_rol": 1,
-    "imagen": null
+    "rol": 1
 }

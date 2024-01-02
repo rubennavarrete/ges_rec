@@ -1,12 +1,12 @@
-import { query } from '@angular/animations';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators, FormControl, Form } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject, debounceTime, finalize, takeUntil } from 'rxjs';
 import { Medicacion } from 'src/app/core/models/medicacion';
-import { Medicamentos, Receta, RecetaResponse } from 'src/app/core/models/receta';
+import { Medicamentos, RecetaResponse } from 'src/app/core/models/receta';
 import { AddRecetaService } from 'src/app/core/services/add-receta.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -54,7 +54,41 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<any>();
   
-  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService) {
+  ngOnInit(): void {
+
+    this.getTokenData();
+
+    // Buscar medicamento
+    this.searchInputSubject.pipe(
+      debounceTime(300) // Ajusta el valor en milisegundos según lo necesario
+    ).subscribe((value) => {
+      this.buscarMedicamento(value);
+    });
+    
+    this.srvUser.SeleccionarConfirmEdit$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (data) => {
+        this.recetaform = this.fb.group({
+          id_medico: [this.tokenData.id_usuario] ,
+          id_paciente: [data.int_id_usuario],
+          diagnostico: ['', Validators.required],
+          medicamentos: this.medicamentoform = this.fb.group({
+            nombreM: ['', Validators.required],
+            cantidadM: ['', Validators.required],
+            dosisM: ['', Validators.required],
+            duracionM: ['', Validators.required],
+            indicacionesM: ['', Validators.required]
+          }),
+        });
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, private srvModal: ModalsService) {
     this.recetaform = this.fb.group({
       id_medico: [''] ,
       id_paciente: [''],
@@ -195,6 +229,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
               });
+
+              
               } else {
                 Swal.fire({
                   title: 'Error',
@@ -210,6 +246,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             },
             complete: () => {
               this.srvRec.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.recetaform.reset();
               this.medicamentoform.reset();
             }
@@ -218,39 +255,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-
-    this.getTokenData();
-
-    // Buscar medicamento
-    this.searchInputSubject.pipe(
-      debounceTime(300) // Ajusta el valor en milisegundos según lo necesario
-    ).subscribe((value) => {
-      this.buscarMedicamento(value);
-    });
-    
-    this.srvUser.SeleccionarConfirmEdit$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (data) => {
-        this.recetaform = this.fb.group({
-          id_medico: [this.tokenData.id_usuario] ,
-          id_paciente: [data.int_id_usuario],
-          diagnostico: ['', Validators.required],
-          medicamentos: this.medicamentoform = this.fb.group({
-            nombreM: ['', Validators.required],
-            cantidadM: ['', Validators.required],
-            dosisM: ['', Validators.required],
-            duracionM: ['', Validators.required],
-            indicacionesM: ['', Validators.required]
-          }),
-        });
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
-  }
+  
 
   ngOnDestroy(): void {
     this.destroy$.next({});

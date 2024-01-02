@@ -10,7 +10,7 @@ import bcrypt from "bcrypt";
 
 //RECIBIR TODOS LOS USUARIOS
 export const getUsuarios = async (req, res) => {
-    //console.log(req.query);
+    
     try{
         const paginationData = req.query;
 
@@ -25,12 +25,15 @@ export const getUsuarios = async (req, res) => {
         }
 
         const usuarios = await Usuarios.findAll();
+        
+        
         if(usuarios.length === 0 || !usuarios){
             return res.json({
                 status: false,
                 message: "No se encontraron usuarios"
             });
         }else {
+
             const { datos, total } = await paginarDatos(
                 paginationData.page,
                 paginationData.size,
@@ -51,6 +54,9 @@ export const getUsuarios = async (req, res) => {
     }
 };
 
+
+
+
 //RECIBIR UN USUARIO
 export const getUsuario = async(req, res) =>{
     try {
@@ -67,6 +73,7 @@ export const getUsuario = async(req, res) =>{
         return res.status(500).json({ message: error.message});
     }
 };
+
 
 //CREAR UN USUARIO Y PERFIL
 export const createUsuario = async (req, res) => {
@@ -136,8 +143,11 @@ export const updateUsuario = async(req,res) => {
                 str_cedula: cedula,
             },
         });
-        const hashedPasss = await bcrypt.hash(password, 10);
-        updateUsuario.str_password = password;
+        
+        if(password){
+            const hashedPasss = await bcrypt.hash(password, 10);
+            updateUsuario.str_password = hashedPasss;
+        }
         updateUsuario.str_nombres = nombres;
         updateUsuario.str_apellidos = apellidos;
         updateUsuario.dt_fecha_nac = fnac;
@@ -146,7 +156,6 @@ export const updateUsuario = async(req,res) => {
         updateUsuario.txt_direccion = direccion;
         updateUsuario.str_telefono = telefono;
         updateUsuario.str_celular = celular;
-
         await updateUsuario.save();
         res.json({
             status: "success",

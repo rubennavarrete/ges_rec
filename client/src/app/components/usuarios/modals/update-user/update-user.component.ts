@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DataUser, EditUser, User } from 'src/app/core/models/user';
 import { AddUserService } from 'src/app/core/services/add-user.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -30,13 +31,31 @@ export class UpdateUserComponent implements OnInit, OnDestroy{
     return this.editform.controls['correo'];
   }
 
+  get nombres() {
+    return this.editform.controls['nombres'];
+  }
+
+  get apellidos() {
+    return this.editform.controls['apellidos'];
+  }
+
+  get cedula() {
+    return this.editform.controls['cedula'];
+  }
+
+  get password() {
+    return this.editform.controls['password'];
+  }
+
+
+
   editform: FormGroup;
   UserError: string = '';
-  constructor(private fb:FormBuilder, public srvUser:AddUserService) {
+  constructor(private fb:FormBuilder, public srvUser:AddUserService, private srvModal: ModalsService) {
     this.editform = this.fb.group({
-          cedula: ['', ],
-          nombres: ['',],
-          apellidos: ['',],
+          cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)] ],
+          nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
+          apellidos: ['',[Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
           correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
           password: ['', ],
           fecha_nac: [new Date()],
@@ -63,11 +82,6 @@ export class UpdateUserComponent implements OnInit, OnDestroy{
           allowOutsideClick: false
         });
         if (this.editform.valid) {
-          this.editform.get('nombres')?.enable();
-          this.editform.get('apellidos')?.enable();
-          this.editform.get('cedula')?.enable();
-          this.editform.get('fecha_nac')?.enable();
-          this.editform.get('password')?.enable();
           this.srvUser.updateUsuario(this.editform.value).pipe(
             takeUntil(this.destroy$)
           ).subscribe({
@@ -95,6 +109,7 @@ export class UpdateUserComponent implements OnInit, OnDestroy{
             },
             complete: () => {
               this.srvUser.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.editform.reset();
 
             }
@@ -119,18 +134,13 @@ export class UpdateUserComponent implements OnInit, OnDestroy{
           nombres: [data.str_nombres,],
           apellidos: [data.str_apellidos,],
           correo: [data.str_correo, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
-          password: [data.str_password, ],
+          password: [''],
           fecha_nac: [data.dt_fecha_nac],
           genero: [data.bln_genero, Validators.required],
           telefono: [data.str_telefono, [Validators.minLength(7), Validators.maxLength(9), Validators.pattern(/^[0-9]+$/)]],
           celular: [data.str_celular, [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
           direccion: [data.txt_direccion],
         });
-        this.editform.get('nombres')?.disable();
-        this.editform.get('apellidos')?.disable();
-        this.editform.get('cedula')?.disable();
-        this.editform.get('fecha_nac')?.disable();
-        this.editform.get('password')?.disable();
       },
       error: (err) => {
         console.log(err);

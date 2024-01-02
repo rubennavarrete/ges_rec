@@ -17,7 +17,7 @@ import { CookieService } from 'ngx-cookie-service';
 })
 
 export class LoginComponent implements OnInit, OnDestroy{
-  
+  showPassword: boolean = false;
   LoginError: string = '';
   loginForm = this.fb.group({
     cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]\d*$/)]],
@@ -36,6 +36,11 @@ export class LoginComponent implements OnInit, OnDestroy{
     private cookieService: CookieService
     ) {}
   ngOnInit(): void {}
+
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
   
   login() {
     if(this.loginForm.valid){

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { DataUser } from 'src/app/core/models/user';
@@ -7,45 +7,53 @@ import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-update-paciente',
-  templateUrl: './update-paciente.component.html',
-  styleUrls: ['./update-paciente.component.css']
+  selector: 'app-edit-profile',
+  templateUrl: './edit-profile.component.html',
+  styleUrls: ['./edit-profile.component.css']
 })
-export class UpdatePacienteComponent {
+export class EditProfileComponent implements OnDestroy, OnInit{
 
   get telefono() {
-    return this.editform.controls['telefono'];
+    return this.editProfile.controls['telefono'];
   }
   get celular() {
-    return this.editform.controls['celular'];
+    return this.editProfile.controls['celular'];
   }
   get direccion() {
-    return this.editform.controls['direccion'];
+    return this.editProfile.controls['direccion'];
   }
   get genero() {
-    return this.editform.controls['genero'];
+    return this.editProfile.controls['genero'];
   }
   get correo() {
-    return this.editform.controls['correo'];
+    return this.editProfile.controls['correo'];
   }
+
   get nombres() {
-    return this.editform.controls['nombres'];
+    return this.editProfile.controls['nombres'];
   }
+
   get apellidos() {
-    return this.editform.controls['apellidos'];
+    return this.editProfile.controls['apellidos'];
   }
+
   get cedula() {
-    return this.editform.controls['cedula'];
+    return this.editProfile.controls['cedula'];
+  }
+
+  get password() {
+    return this.editProfile.controls['password'];
   }
 
 
-  editform: FormGroup;
+
+  editProfile: FormGroup;
   UserError: string = '';
   constructor(private fb:FormBuilder, public srvUser:AddUserService, private srvModal: ModalsService) {
-    this.editform = this.fb.group({
-          cedula: ['', ],
-          nombres: ['',],
-          apellidos: ['',],
+    this.editProfile = this.fb.group({
+          cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)] ],
+          nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
+          apellidos: ['',[Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
           correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
           password: ['', ],
           fecha_nac: [new Date()],
@@ -59,7 +67,7 @@ export class UpdatePacienteComponent {
   
   updateUsuario() {
     Swal.fire({
-      title: '¿Está seguro que desea modificar este Paciente?',
+      title: '¿Está seguro que desea modificar tu Perfil?',
       showDenyButton: true,
       confirmButtonText: 'Modificar',
       denyButtonText: `Cancelar`,
@@ -67,20 +75,20 @@ export class UpdatePacienteComponent {
       if (result.isConfirmed) {
         Swal.fire({
           title: 'Espere un momento',
-          text: 'Estamos actualizando el paciente',
+          text: 'Estamos actualizando tu perfil',
           icon: 'info',
           allowOutsideClick: false
         });
-        if (this.editform.valid) {
-          this.srvUser.updateUsuario(this.editform.value).pipe(
+        if (this.editProfile.valid) {
+          this.srvUser.updateUsuario(this.editProfile.value).pipe(
             takeUntil(this.destroy$)
           ).subscribe({
             next: (data:DataUser) => {
               if(data.status == "success"){
                 Swal.close();
                 Swal.fire({
-                  title: 'Paciente modificado',
-                  text: 'El paciente se ha actualizado correctamente',
+                  title: 'Perfil modificado',
+                  text: 'Tu perfil se ha actualizado correctamente',
                   icon: 'success',
                   confirmButtonText: 'Aceptar'
                 });
@@ -88,7 +96,7 @@ export class UpdatePacienteComponent {
                 Swal.close();
                 Swal.fire({
                   title: 'Error',
-                  text: 'El paciente no se ha actualizado correctamente',
+                  text: 'Tu perfil no se ha actualizado correctamente',
                   icon: 'error',
                   confirmButtonText: 'Aceptar'
                 });
@@ -98,10 +106,9 @@ export class UpdatePacienteComponent {
               console.log(err);
             },
             complete: () => {
-              this.srvUser.setConfirmAdd(true);
+              this.srvUser.setConfirmAddProfile(true);
               this.srvModal.closeModal();
-              this.editform.reset();
-              console.log('complete');
+              this.editProfile.reset();
 
             }
           });
@@ -116,11 +123,11 @@ export class UpdatePacienteComponent {
   
   
   ngOnInit(): void {
-    this.srvUser.SeleccionarConfirmEdit$.pipe(
+    this.srvUser.SeleccionarConfirmEditProfile$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
-        this.editform = this.fb.group({
+        this.editProfile = this.fb.group({
           cedula: [data.str_cedula, ],
           nombres: [data.str_nombres,],
           apellidos: [data.str_apellidos,],
@@ -132,15 +139,20 @@ export class UpdatePacienteComponent {
           celular: [data.str_celular, [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
           direccion: [data.txt_direccion],
         });
+
+        
       },
       error: (err) => {
         console.log(err);
+      },
+      complete: () => {
+        console.log('complete');
       }
     });
   }
+  
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
   }
-
 }

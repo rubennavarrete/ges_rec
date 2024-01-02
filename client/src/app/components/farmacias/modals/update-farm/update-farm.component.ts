@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, pipe, takeUntil } from 'rxjs';
 import { DataFarm } from 'src/app/core/models/farm';
 import { AddFarmService } from 'src/app/core/services/add-farm.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -35,13 +36,13 @@ export class UpdateFarmComponent implements OnInit, OnDestroy {
 
   editfarm: FormGroup;
   farmError: string = '';
-  constructor(private fb:FormBuilder, public srvFarm:AddFarmService) {
+  constructor(private fb:FormBuilder, public srvFarm:AddFarmService, private srvModal: ModalsService) {
     this.editfarm = this.fb.group({
-          nombre: ['', Validators.required],
-          direccion: ['', Validators.required],
+          nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
+          direccion: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
           telefono: ['', [Validators.minLength(7), Validators.maxLength(9), Validators.pattern(/^[0-9]+$/)]],
           correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
-          password: ['',Validators.required],
+          password: ['',],
           nombre_representante: ['',[Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
           celular_representante: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
         });
@@ -62,10 +63,6 @@ export class UpdateFarmComponent implements OnInit, OnDestroy {
           allowOutsideClick: false
         });
         if (this.editfarm.valid) {
-          this.editfarm.get('ruc')?.enable();
-          this.editfarm.get('correo')?.enable();
-          this.editfarm.get('nombre_representante')?.enable();
-          this.editfarm.get('celular_representante')?.enable();
           this.srvFarm.putFarmacia(this.editfarm.value).pipe(
             takeUntil(this.destroy$)
           ).subscribe({
@@ -93,6 +90,7 @@ export class UpdateFarmComponent implements OnInit, OnDestroy {
             },
             complete: () => {
               this.srvFarm.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.editfarm.reset();
               
 
@@ -117,14 +115,10 @@ export class UpdateFarmComponent implements OnInit, OnDestroy {
           ruc: [data.str_ruc],
           telefono: [data.str_telefono_institucion, [Validators.required, Validators.minLength(7), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
           correo: [data.str_correo_institucion, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]] ,
-          password: [data.str_password],
+          password: [''],
           nombre_representante: [data.str_nombre_representante],
           celular_representante: [data.str_celular_representante],
         });
-        this.editfarm.get('ruc')?.disable();
-        this.editfarm.get('correo')?.disable();
-        this.editfarm.get('nombre_representante')?.disable();
-        this.editfarm.get('celular_representante')?.disable();
       },
       error: (err) => {
         console.log(err);

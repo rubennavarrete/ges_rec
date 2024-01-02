@@ -1,10 +1,8 @@
 
 <!-- Formulario para agregar una receta -->
 <form  [formGroup]="recetaform"  novalidate autocomplete="off"  class="content-user" >
-    <div class="text-center"><h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"><span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Agregar</span> Receta</h1></div>
-    <label for="title">Diagnóstico</label>
     <div>
-        <textarea formControlName="diagnostico" id="diagnostico" rows="2" class=" mt-4 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Diagnóstico..."></textarea>
+        <textarea formControlName="diagnostico" id="diagnostico" rows="2" class=" mt-1 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Diagnóstico..."></textarea>
         <div *ngIf="diagnostico.invalid && (diagnostico.dirty || diagnostico.touched)">
             <div *ngIf="diagnostico.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                 <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
@@ -22,7 +20,7 @@
 <form [formGroup]="medicamentoform" novalidate autocomplete="off" class="content_user">
     <label for="title">Lista de Medicamentos</label>
     <div>
-        <div class="grid gap-6 mb-2 md:grid-cols-2 mt-5">
+        <div class="grid gap-2 md:grid-cols-2">
             <div>
                 <input formControlName="nombreM" [ngClass]="{'loading':isLoading}" [spellcheck]="false"  (input)="onSearchInputChange($event)"  [(ngModel)]="src"  type="text" id="nombre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Paracetamol 500mg" required> 
                 <div *ngIf="nombreM.invalid && (nombreM.dirty || nombreM.touched)">
@@ -81,7 +79,7 @@
                 </div>
             </div> 
         </div>
-        <div class="mb-6">
+        <div class="mt-1">
             <input formControlName="indicacionesM"  type="text" id="indicaciones" class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Indicaciones" required>
             <div *ngIf="indicacionesM.invalid && (indicacionesM.dirty || indicacionesM.touched)">
                 <div *ngIf="indicacionesM.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -93,15 +91,16 @@
                 </div>
             </div>
         </div> 
+
+        <button (click)="addMedicamento()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Añadir Medicamento
+        </button>
+
     </div>
-    <hr><hr><hr>
-    <button (click)="addMedicamento()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 text-center inline-flex items-center mr-2 mt-6 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Añadir Medicamento
-    </button>
-    <br><br>
+      
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">

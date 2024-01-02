@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { AddFarmService } from 'src/app/core/services/add-farm.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
 
 @Component({
@@ -26,23 +27,13 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
   
   rucSeleccionado: string = '';
   
-  showWindow1: boolean = true;
-  showWindow2: boolean = false;
-  showWindow3: boolean = false;
   dataFarmacia: any;  
 
   private destroy$ = new Subject<any>();
   constructor(public srvFarm: AddFarmService,
-    public srvPaginacion: PaginacionService) { }
+    public srvPaginacion: PaginacionService,
+    public srvModals: ModalsService) { }
   
-  toggleWindows() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow2 = !this.showWindow2;
-  }
-  toggleWindows2() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow3 = !this.showWindow3;
-  }
   ngOnInit(): void {
     this.pasarPagina(1)
 
@@ -51,15 +42,17 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: (data) => {
         if(data){
-          this.showWindow1 = data;
           this.getFarmacias(); 
-          this.showWindow2 = !data; 
-          this.showWindow3 = !data;
         }
       }
     });
 
     // this.getFarmacias();
+  }
+
+  imputModal(title: string, name: string) {
+    this.srvModals.setFormModal({ title, name });
+    this.srvModals.openModal();
   }
 
   getFarmacias() {
@@ -105,12 +98,10 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
 
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
-    console.log('mapFiltersToRequest', this.mapFiltersToRequest);
+    /* console.log('mapFiltersToRequest', this.mapFiltersToRequest); */
     this.getFarmacias();
   }
 
-
-  
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();

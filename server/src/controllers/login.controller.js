@@ -26,6 +26,7 @@ export const login = async (req, res) => {
     const usuarioToken = {
         nombre: usuario.str_nombres,
         id_usuario: usuario.int_id_usuario,
+        cedula: usuario.str_cedula,
     };
     console.log('Usuario Token',usuarioToken)
     const token = jwt.sign(usuarioToken, jwtVariables.jwtSecret,

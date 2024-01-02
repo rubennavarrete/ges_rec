@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { AddUserService } from 'src/app/core/services/add-user.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
 
 @Component({
@@ -28,48 +29,53 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
   cedulaSeleccionada: string = '';
   private destroy$ = new Subject<any>();
   
-  showWindow1: boolean = true;
-  showWindow2: boolean = false;
-  showWindow3: boolean = false;
-  showWindow4: boolean = false;
+
   dataUser: any;
 
-  constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService) { }
+  constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService) { }
 
+  ngOnInit(): void {
+    this.pasarPagina(1)
+    this.srvUser.SeleccionarConfirmAdd$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (data) => {
+        if(data){
+          this.getUsuarios({}); 
+        }
+      }
+    });
 
-  toggleWindows() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow2 = !this.showWindow2;
   }
 
-  toggleWindows2() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow3 = !this.showWindow3;
+  imputModal(title: string, name: string) {
+    this.srvModals.setFormModal({ title, name });
+    this.srvModals.openModal();
   }
-
-  toggleWindows3() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow4 = !this.showWindow4;
-  }
-
-
-
-  getUsuarios() {
-    this.srvUser.getUsuarios(this.mapFiltersToRequest)
+  
+  getUsuarios(usuario: any) {
+    this.srvUser.getUsuarios(usuario)
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe({
       next: (data: any) => {
-        this.dataUser = data.body;
+        //console.log(data);
         this.srvUser.dataU = data.body
         this.metadata = data.total
+        this.dataUser = data.body;
         this.dataPagina()
       },
       error: (error) => {
         console.log(error);
       }
     });
+  }
+
+  changeUser(event: any) {
+    this.mapFiltersToRequest.data = event.target.value;
+    this.mapFiltersToRequest.parameter = 'str_cedula';
+    this.getUsuarios(this.mapFiltersToRequest);
   }
 
   editarUsuario(cedula: string): void {
@@ -106,25 +112,6 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
     });
   }
 
-  ngOnInit(): void {
-    this.pasarPagina(1)
-    this.srvUser.SeleccionarConfirmAdd$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (data) => {
-        if(data){
-          this.showWindow1 = data;
-          this.getUsuarios(); 
-          this.showWindow2 = !data; 
-          this.showWindow3 = !data;
-          this.showWindow4 = !data;
-        }
-      }
-    });
-
-    this.getUsuarios();
-  }
-
   dataPagina() {
     this.elementPagina.dataLength = this.srvUser.dataU ? this.srvUser.dataU.length : 0;
     this.elementPagina.metaData = this.metadata;
@@ -135,7 +122,7 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
     // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
-    this.getUsuarios();
+    this.getUsuarios(this.mapFiltersToRequest);
   }
 
   ngOnDestroy(): void {

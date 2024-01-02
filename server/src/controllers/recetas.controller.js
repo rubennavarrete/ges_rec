@@ -1,6 +1,10 @@
 import { sequelize } from "../database/database.js";
 import { Recetas } from "../models/Recetas.js";
 import { createReceta_med } from "./recetas_med.controller.js";
+import PDF from 'pdfkit';
+import fs from 'fs';
+
+
 
 //RECIBIR TODAS LAS RECETAS
 export const getRecetas = async (req, res) => {
@@ -60,4 +64,11 @@ export const createReceta = async (req, res) => {
         await t.rollback();
         return res.status(500).json({ error: 'Error al crear la receta médica' });
     }
+};
+
+export const pdfReceta = async (req, res) => {
+    const doc = new PDF();
+    doc.text('Hello world!', 100, 100);
+    doc.pipe(fs.createWriteStream('receta.pdf'));
+    doc.end();
 };
