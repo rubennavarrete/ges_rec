@@ -1,40 +1,34 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, catchError, map } from 'rxjs';
-import { Receta, RecetaResponse } from '../models/receta';
+import { EditReceta, Receta, RecetaResponse } from '../models/receta';
 import { EditUser } from '../models/user';
 import config from 'config/config';
 import { Medicacion, MedicacionResponse } from '../models/medicacion';
 
 
 const confirmAdd:boolean = false;
-const confirmEdit:EditUser = {
-  int_id_usuario: 0,
-  str_cedula: '',
-  str_nombres: '',
-  str_apellidos: '',
-  str_correo: '',
-  str_password: '',
-  dt_fecha_nac: new Date(),
-  bln_genero: false,
-  str_telefono: '',
-  str_celular: '',
-  txt_direccion: ''
+const confirmEdit: EditReceta = {
+  int_id_paciente: 0,
+  int_id_medico: 0,
+  txt_diagnostico: '',
+  medicamentos: []
 };
 
 @Injectable({
   providedIn: 'root'
 })
 export class AddRecetaService {
-
+  dataR!: any[];
   private URL_API: string = config.URL_API_BASE + 'recetas';
-  private URL_API2: string = config.URL_API_BASE + 'medicacion/busqueda?nombre';
+  private URL_API2: string = config.URL_API_BASE + 'receta';
 
   constructor(private http: HttpClient) { }
 
+
     //BEHAVIOR SUBJECT
     private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);
-    private confirmEdit$ = new BehaviorSubject<EditUser>(confirmEdit);
+    private confirmEdit$ = new BehaviorSubject<EditReceta>(confirmEdit);
 
     //METODOS
 
@@ -50,6 +44,20 @@ export class AddRecetaService {
 
     postReceta(dataFormReceta: Receta): Observable<RecetaResponse> {
       return this.http.post<RecetaResponse>(this.URL_API, dataFormReceta);
+    }
+
+    //RECIBIR RECETA
+
+    getRecetas(pagination: any) {
+      const params = new HttpParams()
+        .set('page', pagination.page)
+        .set('size', pagination.size)
+        .set('parameter', pagination.parameter)
+        .set('data', pagination.data);
+  
+      return this.http.get<Receta>(this.URL_API + '?' + params, {
+        withCredentials: true,
+      });
     }
 
     //RECIBIR MEDICAMENTOS

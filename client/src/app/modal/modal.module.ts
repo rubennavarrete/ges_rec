@@ -5,6 +5,8 @@ import { UserModule } from '../components/usuarios/user.module';
 import { MedicoModule } from '../components/medicos/medico.module';
 import { FarmModule } from '../components/farmacias/farm.module';
 import { Medicaciones1Module } from '../components/medicaciones/medicaciones.module';
+import { DiagnosticoModule } from '../components/diagnosticos/diagnostico.module';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -15,7 +17,9 @@ import { Medicaciones1Module } from '../components/medicaciones/medicaciones.mod
     UserModule,
     MedicoModule,
     FarmModule,
-    Medicaciones1Module
+    Medicaciones1Module,
+    DiagnosticoModule,
+    RouterModule.forChild([])
   ],
   exports: [
     ModalsComponent

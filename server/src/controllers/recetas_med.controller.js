@@ -29,6 +29,8 @@ export const getReceta_med = async(req, res) =>{
     }
 }
 
+
+
 // CREAR LISTA DE MEDICAMENTOS
 export const createReceta_med = async (id_receta, req, t) => {
     const { medicamentos } = req.body;

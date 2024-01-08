@@ -37,7 +37,7 @@ export class AddMedicacionesService {
   }
 
 
-  //METODO PARA ENVIAR DATOS AL COMPONENTE EDITAR USUARIO
+  //METODO PARA ENVIAR DATOS AL COMPONENTE EDITAR MEDICACION
   get SeleccionarConfirmEdit$(): Observable<EditMedicacion> {
     return this.confirmEdit$.asObservable();
   }
@@ -55,7 +55,7 @@ export class AddMedicacionesService {
         .set('parameter', pagination.parameter)
         .set('data', pagination.data);
     
-      return this.http.get<EditMedicacion>(this.URL_API + '?' +params,
+      return this.http.get<Medicacion>(this.URL_API + '?' +params,
         {
           withCredentials: true,
         }

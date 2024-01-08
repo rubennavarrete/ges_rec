@@ -15,8 +15,16 @@ export interface Receta {
     medicamentos: Medicamentos[];
 }
 
+export interface EditReceta {
+    int_id_paciente: number;
+    int_id_medico: number;
+    txt_diagnostico: string;
+    medicamentos: Medicamentos[];
+}
+
 
 export interface RecetaResponse {
     status: string;
+    data: Receta;
 }
 
