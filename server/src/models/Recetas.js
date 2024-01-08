@@ -25,7 +25,7 @@ export const Recetas = sequelize.define(
             allowNull: false,
         },
 
-        bln_estado:{
+        bln_vigencia:{
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },

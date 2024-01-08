@@ -48,8 +48,6 @@ import { InjectSessionInterceptor } from './core/interceptors/inject-session.int
         LoginModule,
         AdminModule,
         ModalModule
-
-        
     ]
 })
 export class AppModule { }

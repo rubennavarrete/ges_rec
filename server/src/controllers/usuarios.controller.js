@@ -13,8 +13,8 @@ export const getUsuarios = async (req, res) => {
     
     try{
         const paginationData = req.query;
-
-        if(paginationData.page === "undefined"){
+        if (paginationData.page === "undefined" || isNaN(paginationData.page)) {
+            paginationData.page = 1; // Establece un valor predeterminado si no es un número válido
             const { datos, total } = await paginarDatos(1, 10, Usuarios, '', '');
             return res.json({
                 status: true,
