@@ -15,6 +15,6 @@ import { EditRecetaComponent } from './modals/edit-receta/edit-receta.component'
     ReactiveFormsModule,
     DashboardModule
   ],
-  exports: [ListRecetasComponent,AddRecetaComponent]
+  exports: [ListRecetasComponent,AddRecetaComponent, EditRecetaComponent]
 })
 export class DiagnosticoModule { }

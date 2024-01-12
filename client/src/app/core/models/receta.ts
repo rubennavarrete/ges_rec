@@ -13,18 +13,22 @@ export interface Receta {
     id_medico: number;
     diagnostico: string;
     medicamentos: Medicamentos[];
+    int_id_paciente: number;
+    int_id_medico: number;
+    txt_diagnostico: string;
+    
 }
 
 export interface EditReceta {
     int_id_paciente: number;
     int_id_medico: number;
     txt_diagnostico: string;
-    medicamentos: Medicamentos[];
 }
 
 
 export interface RecetaResponse {
     status: string;
+    message: string;
     data: Receta;
 }
 

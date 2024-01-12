@@ -12,7 +12,6 @@ const confirmEdit: EditReceta = {
   int_id_paciente: 0,
   int_id_medico: 0,
   txt_diagnostico: '',
-  medicamentos: []
 };
 
 @Injectable({
@@ -22,6 +21,8 @@ export class AddRecetaService {
   dataR!: any[];
   private URL_API: string = config.URL_API_BASE + 'recetas';
   private URL_API2: string = config.URL_API_BASE + 'receta';
+  private URL_API3: string = config.URL_API_BASE + 'recetaSearch';
+  
 
   constructor(private http: HttpClient) { }
 
@@ -39,14 +40,25 @@ export class AddRecetaService {
     setConfirmAdd(data: boolean): void {
       this.confirmAdd$.next(data);
     }
+
+    //METODO PARA ENVIAR DATOS AL COMPONENTE VOLVER A RECETAR
+
+    get SeleccionarConfirmEdit$(): Observable<EditReceta> {
+      return this.confirmEdit$.asObservable();
+    }
+    setConfirmEdit(data: EditReceta): void {
+      this.confirmEdit$.next(data);
+    }
+
+    
   
     //ENVIAR RECETA
 
-    postReceta(dataFormReceta: Receta): Observable<RecetaResponse> {
-      return this.http.post<RecetaResponse>(this.URL_API, dataFormReceta);
+    postReceta(dataFormReceta: Receta) {
+      return this.http.post<RecetaResponse>(`${this.URL_API}`, dataFormReceta);
     }
 
-    //RECIBIR RECETA
+    //RECIBIR RECETAS
 
     getRecetas(pagination: any) {
       const params = new HttpParams()
@@ -58,6 +70,17 @@ export class AddRecetaService {
       return this.http.get<Receta>(this.URL_API + '?' + params, {
         withCredentials: true,
       });
+    }
+
+    //RECIBIR UNA RECETA
+
+    getReceta(id_receta: number){
+      return this.http.get<Receta>(`${this.URL_API3}/${id_receta}`);
+    }
+
+    //RECIBIR MEDICAMENTO DE LA RECETA
+    getMedicamentoReceta(id_receta: number){
+      return this.http.get<Medicacion[]>(`${this.URL_API2}/${id_receta}`);
     }
 
     //RECIBIR MEDICAMENTOS

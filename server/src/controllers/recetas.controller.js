@@ -25,6 +25,22 @@ export const getRecetasPaciente = async (req, res) => {
     
 }
 
+//RECIBIR UNA RECETA
+export const getReceta = async (req, res) => {
+    try{
+        const { id_receta } = req.params;
+        const receta = await Recetas.findOne({
+            where: {
+                int_id_receta: id_receta
+            }
+        });
+        res.json(receta);
+    }catch (error){
+        return res.status(500).json({message: error.message});
+    }
+    
+}
+
 export const getRecetas = async (req, res) => {
     try {
         const paginationData = req.query;
@@ -67,21 +83,7 @@ export const getRecetas = async (req, res) => {
     }
 }
 
-//RECIBIR UNA RECETA
-export const getReceta = async (req, res) => {
-    const { id_receta } = req.params;
-    try{
-        const receta = await Recetas.findOne({
-            where: {
-                int_id_receta: id_receta
-            }
-        });
-        res.json(receta);
-    }catch (error){
-        return res.status(500).json({message: error.message});
-    }
-    
-}
+
 
 export const getRecetaCompleta = async (req, res) => {
     const { id_receta } = req.params;
@@ -107,11 +109,15 @@ export const getRecetaCompleta = async (req, res) => {
 
         // Combinar la información de la receta y la medicación
         const recetaCompleta = {
-            receta,
             receta_med
         };
 
-        res.json(recetaCompleta);
+        res.json({
+            status: 'success',
+            message: 'Receta obtenida correctamente',
+            dta: recetaCompleta
+        });
+            
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -141,7 +147,9 @@ export const createReceta = async (req, res) => {
         await t.commit();
 
         return res.json({
-            status: 'success'
+            message: "Se ha creado la receta",
+            status: 'success',
+            data: newReceta,
         });
     } catch (error) {
         console.error('Error al crear la receta médica', error);
