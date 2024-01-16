@@ -50,7 +50,7 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
   }
 
   redirectToDiagnosticos() {
-    this.router.navigate(['admin', 'diagnosticos']);
+    
   }
   
 
@@ -85,14 +85,13 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
   }
 
   editarUsuario(cedula: string): void {
-    this.cedulaSeleccionada = cedula;
-    this.srvUser.getUsuario(this.cedulaSeleccionada)
+    this.srvUser.getUsuario(cedula)
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe({
       next: (data) => {
-        // //console.log(data);
+        console.log(data);
         this.srvUser.setConfirmEdit(data);
       },
       error: (error) => {
@@ -103,14 +102,14 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
 
   
   addReceta(cedula: string): void {
-    this.cedulaSeleccionada = cedula;
-    this.srvUser.getUsuario(this.cedulaSeleccionada)
+    this.srvUser.getUsuario(cedula)
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe({
       next: (data) => {
         this.srvUser.setConfirmEdit(data);
+        this.router.navigate(['admin', 'diagnosticos']);
       },
       error: (error) => {
         console.log(error);

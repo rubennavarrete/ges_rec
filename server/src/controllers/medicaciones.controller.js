@@ -36,7 +36,6 @@ export const getMedicaciones = async (req, res) => {
 
             return res.json({
                 status: true,
-                message: "Medicamentos obtenidos correctamente",
                 body: datos,
                 total: total
             });
@@ -57,7 +56,11 @@ export const getMedicacion= async (req, res) => {
         });
 
         if (medicamento.length === 0) return res.status(404).json({ message: "No se ha encontrado el medicamento" });
-        res.json(medicamento)
+        res.json({
+            status: "success",
+            message: "Se ha encontrado el medicamento",
+            data: medicamento
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

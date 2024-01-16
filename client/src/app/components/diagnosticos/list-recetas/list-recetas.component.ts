@@ -28,6 +28,8 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
   mapFiltersToRequest: any = {};
 
   dataReceta: any;
+  id_usuario: number = 0;
+  cedulaSeleccionada: string = '';
 
   private destroy$ = new Subject<any>();
 
@@ -99,6 +101,22 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
       next: (data) => {
         console.log(data);
         this.srvRec.setConfirmEdit(data);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  obtenerMedicacion(id_medicacion:number): void {
+    this.srvRec.getMedicamentoReceta(id_medicacion)
+    .pipe(
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (data) => {
+        console.log(data);
+        this.srvRec.setConfirmEditMed(data);
       },
       error: (error) => {
         console.log(error);

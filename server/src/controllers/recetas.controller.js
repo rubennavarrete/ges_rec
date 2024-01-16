@@ -73,7 +73,6 @@ export const getRecetas = async (req, res) => {
 
             return res.json({
                 status: true,
-                message: "Recetas obtenidos correctamente",
                 body: datos,
                 total: total
             });
@@ -84,43 +83,26 @@ export const getRecetas = async (req, res) => {
 }
 
 
-
+//RECIBIR UNA RECETA COMPLETA
 export const getRecetaCompleta = async (req, res) => {
-    const { id_receta } = req.params;
-
     try {
-        // Obtener la información de la receta
-        const receta = await Recetas.findOne({
-            where: {
-                int_id_receta: id_receta
-            }
-        });
+        const {id_receta} = req.params;
+        const query = `
+        SELECT * FROM ObtenerDatosReceta(:id_receta);
+        `;
 
-        if (!receta) {
-            return res.status(404).json({ message: "No se ha encontrado la receta" });
-        }
+        const receta = await sequelize.query(query, {
+        type: sequelize.QueryTypes.SELECT,
+        replacements: { id_receta } 
+    });
 
-        // Obtener la información de la medicación asociada a la receta
-        const receta_med = await Recetas_medicacion.findAll({
-            where: {
-                int_id_receta: receta.int_id_receta // Asegúrate de ajustar el campo de relación entre Recetas y Recetas_medicacion
-            },
-        });
+        if(receta.length === 0) return res.status(404).json({ message: "No se ha encontrado medicamentos"});
 
-        // Combinar la información de la receta y la medicación
-        const recetaCompleta = {
-            receta_med
-        };
-
-        res.json({
-            status: 'success',
-            message: 'Receta obtenida correctamente',
-            dta: recetaCompleta
-        });
-            
+        res.json(receta);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
+    
 };
 
 
@@ -135,7 +117,6 @@ export const createReceta = async (req, res) => {
                 int_id_paciente: id_paciente,
                 int_id_medico: id_medico,
                 txt_diagnostico: diagnostico,
-                bln_vigencia: true,
             },
             { transaction: t }
         );

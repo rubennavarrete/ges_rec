@@ -5,6 +5,12 @@ export interface Medicamentos {
     dosis: string;
     duracion: string;
     indicaciones: string;
+    int_id_medicacion: number;
+    str_nombre_comercial: string;
+    str_cantidad: string;
+    str_dosis: string;
+    str_duracion: string;
+    txt_indicaciones: string;
 }
 
 
@@ -26,9 +32,11 @@ export interface EditReceta {
 }
 
 
+
 export interface RecetaResponse {
     status: string;
     message: string;
     data: Receta;
 }
+
 

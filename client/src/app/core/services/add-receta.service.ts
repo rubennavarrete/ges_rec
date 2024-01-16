@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, catchError, map } from 'rxjs';
-import { EditReceta, Receta, RecetaResponse } from '../models/receta';
+import { EditReceta, Medicamentos, Receta, RecetaResponse } from '../models/receta';
 import { EditUser } from '../models/user';
 import config from 'config/config';
 import { Medicacion, MedicacionResponse } from '../models/medicacion';
@@ -13,6 +13,20 @@ const confirmEdit: EditReceta = {
   int_id_medico: 0,
   txt_diagnostico: '',
 };
+const confirmEditMed: Medicamentos = {
+  int_id_medicacion: 0,
+  str_nombre_comercial: '',
+  str_cantidad: '',
+  str_dosis: '',
+  str_duracion: '',
+  txt_indicaciones: '',
+  id_medicacion: 0,
+  nombre: '',
+  cantidad: '',
+  dosis: '',
+  duracion: '',
+  indicaciones: '',
+};
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +36,7 @@ export class AddRecetaService {
   private URL_API: string = config.URL_API_BASE + 'recetas';
   private URL_API2: string = config.URL_API_BASE + 'receta';
   private URL_API3: string = config.URL_API_BASE + 'recetaSearch';
+  private URL_API4: string = config.URL_API_BASE + 'medicacion';
   
 
   constructor(private http: HttpClient) { }
@@ -30,6 +45,7 @@ export class AddRecetaService {
     //BEHAVIOR SUBJECT
     private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);
     private confirmEdit$ = new BehaviorSubject<EditReceta>(confirmEdit);
+    private confirmEditMed$ = new BehaviorSubject<Medicamentos>(confirmEditMed);
 
     //METODOS
 
@@ -48,6 +64,13 @@ export class AddRecetaService {
     }
     setConfirmEdit(data: EditReceta): void {
       this.confirmEdit$.next(data);
+    }
+
+    get SeleccionarConfirmEditMed$(): Observable<Medicamentos> {
+      return this.confirmEditMed$.asObservable();
+    }
+    setConfirmEditMed(data: Medicamentos): void {
+      this.confirmEditMed$.next(data);
     }
 
     
@@ -80,17 +103,16 @@ export class AddRecetaService {
 
     //RECIBIR MEDICAMENTO DE LA RECETA
     getMedicamentoReceta(id_receta: number){
-      return this.http.get<Medicacion[]>(`${this.URL_API2}/${id_receta}`);
+      return this.http.get<Medicamentos>(`${this.URL_API2}/${id_receta}`);
     }
 
     //RECIBIR MEDICAMENTOS
 
-    getMedicamentos(nombre : string):Observable<Medicacion[]>{
-      return this.http.get<MedicacionResponse>(`${this.URL_API2}=${nombre}`).pipe(
+    getMedicamentos(nombre : string):Observable<Medicacion[]>{ 
+      return this.http.get<MedicacionResponse>(`${this.URL_API4}/busqueda?nombre=${nombre}`).pipe(
         map((res:MedicacionResponse)=> res?.data),
         catchError(() => EMPTY)
       );
     }
-    
 
   }

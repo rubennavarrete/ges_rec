@@ -61,6 +61,7 @@ export const Usuarios = sequelize.define(
         bln_estado: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: true,
         },
 
         str_token: {

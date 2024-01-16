@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject, debounceTime, finalize, takeUntil } from 'rxjs';
 import { Medicacion } from 'src/app/core/models/medicacion';
 import { Medicamentos, RecetaResponse } from 'src/app/core/models/receta';
+import { AddMedicacionesService } from 'src/app/core/services/add-medicaciones.service';
 import { AddRecetaService } from 'src/app/core/services/add-receta.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
 import { ModalsService } from 'src/app/core/services/modals.service';
@@ -14,8 +15,7 @@ import Swal from 'sweetalert2';
   templateUrl: './edit-receta.component.html',
   styleUrls: ['./edit-receta.component.css']
 })
-export class EditRecetaComponent {
-
+export class EditRecetaComponent implements OnDestroy, OnInit {
   public isLoading = false;
   public src: string = '';
   public data$: any;
@@ -25,13 +25,15 @@ export class EditRecetaComponent {
   medicamentoform: FormGroup;
   editrecetaform: FormGroup;
 
-  medicamento: Medicamentos[] = [] ;
+  medicamento: Medicamentos[] = [];
 
   medicamentoSeleccionado: Medicamentos | null = null;
+  
 
   idseleccionada: number = 0;
 
   tokenData: any;
+  dataMed: any= [];
 
   get nombreM() {
     return this.medicamentoform.controls['nombreM'];
@@ -48,7 +50,6 @@ export class EditRecetaComponent {
   get indicacionesM() {
     return this.medicamentoform.controls['indicacionesM'];
   }
-
   get diagnostico() {
     return this.editrecetaform.controls['diagnostico'];
   }
@@ -56,6 +57,14 @@ export class EditRecetaComponent {
   private destroy$ = new Subject<any>();
   
   ngOnInit(): void {
+
+    // Buscar medicamento
+    this.searchInputSubject.pipe(
+      debounceTime(300) // Ajusta el valor en milisegundos según lo necesario
+    ).subscribe((value) => {
+      this.buscarMedicamento(value);
+    });
+
     this.srvRec.SeleccionarConfirmEdit$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
@@ -77,9 +86,42 @@ export class EditRecetaComponent {
         console.log(err);
       }
     });
+    this.srvRec.SeleccionarConfirmEditMed$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (data) => {
+        // Asignar dataMed a this.dataMed
+        this.dataMed = data;
+
+        this.medicamento = []; // Reiniciar el array de medicamentos
+    
+        // Iterar sobre cada objeto en dataMed y agregarlo a medicamento
+        for (const medData of this.dataMed) {
+          const nuevoMedicamento: Medicamentos = {
+            nombre: medData.str_nombre_comercial ,
+            id_medicacion: medData.int_id_medicacion,
+            cantidad: medData.str_cantidad,
+            dosis: medData.str_dosis,
+            duracion: medData.str_duracion,
+            indicaciones: medData.str_indicacion,
+            int_id_medicacion: 0,
+            str_nombre_comercial: '',
+            str_cantidad: '',
+            str_dosis: '',
+            str_duracion: '',
+            txt_indicaciones: '',
+          };
+          this.medicamento.push(nuevoMedicamento);
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+    
   }
 
-  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, private srvModal: ModalsService) {
+  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, private srvModal: ModalsService, public srvMed: AddMedicacionesService, ) {
     this.editrecetaform = this.fb.group({
       id_medico: [''] ,
       id_paciente: [''],
@@ -106,9 +148,9 @@ export class EditRecetaComponent {
     }
   }
 
-  //Buscar medicamento
-  buscarMedicamento(value: string) {
-    // console.log(value);
+   //Buscar medicamento
+   buscarMedicamento(value: string) {
+
     this.isLoading = true;
     this.srvRec.getMedicamentos(value).pipe(
       takeUntil(this.destroy$),
@@ -119,7 +161,6 @@ export class EditRecetaComponent {
     ).subscribe({
       next: (data) => {
         this.data$ = data;
-        // //console.log(data);
       },
       error: (error) => {
         console.log(error);
@@ -159,13 +200,20 @@ export class EditRecetaComponent {
       this.medicamentoSeleccionado = null; // Reiniciar el objeto seleccionado
     } else {
       // Crear un nuevo objeto y agregarlo al array
-      const nuevoMedicamento: Medicamentos = {
-        nombre: this.medicamentoform.value.nombreM,
+      
+       const nuevoMedicamento: Medicamentos = {
+        nombre: this.medicamentoform.value.nombreM ,
         id_medicacion:  this.idseleccionada,
         cantidad: this.medicamentoform.value.cantidadM,
         dosis: this.medicamentoform.value.dosisM,
         duracion: this.medicamentoform.value.duracionM,
-        indicaciones: this.medicamentoform.value.indicacionesM
+        indicaciones: this.medicamentoform.value.indicacionesM,
+        int_id_medicacion: 0,
+        str_nombre_comercial: '',
+        str_cantidad: '',
+        str_dosis: '',
+        str_duracion: '',
+        txt_indicaciones: '',
       };
       this.medicamento.push(nuevoMedicamento);
     }
@@ -180,6 +228,7 @@ export class EditRecetaComponent {
     this.medicamentoSeleccionado = med;
     this.medicamentoform.patchValue({
       nombreM: med.nombre,
+      cantidadM: med.cantidad,
       dosisM: med.dosis,
       duracionM: med.duracion,
       indicacionesM: med.indicaciones
@@ -191,6 +240,9 @@ export class EditRecetaComponent {
     this.medicamento.splice(index, 1);
     console.log(this.medicamento);
   }
+
+  //Obtener medicamentos de la receta
+ 
 
   //Crear receta
   postReceta() {

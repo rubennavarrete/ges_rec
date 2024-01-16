@@ -105,7 +105,6 @@ export const createUsuario = async (req, res) => {
                     txt_direccion: direccion,
                     str_telefono: telefono,
                     str_celular: celular,
-                    bln_estado: true,
                 },
                 { transaction: t }
             );

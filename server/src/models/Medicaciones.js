@@ -19,6 +19,11 @@ export const Medicaciones = sequelize.define(
             type: DataTypes.STRING(100),
             allowNull: false,
         },
+        bln_vigencia: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true,
+        },
     },
     {
         schema: "ges_recetas",
