@@ -1,55 +1,6 @@
 import { sequelize } from "../database/database.js";
-import { Recetas } from "../models/Recetas.js";
-
-//RECIBIR DATOS DATOS DEL PACIENTE-MEDICO-RECETA
-export const getRecetaPaciente = async (req, res) => {
-    try {
-        const {id_receta} = req.params;
-        const query = `
-        SELECT * FROM  ObtenerDatosPorReceta(:id_receta);
-        `;
-
-        const receta = await sequelize.query(query, {
-        type: sequelize.QueryTypes.SELECT,
-        replacements: { id_receta } 
-    });
-
-        if(receta.length === 0) return res.status(404).json({ message: "No se ha encontrado medicamentos"});
-
-        res.json(receta);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-    
-};
-
-//RECIBIR DATOS DATOS DE LOS MEDICAMENTOS DE LA RECETA
-export const getMedicamentosPaciente = async (req, res) => {
-    try {
-        const {id_receta} = req.params;
-        const query = `
-        SELECT * FROM  ObtenerMedicamentosPorReceta(:id_receta);
-        `;
-
-        const medicamentos = await sequelize.query(query, {
-        type: sequelize.QueryTypes.SELECT,
-        replacements: { id_receta } 
-    });
-
-        if(medicamentos.length === 0) return res.status(404).json({ message: "No se ha encontrado medicamentos"});
-
-        res.json(medicamentos);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-    
-};
-
-import PDFDocument from 'pdfkit';
 import fs from 'fs';
-import base64 from 'base64-stream';
-
-// ...
+import pdf from 'html-pdf';
 
 export const pdfReceta = async (req, res) => {
     const { id_receta } = req.params;
@@ -73,61 +24,118 @@ export const pdfReceta = async (req, res) => {
             replacements: { id_receta },
         });
 
-        // Crear el documento PDF
-        const doc = new PDFDocument();
+        // Calcular la edad del paciente a partir de su fecha de nacimiento
+        const fechaNacimientoPaciente = receta[0]?.dt_fecha_nac_paciente;
+        const edadPaciente = fechaNacimientoPaciente ? calcularEdad(new Date(fechaNacimientoPaciente)) : '';
 
-        // Agregar contenido al PDF
-        doc.text('Datos de la Receta', { align: 'center' });
-        doc.text('\n');
+        // Construir el HTML del documento
+        const html = `
+            <html>
+                <head>
+                    <style>
+                        body {
+                            font-family: 'Arial', sans-serif;
+                        }
+                        h1, h2, h3 {
+                            text-align: center;
+                            color: #333; /* Cambiar color del texto */
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-bottom: 20px;
+                        }
+                        table, th, td {
+                            border: 1px solid #ddd;
+                        }
+                        th, td {
+                            padding: 10px;
+                            text-align: left;
+                            font-family: 'Arial', sans-serif; /* Cambiar fuente */
+                        }
+                        th {
+                            background-color: #f2f2f2; /* Cambiar color de fondo de encabezado */
+                        }
+                        td {
+                            color: #333; /* Cambiar color del texto en celdas de datos */
+                        }
+                        #pacienteNombre {
+                            font-weight: bold;
+                            color: #008080; /* Cambiar color del nombre del paciente */
+                        }
+                        #medicoNombre {
+                            font-weight: bold;
+                            color: #800080; /* Cambiar color del nombre del médico */
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Receta Médica</h1>
 
-        // Agregar datos de la receta
-        if (receta.length > 0) {
-            const datosReceta = receta[0];
-            doc.text(`ID Medico: ${datosReceta.int_id_medico}`);
-            doc.text(`Cedula Medico: ${datosReceta.str_cedula_medico}`);
-            doc.text(`Nombres Medico: ${datosReceta.str_nombres_medico}`);
-            doc.text(`Apellidos Medico: ${datosReceta.str_apellidos_medico}`);
-            doc.text(`Fecha Nacimiento Medico: ${datosReceta.dt_fecha_nac_medico}`);
-            doc.text('\n');
-            doc.text(`Cedula Paciente: ${datosReceta.str_cedula_paciente}`);
-            doc.text(`Nombres Paciente: ${datosReceta.str_nombres_paciente}`);
-            doc.text(`Apellidos Paciente: ${datosReceta.str_apellidos_paciente}`);
-            doc.text(`Fecha Nacimiento Paciente: ${datosReceta.dt_fecha_nac_paciente}`);
-            doc.text('\n');
-            doc.text(`ID Receta: ${datosReceta.int_id_receta}`);
-            doc.text(`Fecha Creacion: ${datosReceta.dt_fecha_creacion}`);
-            doc.text(`Vigencia: ${datosReceta.bln_vigencia}`);
-            doc.text(`Diagnostico: ${datosReceta.txt_diagnostico}`);
-        }
+                    <h2>Datos del Médico:</h2>
+                    <p>ID Medico: ${receta[0]?.int_id_medico}</p>
+                    <p>Cedula Medico: ${receta[0]?.str_cedula_medico}</p>
+                    <p id="medicoNombre">Nombres Medico: ${receta[0]?.str_nombres_medico} ${receta[0]?.str_apellidos_medico}</p>
+                    <!-- Eliminada la fecha de nacimiento del médico -->
 
-        doc.text('\n');
-        doc.text('Medicamentos', { align: 'center' });
-        doc.text('\n');
+                    <h2>Datos del Paciente:</h2>
+                    <table>
+                        <tr>
+                            <th>Cedula</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Edad</th> <!-- Cambiada etiqueta -->
+                        </tr>
+                        <tr>
+                            <td>${receta[0]?.str_cedula_paciente}</td>
+                            <td id="pacienteNombre">${receta[0]?.str_nombres_paciente}</td>
+                            <td>${receta[0]?.str_apellidos_paciente}</td>
+                            <td>${edadPaciente}</td>
+                        </tr>
+                    </table>
 
-        // Agregar datos de los medicamentos
-        if (medicamentos.length > 0) {
-            medicamentos.forEach((medicamento, index) => {
-                doc.text(`Medicamento ${index + 1}`);
-                doc.text(`Nombre Comercial: ${medicamento.str_nombre_comercial}`);
-                doc.text(`Nombre Generico: ${medicamento.str_nombre_generico}`);
-                doc.text(`Cantidad: ${medicamento.str_cantidad}`);
-                doc.text(`Dosis: ${medicamento.str_dosis}`);
-                doc.text(`Indicacion: ${medicamento.str_indicacion}`);
-                doc.text(`Duracion: ${medicamento.str_duracion}`);
-                doc.text('\n');
-            });
-        }
+                    <h2>Medicamentos:</h2>
+                    <table>
+                        <tr>
+                            <th>Nombre Comercial</th>
+                            <th>Nombre Generico</th>
+                            <th>Cantidad</th>
+                            <th>Dosis</th>
+                            <th>Indicacion</th>
+                            <th>Duracion</th>
+                        </tr>
+                        ${medicamentos
+                            .map(
+                                med => `
+                                <tr>
+                                    <td>${med.str_nombre_comercial}</td>
+                                    <td>${med.str_nombre_generico}</td>
+                                    <td>${med.str_cantidad}</td>
+                                    <td>${med.str_dosis}</td>
+                                    <td>${med.str_indicacion}</td>
+                                    <td>${med.str_duracion}</td>
+                                </tr>
+                            `
+                            )
+                            .join('')}
+                    </table>
+                </body>
+            </html>
+        `;
 
-        // Guardar el PDF en un archivo
-        const outputPath = 'receta.pdf';
-        const writeStream = fs.createWriteStream(outputPath);
-        doc.pipe(writeStream);
-        doc.end();
+        // Opciones para el PDF
+        const options = { format: 'Letter' };
 
-        writeStream.on('finish', () => {
-            console.log(`El PDF se ha guardado correctamente en: ${outputPath}`);
+        // Crear el PDF y guardarlo en un archivo
+        pdf.create(html, options).toFile('receta.pdf', (err, _) => {
+            if (err) {
+                console.error('Error al generar el PDF:', err);
+                return res.status(500).json({ message: 'Error al generar el PDF' });
+            }
+
+            console.log('El PDF se ha guardado correctamente en: receta.pdf');
             // Convertir el archivo PDF a base64 y enviarlo en la respuesta
-            const pdfBase64 = fs.readFileSync(outputPath, 'base64');
+            const pdfBase64 = fs.readFileSync('receta.pdf', 'base64');
             res.json({ pdfBase64 });
         });
     } catch (error) {
@@ -136,4 +144,17 @@ export const pdfReceta = async (req, res) => {
     }
 };
 
+// Función para calcular la edad a partir de la fecha de nacimiento
+function calcularEdad(fechaNacimiento) {
+    const ahora = new Date();
+    let edad = ahora.getFullYear() - fechaNacimiento.getFullYear();
+    const mesActual = ahora.getMonth() + 1;
+    const mesNacimiento = fechaNacimiento.getMonth() + 1;
+
+    if (mesActual < mesNacimiento || (mesActual === mesNacimiento && ahora.getDate() < fechaNacimiento.getDate())) {
+        edad--;
+    }
+
+    return edad;
+}
 
