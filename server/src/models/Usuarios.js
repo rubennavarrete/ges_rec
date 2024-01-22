@@ -75,6 +75,12 @@ export const Usuarios = sequelize.define(
             defaultValue: DataTypes.NOW,
         },
 
+        dt_fecha_actualizacion: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
+        },
+
 
     },
     {

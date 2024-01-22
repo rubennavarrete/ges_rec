@@ -113,7 +113,7 @@ export class UpdatePacienteComponent {
       }
     });
 }
-  
+ 
   
   ngOnInit(): void {
     this.srvUser.SeleccionarConfirmEdit$.pipe(

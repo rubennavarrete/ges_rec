@@ -41,6 +41,7 @@ export const getReceta = async (req, res) => {
     
 }
 
+//RECIBIR TODAS LAS RECETAS
 export const getRecetas = async (req, res) => {
     try {
         const paginationData = req.query;

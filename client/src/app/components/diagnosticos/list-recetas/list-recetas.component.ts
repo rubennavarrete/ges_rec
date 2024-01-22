@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 import { Subject, takeUntil } from 'rxjs';
 import { AddRecetaService } from 'src/app/core/services/add-receta.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
@@ -38,14 +39,17 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
   constructor (public srvReceta:AddRecetaService, public srvUser:AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService, public srvRec: AddRecetaService) { }
 
   ngOnInit(): void {
+    initFlowbite();
     this.pasarPagina(1)
-    this.srvReceta.SeleccionarConfirmAdd$.pipe(
+    this.srvUser.SeleccionarConfirmEdit$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
-        if(data){
-          this.getRecetas({}); 
-        }
+        this.id_usuario = data.int_id_usuario;
+        this.getRecetasPaciente();
+      },
+      error: (err) => {
+        console.log(err);
       }
     });
   }
@@ -55,28 +59,21 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
     this.srvModals.openModal();
   }
 
-  getRecetas(receta: any) {
-    this.srvReceta.getRecetas(receta)
+  getRecetasPaciente() {
+    this.srvReceta.getRecetasPaciente(this.id_usuario)
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe({
       next: (data:any) => {
-        this.srvReceta.dataR = data.body
-        this.metadata = data.total
-        this.dataReceta = data.body;
-        this.dataPagina();
+        this.srvReceta.dataR = data;
+        this.dataReceta = data;
+        console.log(data);
       },
       error: (error) => {
         console.log(error);
       }
     });
-  }
-
-  changeUser(event: any) {
-    this.mapFiltersToRequest.data = event.target.value;
-    this.mapFiltersToRequest.parameter = 'int_id_paciente';
-    this.getRecetas(this.mapFiltersToRequest);
   }
 
   dataPagina() {
@@ -89,7 +86,7 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
     // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
-    this.getRecetas(this.mapFiltersToRequest);
+    /* this.getRecetasPaciente(this.mapFiltersToRequest); */
   }
 
   volverRecetar(id_receta: number): void {

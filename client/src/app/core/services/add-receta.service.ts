@@ -95,6 +95,12 @@ export class AddRecetaService {
       });
     }
 
+
+    //RECIBIR RECETAS DEL PACIENTE
+    getRecetasPaciente(id_paciente: number) {
+      return this.http.get<Receta>(`${this.URL_API}/${id_paciente}`);
+    }
+
     //RECIBIR UNA RECETA
 
     getReceta(id_receta: number){

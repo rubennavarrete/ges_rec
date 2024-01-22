@@ -26,6 +26,8 @@ export class AddUserService {
   dataU!: any[];
 
   private URL_API: string = config.URL_API_BASE + 'usuarios';
+  private URL_API2: string = config.URL_API_BASE + 'medicos';
+  private URL_API3: string = config.URL_API_BASE + 'pacientes';
 
   //BEHAVIOR SUBJECT
   private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);
@@ -74,14 +76,26 @@ export class AddUserService {
   //   return this.http.get<User[]>(this.URL_API);
   // }
 
-  getUsuarios(pagination: any) {
+  getMedicos(pagination: any) {
     const params = new HttpParams()
       .set('page', pagination.page)
       .set('size', pagination.size)
       .set('parameter', pagination.parameter)
       .set('data', pagination.data);
 
-    return this.http.get<User>(this.URL_API + '?' + params, {
+    return this.http.get<User>(this.URL_API2 + '?' + params, {
+      withCredentials: true,
+    });
+  }
+
+  getPacientes(pagination: any) {
+    const params = new HttpParams()
+      .set('page', pagination.page)
+      .set('size', pagination.size)
+      .set('parameter', pagination.parameter)
+      .set('data', pagination.data);
+
+    return this.http.get<User>(this.URL_API3 + '?' + params, {
       withCredentials: true,
     });
   }
@@ -100,4 +114,13 @@ export class AddUserService {
       dataFormUser
     );
   }
+
+  deleteUsuario(cedula: string) {
+    return this.http.put(`${this.URL_API}/desactivar/${cedula}`, null);
+  }
+
+  activarUsuario(cedula: string) {
+    return this.http.put(`${this.URL_API}/activar/${cedula}`, null);
+  }
+  
 }
