@@ -28,6 +28,7 @@ export const Recetas = sequelize.define(
         bln_vigencia:{
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: true,
         },
 
         dt_fecha_creacion : {

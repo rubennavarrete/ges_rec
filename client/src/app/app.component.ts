@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Layouts } from './layout/layout';
 import { Subject, takeUntil } from 'rxjs';
 import { Router, RoutesRecognized } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    initFlowbite();
     this.router.events
       .pipe(takeUntil(this.destroy$))
       .subscribe({

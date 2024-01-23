@@ -47,7 +47,6 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
   get indicacionesM() {
     return this.medicamentoform.controls['indicacionesM'];
   }
-
   get diagnostico() {
     return this.recetaform.controls['diagnostico'];
   }
@@ -174,7 +173,13 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
         cantidad: this.medicamentoform.value.cantidadM,
         dosis: this.medicamentoform.value.dosisM,
         duracion: this.medicamentoform.value.duracionM,
-        indicaciones: this.medicamentoform.value.indicacionesM
+        indicaciones: this.medicamentoform.value.indicacionesM,
+        int_id_medicacion: 0,
+        str_nombre_comercial: '',
+        str_cantidad: '',
+        str_dosis: '',
+        str_duracion: '',
+        txt_indicaciones: '',
       };
       this.medicamento.push(nuevoMedicamento);
     }

@@ -50,6 +50,12 @@
               <app-update-medicaciones></app-update-medicaciones>
             </div>
 
+            <!-- MODALS PARA VOLVER A RECETAR -->
+
+            <div *ngSwitchCase="'volverRecetar'">
+              <app-edit-receta></app-edit-receta>
+            </div>
+
 
             <div *ngSwitchCase="'clear'"></div>
           </container-element>

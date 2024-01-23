@@ -12,24 +12,6 @@ export const getRecetas_med = async (req, res) => {
     
 }
 
-//RECIBIR UNA RECETA
-export const getReceta_med = async(req, res) =>{
-    try {
-        const {id_receta_med} = req.params;
-        const receta_med = await Recetas_medicacion.findOne({
-            where: {
-                id_receta_med:id_receta_med,
-            },
-        });
-
-        if(receta_med.length === 0) return res.status(404).json({ message: "No se ha encontrado la receta"});
-        res.json(receta_med)
-    } catch (error) {
-        return res.status(500).json({ message: error.message});
-    }
-}
-
-
 
 // CREAR LISTA DE MEDICAMENTOS
 export const createReceta_med = async (id_receta, req, t) => {

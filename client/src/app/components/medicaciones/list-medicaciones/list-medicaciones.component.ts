@@ -47,7 +47,6 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
         }
       }
     });
-
     /* this.getMedicaciones(); */
 
   }

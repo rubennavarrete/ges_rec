@@ -6,37 +6,41 @@ import { Pacientes } from "../models/Pacientes.js";
 //RECIBIR TODOS LOS PACIENTES
 export const getPacientes = async (req, res) => {
     try {
-        const query = `
-        SELECT * FROM ges_recetas.listarPacientes();
-        `;
+        const paginationData = req.query;
 
-        const pacientes = await sequelize.query(query, {
-        type: sequelize.QueryTypes.SELECT
-    });
+        if (paginationData.page === "undefined" || isNaN(paginationData.page)) {
+            paginationData.page = 1;
+            const { datos, total } = await paginarDatos(1, 10,'', '');
+            return res.json({
+                status: true,
+                message: "Usuarios obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
 
-        res.json(pacientes);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
-    
+        const pacientes = await sequelize.query('SELECT * FROM obtener_pacientes()', { type: sequelize.QueryTypes.SELECT });
 
-//RECIBIR UN PACIENTE
-export const getPaciente = async (req, res) => {
-    try {
-        const {cedula} = req.params;
-        const query = `
-        SELECT * FROM ges_recetas.listarPaciente(:cedula);
-        `;
-
-        const paciente = await sequelize.query(query, {
-        type: sequelize.QueryTypes.SELECT,
-        replacements: { cedula } 
-    });
-
-        if(paciente.length === 0) return res.status(404).json({ message: "No se ha encontrado el paciente"});
-
-        res.json(paciente);
+        if (result.length === 0 || !result) {
+            return res.json({
+                status: false,
+                message: "No se encontraron usuarios"
+            });
+        } else {
+            const { datos, total } = await paginarDatos(
+                paginationData.page,
+                paginationData.size,
+                pacientes, // Usar directamente el resultado de la consulta
+                paginationData.parameter,
+                paginationData.data
+            );
+            return res.json({
+                status: true,
+                message: "Usuarios obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

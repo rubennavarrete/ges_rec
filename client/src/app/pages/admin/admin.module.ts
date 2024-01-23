@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { RecetasComponent } from './recetas/recetas.component';
 
 
 
@@ -37,6 +38,13 @@ const routes: Routes = [
             (m) => m.DiagnosticosModule
           ),
       },
+      {
+        path: 'recetas',
+        loadChildren: () =>
+          import('./recetas/recetas.module').then(
+            (m) => m.RecetasModule
+          ),
+      },
     ],
   },
 ];
@@ -44,11 +52,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    // FarmaciasComponent,
-    // MedicosComponent,
-    // UsuariosComponent
-  
-    // MedicacionesComponent
   ],
   imports: [
     CommonModule,

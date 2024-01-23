@@ -11,6 +11,7 @@ import farmaciasRoutes from "./routes/farmacias.routes.js";
 import recetasRoutes from "./routes/recetas.routes.js";
 import medicacionesRoutes from "./routes/medicaciones.routes.js";
 import resetPasswordRoutes from "./routes/reset_password.routes.js";
+import pdfRoutes from "./routes/pdf.routes.js";
 import cookiesParser from "cookie-parser";
 
 //MIDDLEWARES
@@ -44,5 +45,6 @@ app.use(medicosRoutes);
 app.use(farmaciasRoutes);
 app.use(recetasRoutes);
 app.use(medicacionesRoutes);
+app.use(pdfRoutes);
 
 export default app;

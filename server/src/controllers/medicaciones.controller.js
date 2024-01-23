@@ -1,6 +1,6 @@
 import { sequelize } from "../database/database.js";
 import { Medicaciones } from "../models/Medicaciones.js";
-import { paginarDatos } from "../utils/paginacion.utils.js";
+import { paginarDatosExtras } from "../utils/paginacionData.utils.js";
 
 
 //RECIBIR TODOS LOS MEDICAMENTOS
@@ -9,7 +9,7 @@ export const getMedicaciones = async (req, res) => {
         const paginationData = req.query;
 
         if(paginationData.page === "undefined"){
-            const { datos, total } = await paginarDatos(1, 10, Medicaciones, '', '');
+            const { datos, total } = await paginarDatosExtras(1, 10, Medicaciones, '', '');
             return res.json({
                 status: true,
                 message: "Medicamentos obtenidos correctamente",
@@ -26,7 +26,7 @@ export const getMedicaciones = async (req, res) => {
                 message: "No se encontraron medicamentos"
             });
         }else {
-            const { datos, total } = await paginarDatos(
+            const { datos, total } = await paginarDatosExtras(
                 paginationData.page,
                 paginationData.size,
                 Medicaciones,
@@ -36,7 +36,6 @@ export const getMedicaciones = async (req, res) => {
 
             return res.json({
                 status: true,
-                message: "Medicamentos obtenidos correctamente",
                 body: datos,
                 total: total
             });
@@ -57,7 +56,11 @@ export const getMedicacion= async (req, res) => {
         });
 
         if (medicamento.length === 0) return res.status(404).json({ message: "No se ha encontrado el medicamento" });
-        res.json(medicamento)
+        res.json({
+            status: "success",
+            message: "Se ha encontrado el medicamento",
+            data: medicamento
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

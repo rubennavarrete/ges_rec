@@ -31,7 +31,7 @@ export const getFarmacias = async (req, res) => {
             const { datos, total } = await paginarDatos(
                 paginationData.page,
                 paginationData.size,
-                Farmacias,
+                farmacias,
                 paginationData.parameter,
                 paginationData.data
             );
