@@ -226,7 +226,8 @@ export const pdfReceta = async (req, res) => {
             console.log('El PDF se ha guardado correctamente en: receta.pdf');
             // Convertir el archivo PDF a base64 y enviarlo en la respuesta
             const pdfBase64 = fs.readFileSync('receta.pdf', 'base64');
-            res.json({ pdfBase64 });
+            res.json({ 
+                data: pdfBase64 });
         });
     } catch (error) {
         console.error('Error al generar el PDF:', error);

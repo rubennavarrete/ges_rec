@@ -1,8 +1,7 @@
 import { sequelize } from "../database/database.js";
 import { Recetas } from "../models/Recetas.js";
-import { Recetas_medicacion } from "../models/Recetas_med.js";
 import { createReceta_med } from "./recetas_med.controller.js";
-import { paginarDatos } from "../utils/paginacion.utils.js";
+import { paginarDatosExtras } from "../utils/paginacionData.utils.js";
 import PDF from 'pdfkit';
 import fs from 'fs';
 
@@ -47,7 +46,7 @@ export const getRecetas = async (req, res) => {
         const paginationData = req.query;
         if(paginationData.page === "undefined" || isNaN(paginationData.page)){
             paginationData.page = 1;
-            const { datos, total } = await paginarDatos(1, 10, Recetas, '', '');
+            const { datos, total } = await paginarDatosExtras(1, 10, Recetas, '', '');
             return res.json({
                 status: true,
                 message: "Recetas obtenidas correctamente",
@@ -64,7 +63,7 @@ export const getRecetas = async (req, res) => {
                 message: "No se encontraron recetas"
             });
         }else {
-            const { datos, total } = await paginarDatos(
+            const { datos, total } = await paginarDatosExtras(
                 paginationData.page,
                 paginationData.size,
                 Recetas,

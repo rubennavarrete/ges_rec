@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 import { Subject, takeUntil } from 'rxjs';
 import { AddUserService } from 'src/app/core/services/add-user.service';
 import { ModalsService } from 'src/app/core/services/modals.service';
@@ -37,6 +38,7 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
   constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService, private router: Router) { }
 
   ngOnInit(): void {
+    initFlowbite();
     this.pasarPagina(1)
     this.srvUser.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)

@@ -1,10 +1,12 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, catchError, map } from 'rxjs';
 import { EditReceta, Medicamentos, Receta, RecetaResponse } from '../models/receta';
 import { EditUser } from '../models/user';
 import config from 'config/config';
 import { Medicacion, MedicacionResponse } from '../models/medicacion';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 
 const confirmAdd:boolean = false;
@@ -37,9 +39,10 @@ export class AddRecetaService {
   private URL_API2: string = config.URL_API_BASE + 'receta';
   private URL_API3: string = config.URL_API_BASE + 'recetaSearch';
   private URL_API4: string = config.URL_API_BASE + 'medicacion';
+  private URL_API5: string = config.URL_API_BASE + 'pdf';
   
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) { }
 
 
     //BEHAVIOR SUBJECT
@@ -121,4 +124,10 @@ export class AddRecetaService {
       );
     }
 
+    //RECIBIR PDF RECETA
+
+    getPdfReceta(id_receta: number): Observable<any>{
+      return this.http.get(`${this.URL_API5}/${id_receta}`);
+    }
+    
   }

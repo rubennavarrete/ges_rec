@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { initFlowbite } from 'flowbite';
 import { Subject, takeUntil } from 'rxjs';
 import { AddRecetaService } from 'src/app/core/services/add-receta.service';
@@ -8,14 +7,12 @@ import { ModalsService } from 'src/app/core/services/modals.service';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
 import Swal from 'sweetalert2';
 
-
-
 @Component({
-  selector: 'app-list-recetas',
-  templateUrl: './list-recetas.component.html',
-  styleUrls: ['./list-recetas.component.css']
+  selector: 'app-list-receta-paciente',
+  templateUrl: './list-receta-paciente.component.html',
+  styleUrls: ['./list-receta-paciente.component.css']
 })
-export class ListRecetasComponent implements OnInit, OnDestroy {
+export class ListRecetaPacienteComponent {
 
   elementPagina: {
     dataLength: number,
@@ -35,26 +32,21 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
   id_usuario: number = 0;
   cedulaSeleccionada: string = '';
 
-
-
   private destroy$ = new Subject<any>();
 
   
 
-  constructor (public srvReceta:AddRecetaService, 
-              public srvUser:AddUserService, 
-              public srvPaginacion: PaginacionService, 
-              public srvModals: ModalsService, 
-              public srvRec: AddRecetaService) { }
+  constructor (public srvReceta:AddRecetaService, public srvUser:AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService, public srvRec: AddRecetaService) { }
 
   ngOnInit(): void {
     initFlowbite();
     this.pasarPagina(1)
-    this.srvReceta.SeleccionarConfirmAdd$.pipe(
+    this.srvUser.SeleccionarConfirmEdit$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
-        this.getRecetas({});
+        this.id_usuario = data.int_id_usuario;
+        this.getRecetasPaciente();
       },
       error: (err) => {
         console.log(err);
@@ -67,18 +59,18 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
     this.srvModals.openModal();
   }
 
-  getRecetas(receta: any) {
-    this.srvReceta.getRecetas(receta)
+  // Función para obtener las recetas del paciente
+
+  getRecetasPaciente() {
+    this.srvReceta.getRecetasPaciente(this.id_usuario)
     .pipe(
       takeUntil(this.destroy$)
     )
     .subscribe({
       next: (data:any) => {
-        this.srvReceta.dataR = data.body;
-        this.metadata = data.total;
-        this.dataReceta = data.body;
-        this.dataPagina();
-
+        this.srvReceta.dataR = data;
+        this.dataReceta = data;
+        console.log(data);
       },
       error: (error) => {
         console.log(error);
@@ -96,9 +88,10 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
     // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
-    this.getRecetas(this.mapFiltersToRequest);
+    /* this.getRecetasPaciente(this.mapFiltersToRequest); */
   }
 
+  // Función para obtener la receta
   volverRecetar(id_receta: number): void {
     this.srvRec.getReceta(id_receta)
     .pipe(
@@ -115,6 +108,7 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Función para obtener la medicación de la receta
   obtenerMedicacion(id_medicacion:number): void {
     this.srvRec.getMedicamentoReceta(id_medicacion)
     .pipe(
@@ -131,6 +125,7 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Función para descargar la receta en PDF
   getPdfReceta(id_receta: number): void {
     Swal.fire({
       title: 'Descargando receta...',
@@ -179,8 +174,10 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
       });
   }
   
+
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
   }
+
 }
