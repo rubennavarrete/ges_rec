@@ -5,6 +5,7 @@ import { createMedico } from "./medicos.controller.js";
 import { createPaciente } from "./pacientes.controller.js";
 import { paginarDatos } from "../utils/paginacion.utils.js";
 import bcrypt from "bcrypt";
+import { sentCredenciales } from "./credenciales.controller.js";
 
 
 
@@ -158,6 +159,10 @@ export const createUsuario = async (req, res) => {
             } else if (rol === 4) {
                 await createPaciente(newUsuario.int_id_usuario, t, req);
             }
+
+            await sentCredenciales(req);
+
+            
             return  res.json(
                 {
                     status: "success",
@@ -168,6 +173,8 @@ export const createUsuario = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
+
+    
 };
 
 
@@ -175,7 +182,7 @@ export const createUsuario = async (req, res) => {
 //ACTUALIZAR UN USUARIO
 export const updateUsuario = async(req,res) => {
     const {cedula} = req.params;   
-    const { password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular} = req.body;
+    const { password, nombres, apellidos, fecha_nac, genero, correo, direccion, telefono, celular} = req.body;
     try {
         const updateUsuario = await Usuarios.findOne({
             where: {
@@ -189,7 +196,7 @@ export const updateUsuario = async(req,res) => {
         }
         updateUsuario.str_nombres = nombres;
         updateUsuario.str_apellidos = apellidos;
-        updateUsuario.dt_fecha_nac = fnac;
+        updateUsuario.dt_fecha_nac = fecha_nac;
         updateUsuario.bln_genero = genero;
         updateUsuario.str_correo = correo;
         updateUsuario.txt_direccion = direccion;

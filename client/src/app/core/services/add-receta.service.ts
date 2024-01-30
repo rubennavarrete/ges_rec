@@ -34,7 +34,9 @@ const confirmEditMed: Medicamentos = {
   providedIn: 'root'
 })
 export class AddRecetaService {
+
   dataR!: any[];
+  
   private URL_API: string = config.URL_API_BASE + 'recetas';
   private URL_API2: string = config.URL_API_BASE + 'receta';
   private URL_API3: string = config.URL_API_BASE + 'recetaSearch';
@@ -43,6 +45,7 @@ export class AddRecetaService {
   
 
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) { }
+
 
 
     //BEHAVIOR SUBJECT

@@ -45,6 +45,11 @@
                 </tr>
             </thead>
             <tbody>
+                <tr *ngIf="dataReceta.length === 0">
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500 dark:text-white">
+                        No hay datos disponibles.
+                    </td>
+                </tr>
                 <tr *ngFor="let item of dataReceta ; let i = index"  class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                     <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{item.int_id_paciente}}
@@ -85,7 +90,7 @@
             </tbody>
         </table>
     </div>
-    <div>
+    <div class="mt-5">
         <app-pagination
         (nextPage)="pasarPagina($event)"
         ></app-pagination>

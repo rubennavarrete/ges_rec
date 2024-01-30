@@ -28,7 +28,7 @@ export class ListRecetaPacienteComponent {
   metadata: any;
   mapFiltersToRequest: any = {};
 
-  dataReceta: any;
+  dataReceta: any[] = [];
   id_usuario: number = 0;
   cedulaSeleccionada: string = '';
 

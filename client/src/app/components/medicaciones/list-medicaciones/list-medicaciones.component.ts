@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { initFlowbite } from 'flowbite';
 import { Subject, takeUntil } from 'rxjs';
 import { AddMedicacionesService } from 'src/app/core/services/add-medicaciones.service';
 import { ModalsService } from 'src/app/core/services/modals.service';
@@ -27,7 +28,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
   metadata: any;
   mapFiltersToRequest: any = {};
   
-  dataMed: any;
+  dataMed: any[] = [];
   
 
   private destroy$ = new Subject<any>();
@@ -37,6 +38,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
     public srvModals: ModalsService) { }
   
   ngOnInit(): void { 
+    initFlowbite();
     this.pasarPagina(1)
     this.srvMed.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)

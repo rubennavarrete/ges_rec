@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 })
 export class EditProfileComponent implements OnDestroy, OnInit{
 
+  showPassword: boolean = false;
+
   get telefono() {
     return this.editProfile.controls['telefono'];
   }
@@ -45,6 +47,11 @@ export class EditProfileComponent implements OnDestroy, OnInit{
     return this.editProfile.controls['password'];
   }
 
+  get confirmPassword() {
+    return this.editProfile.controls['confirmPassword'];
+  }
+
+
 
 
   editProfile: FormGroup;
@@ -55,8 +62,9 @@ export class EditProfileComponent implements OnDestroy, OnInit{
           nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
           apellidos: ['',[Validators.required, Validators.pattern(/^[a-zA-ZáéíóúñÁÉÍÓÚ ]+$/)]],
           correo: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
-          password: ['', ],
-          fecha_nac: [new Date()],
+          password: [''],
+          confirmPassword: [''],
+          fecha_nac: [''],
           genero: ['', Validators.required],
           telefono: ['', [Validators.minLength(7), Validators.maxLength(9), Validators.pattern(/^[0-9]+$/)]],
           celular: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
@@ -79,46 +87,55 @@ export class EditProfileComponent implements OnDestroy, OnInit{
           icon: 'info',
           allowOutsideClick: false
         });
-        if (this.editProfile.valid) {
-          this.srvUser.updateUsuario(this.editProfile.value).pipe(
-            takeUntil(this.destroy$)
-          ).subscribe({
-            next: (data:DataUser) => {
-              if(data.status == "success"){
-                Swal.close();
-                Swal.fire({
-                  title: 'Perfil modificado',
-                  text: 'Tu perfil se ha actualizado correctamente',
-                  icon: 'success',
-                  confirmButtonText: 'Aceptar'
-                });
-              }else{
-                Swal.close();
-                Swal.fire({
-                  title: 'Error',
-                  text: 'Tu perfil no se ha actualizado correctamente',
-                  icon: 'error',
-                  confirmButtonText: 'Aceptar'
-                });
-              }
-            },
-            error: (err) => {
-              console.log(err);
-            },
-            complete: () => {
-              this.srvUser.setConfirmAddProfile(true);
-              this.srvModal.closeModal();
-              this.editProfile.reset();
+        if(this.editProfile.value.password != this.editProfile.value.confirmPassword){
+          Swal.close();
+          alert("Las contraseñas no coinciden");
+        }else{
+          if (this.editProfile.value) {
+            this.srvUser.updateUsuario(this.editProfile.value).pipe(
+              takeUntil(this.destroy$)
+            ).subscribe({
+              next: (data:DataUser) => {
+                if(data.status == "success"){
+                  Swal.close();
+                  Swal.fire({
+                    title: 'Perfil modificado',
+                    text: 'Tu perfil se ha actualizado correctamente',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                  });
+                }else{
+                  Swal.close();
+                  Swal.fire({
+                    title: 'Error',
+                    text: 'Tu perfil no se ha actualizado correctamente',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                  });
+                }
+              },
+              error: (err) => {
+                console.log(err);
+              },
+              complete: () => {
+                this.srvUser.setConfirmAddProfile(true);
+                this.srvModal.closeModal();
+                this.editProfile.reset();
 
-            }
-          });
-        } else {
-          this.UserError = 'Los datos ingresados son incorrectos';
+              }
+            });
+          } else {
+            this.UserError = 'Los datos ingresados son incorrectos';
+          }
         }
       } else if (result.isDenied) {
         Swal.fire('Los cambios no se han guardado', '', 'info');
       }
     });
+}
+
+togglePasswordVisibility() {
+  this.showPassword = !this.showPassword;
 }
   
   
@@ -133,14 +150,13 @@ export class EditProfileComponent implements OnDestroy, OnInit{
           apellidos: [data.str_apellidos,],
           correo: [data.str_correo, [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/)]],
           password: [''],
+          confirmPassword: [''],
           fecha_nac: [data.dt_fecha_nac],
           genero: [data.bln_genero, Validators.required],
           telefono: [data.str_telefono, [Validators.minLength(7), Validators.maxLength(9), Validators.pattern(/^[0-9]+$/)]],
           celular: [data.str_celular, [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]+$/)]],
           direccion: [data.txt_direccion],
         });
-
-        
       },
       error: (err) => {
         console.log(err);

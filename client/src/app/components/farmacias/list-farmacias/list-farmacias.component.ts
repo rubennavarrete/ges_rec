@@ -1,8 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { initFlowbite } from 'flowbite';
 import { Subject, takeUntil } from 'rxjs';
 import { AddFarmService } from 'src/app/core/services/add-farm.service';
 import { ModalsService } from 'src/app/core/services/modals.service';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-farmacias',
@@ -27,7 +29,7 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
   
   rucSeleccionado: string = '';
   
-  dataFarmacia: any;  
+  dataFarmacia: any[] = [];  
 
   private destroy$ = new Subject<any>();
   constructor(public srvFarm: AddFarmService,
@@ -35,19 +37,17 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
     public srvModals: ModalsService) { }
   
   ngOnInit(): void {
+    initFlowbite();
     this.pasarPagina(1)
-
     this.srvFarm.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
         if(data){
-          this.getFarmacias(); 
+          this.getFarmacias({}); 
         }
       }
     });
-
-    // this.getFarmacias();
   }
 
   imputModal(title: string, name: string) {
@@ -55,11 +55,13 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
     this.srvModals.openModal();
   }
 
-  getFarmacias() {
-    this.srvFarm.getFarmacias(this.mapFiltersToRequest)
+  getFarmacias(farmacia: any) {
+    this.srvFarm.getFarmacias(farmacia)
+    .pipe(
+      takeUntil(this.destroy$)
+    )
     .subscribe({
       next: (data: any) => {
-        // console.log('lo que llega ->', data)
         this.srvFarm.dataF = data.body
         this.metadata = data.total
         this.dataFarmacia = data.body;
@@ -70,6 +72,49 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  @ViewChild('dropdownActionButton', { static: false}) dropdownActionButton: ElementRef | undefined;
+
+  changeFarm(event: any) {
+    this.mapFiltersToRequest.data = event.target.value;
+    this.mapFiltersToRequest.parameter = 'str_ruc';
+    this.getFarmacias(this.mapFiltersToRequest);
+  }
+  
+  changeEstadoA() {
+    this.mapFiltersToRequest.data = 'true';
+    this.mapFiltersToRequest.parameter = 'bln_estado'; // O el nombre correcto del parámetro en tu backend
+    this.getFarmacias(this.mapFiltersToRequest);
+    if (this.dropdownActionButton) {
+      this.dropdownActionButton.nativeElement.innerText = 'Estado: Activo';
+    }
+  }
+  changeEstadoI() {
+    this.mapFiltersToRequest.data = 'false';
+    this.mapFiltersToRequest.parameter = 'bln_estado'; // O el nombre correcto del parámetro en tu backend
+    this.getFarmacias(this.mapFiltersToRequest);
+    if (this.dropdownActionButton) {
+      this.dropdownActionButton.nativeElement.innerText = 'Estado: Inactivo';
+    }
+  }
+  
+  limpiarFiltro() {
+    this.mapFiltersToRequest.data = 'all';
+    this.mapFiltersToRequest.parameter = 'bln_estado'; // O el nombre correcto del parámetro en tu backend
+    this.getFarmacias(this.mapFiltersToRequest);
+    if (this.dropdownActionButton) {
+      this.dropdownActionButton.nativeElement.innerText = 'Estado: Todos';
+       // Desmarcar los radio buttons
+       const radioActivo = document.getElementById('default-radio-4') as HTMLInputElement;
+       const radioInactivo = document.getElementById('default-radio-5') as HTMLInputElement;
+   
+       if (radioActivo && radioInactivo) {
+         radioActivo.checked = false;
+         radioInactivo.checked = false;
+       }
+    }
+  }
+  
 
   editarFarmacia(ruc: string): void {
     this.rucSeleccionado = ruc;
@@ -98,8 +143,8 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
 
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
-    /* console.log('mapFiltersToRequest', this.mapFiltersToRequest); */
-    this.getFarmacias();
+    console.log('mapFiltersToRequest', this.mapFiltersToRequest);
+    this.getFarmacias(this.mapFiltersToRequest);
   }
 
   ngOnDestroy(): void {

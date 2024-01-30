@@ -20,6 +20,7 @@ export class UsuarioComponent implements OnInit, OnDestroy{
   private destroy$ = new Subject<any>();
   userform: FormGroup;
   UserError: string = '';
+  
 
 
   get nombres() {

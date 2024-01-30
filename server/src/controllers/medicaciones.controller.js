@@ -70,7 +70,7 @@ export const getMedicacion= async (req, res) => {
 export const getMedicacionByName= async (req, res) => {
     try {
         const { nombre } = req.query;
-        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%')`;
+        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%') AND bln_vigencia = true ORDER BY str_nombre_comercial ASC`;
 
         const medicamento = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT
@@ -141,17 +141,45 @@ export const updateMedicacion= async (req, res) => {
     }
 }
 
-//ELIMINAR UN MEDICAMENTO
-export const deleteMedicacion = async (req, res) => {
-    const { id_medicacion } = req.params;
+//DESACTIVAR MEDICAMENTO
+export const deleteMedicacion = async(req,res) => {
+    const {id_medicacion} = req.params;   
     try {
-        const deleteRowCount = await Medicaciones.destroy({
+        const updateMedicamento = await Medicaciones.findOne({
             where: {
-                int_id_medicamento: id_medicacion,
+                int_id_medicacion: id_medicacion,
             },
         });
-        res.json({ message: "Se ha eliminado el medicamento"});
+        
+        updateMedicamento.bln_vigencia= false;
+        await updateMedicamento.save();
+        res.json({
+            status: "success",
+            data: updateMedicamento,
+        });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message});
     }
-}
+};
+
+
+//ACTIVAR MEDICAMENTO
+export const activarMedicacion = async(req,res) => {
+    const {id_medicacion} = req.params;   
+    try {
+        const updateMedicamento = await Medicaciones.findOne({
+            where: {
+                int_id_medicacion: id_medicacion,
+            },
+        });
+        
+        updateMedicamento.bln_estado= true;
+        await updateMedicamento.save();
+        res.json({
+            status: "success",
+            data: updateMedicamento,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message});
+    }
+};

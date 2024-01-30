@@ -93,7 +93,7 @@ export const createFarmacia = async (req, res) => {
                     str_nombre_representante: nombre_representante,
                     str_celular_representante: celular_representante,
                     str_password: hashedPasss,
-                    int_id_rol: 2,
+                    int_id_rol: 3,
                 },
                 { transaction: t }
             );
@@ -143,31 +143,45 @@ export const updateFarmacia = async (req, res) => {
     
 }
 
-//ELIMINAR UNA FARMACIA
-export const deleteFarmacia = async (req, res) => {
+//DESACTIVAR FARMACIA
+export const deleteFarmacia = async(req,res) => {
+    const {ruc} = req.params;   
     try {
-        const {ruc} = req.params;
-        const farmacia = await Farmacias.findOne({
+        const updateFarmacia = await Farmacias.findOne({
             where: {
                 str_ruc: ruc,
             },
         });
-
-        if (!farmacia) {
-            return res.status(404).json({ message: 'La farmacia no existe' });
-        }
-
-        await Farmacias.destroy({
-            where: {
-                str_ruc: ruc,
-            },
-        });
-        return res.json({
-            status:"success",
-            message: "Farmacia eliminada exitosamente",
+        
+        updateFarmacia.bln_estado= false;
+        await updateFarmacia.save();
+        res.json({
+            status: "success",
+            data: updateFarmacia,
         });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message});
     }
-    
-}
+};
+
+
+//ACTIVAR FARMACIA
+export const activarFarmacia = async(req,res) => {
+    const {ruc} = req.params;   
+    try {
+        const updateFarmacia = await Farmacias.findOne({
+            where: {
+                str_ruc: ruc,
+            },
+        });
+        
+        updateFarmacia.bln_estado= true;
+        await updateFarmacia.save();
+        res.json({
+            status: "success",
+            data: updateFarmacia,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message});
+    }
+};
