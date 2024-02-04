@@ -93,7 +93,7 @@ export class UsuarioComponent implements OnInit, OnDestroy{
   addUsuario() {
 
     Swal.fire({
-      title: '¿Está seguro que desea agregar este Usuario?',
+      title: '¿Está seguro que desea agregar este Médico?',
       showDenyButton: true,
       confirmButtonText: 'Agregar',
       denyButtonText: `Cancelar`,
@@ -118,8 +118,8 @@ export class UsuarioComponent implements OnInit, OnDestroy{
                   if(data.status == "success"){
                     Swal.close();
                     Swal.fire({
-                      title: 'Usuario registrado',
-                      text: 'El usuario se ha registrado correctamente',
+                      title: 'Médico registrado',
+                      text: 'El médico se ha registrado correctamente',
                       icon: 'success',
                       confirmButtonText: 'Aceptar'
                     });
@@ -127,7 +127,7 @@ export class UsuarioComponent implements OnInit, OnDestroy{
                     Swal.close();
                     Swal.fire({
                       title: 'Error',
-                      text: 'El usuario no se ha registrado correctamente',
+                      text: 'El médico no se ha registrado correctamente',
                       icon: 'error',
                       confirmButtonText: 'Aceptar'
                     });
@@ -151,7 +151,7 @@ export class UsuarioComponent implements OnInit, OnDestroy{
             }
           }
       } else if (result.isDenied) {
-        Swal.fire('No se agrego el Usuario', '', 'info');
+        Swal.fire('No se agrego el Médico', '', 'info');
 
         
       }

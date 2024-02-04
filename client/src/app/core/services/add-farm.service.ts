@@ -82,4 +82,12 @@ export class AddFarmService {
     return this.http.put<DataFarm>(`${this.URL_API}/${dataFormFarm.ruc}`, dataFormFarm);
   }
 
+  deleteFarmacia(ruc: string) {
+    return this.http.put(`${this.URL_API}/desactivar/${ruc}`, null);
+  }
+
+  activarFarmacia(ruc: string) {
+    return this.http.put(`${this.URL_API}/activar/${ruc}`, null);
+  }
+
 }

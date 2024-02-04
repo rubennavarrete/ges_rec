@@ -32,6 +32,7 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
   dataFarmacia: any[] = [];  
 
   private destroy$ = new Subject<any>();
+
   constructor(public srvFarm: AddFarmService,
     public srvPaginacion: PaginacionService,
     public srvModals: ModalsService) { }
@@ -77,7 +78,7 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
 
   changeFarm(event: any) {
     this.mapFiltersToRequest.data = event.target.value;
-    this.mapFiltersToRequest.parameter = 'str_ruc';
+    this.mapFiltersToRequest.parameter = 'str_nombre_institucion';
     this.getFarmacias(this.mapFiltersToRequest);
   }
   
@@ -99,7 +100,7 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
   }
   
   limpiarFiltro() {
-    this.mapFiltersToRequest.data = 'all';
+    this.mapFiltersToRequest.data = '';
     this.mapFiltersToRequest.parameter = 'bln_estado'; // O el nombre correcto del parámetro en tu backend
     this.getFarmacias(this.mapFiltersToRequest);
     if (this.dropdownActionButton) {
@@ -117,8 +118,7 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
   
 
   editarFarmacia(ruc: string): void {
-    this.rucSeleccionado = ruc;
-    this.srvFarm.getFarmacia(this.rucSeleccionado)
+    this.srvFarm.getFarmacia(ruc)
     .pipe(
       takeUntil(this.destroy$)
     )
@@ -130,6 +130,114 @@ export class ListFarmaciasComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.log(err);
+      }
+    });
+  }
+
+  eliminarFarmacia(ruc: string): void {
+    Swal.fire({
+      title: '¿Está seguro de eliminar la farmacia?',
+      text: 'No podrá recuperar los datos de la farmacia',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'No, cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Espere un momento',
+          text: 'Estamos eliminando la farmacia',
+          icon: 'info',
+          allowOutsideClick: false
+        });
+        this.srvFarm.deleteFarmacia(ruc).pipe(
+          takeUntil(this.destroy$)
+        ).subscribe({
+          next: (data: any) => {
+            if(data.status == "success"){
+              Swal.close();
+              Swal.fire({
+                title: 'Farmacia eliminada',
+                text: 'La farmacia se ha eliminado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }else{
+              Swal.close();
+              Swal.fire({
+                title: 'Error',
+                text: 'La farmacia no se ha eliminado correctamente',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+          complete: () => {
+            this.changeEstadoA();
+            console.log('complete');
+          }
+        });
+      } else if (result.isDenied) {
+        Swal.fire('Los cambios no se han guardado', '', 'info');
+      }
+    });
+  }
+
+  activarFarmacia(ruc: string): void {
+    Swal.fire({
+      title: '¿Está seguro de activar la farmacia?',
+      text: 'La farmacia se activará correctamente',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, activar',
+      cancelButtonText: 'No, cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Espere un momento',
+          text: 'Estamos activando la farmacia',
+          icon: 'info',
+          allowOutsideClick: false
+        });
+        this.srvFarm.activarFarmacia(ruc).pipe(
+          takeUntil(this.destroy$)
+        ).subscribe({
+          next: (data: any) => {
+            if(data.status == "success"){
+              Swal.close();
+              Swal.fire({
+                title: 'Farmacia activado',
+                text: 'La farmacia se ha activado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }else{
+              Swal.close();
+              Swal.fire({
+                title: 'Error',
+                text: 'La farmacia no se ha activado correctamente',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+          complete: () => {
+            this.changeEstadoA();
+            console.log('complete');
+          }
+        });
+      } else if (result.isDenied) {
+        Swal.fire('Los cambios no se han guardado', '', 'info');
       }
     });
   }

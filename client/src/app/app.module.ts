@@ -17,6 +17,14 @@ import { LoginModule } from './pages/login/login.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { CookieService } from 'ngx-cookie-service';
 import { InjectSessionInterceptor } from './core/interceptors/inject-session.interceptor';
+import { MedicosModule } from './pages/medicos/medicos.module';
+import { FarmaciaComponent } from './pages/farmacia/farmacia.component';
+import { Error404Component } from './pages/error404/error404.component';
+import { PacientesModule } from './pages/pacientes/pacientes.module';
+import { FarmaciaModule } from './pages/farmacia/farmacia.module';
+import { Error404Module } from './pages/error404/error404.module';
+
+
 
 
 
@@ -24,7 +32,7 @@ import { InjectSessionInterceptor } from './core/interceptors/inject-session.int
 
 @NgModule({
     declarations: [
-        AppComponent,    
+        AppComponent,
     ],
     providers: [
         LoginService,
@@ -47,6 +55,10 @@ import { InjectSessionInterceptor } from './core/interceptors/inject-session.int
         LayoutModule,
         LoginModule,
         AdminModule,
+        MedicosModule,
+        PacientesModule,
+        FarmaciaModule,
+        Error404Module,
         ModalModule
     ]
 })

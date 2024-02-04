@@ -73,6 +73,14 @@ export class AddMedicacionesService {
   updateMedicacion(dataFormMed: Medicacion) : Observable<MedicacionResponse> {
     return this.http.put<MedicacionResponse>(`${this.URL_API}/${dataFormMed.id_medicacion}`, dataFormMed);
   }
+
+  deleteMedicacion(id_medicacion: number) {
+    return this.http.put(`${this.URL_API}/desactivar/${id_medicacion}`, null);
+  }
+
+  activarMedicacion(id_medicacion: number) {
+    return this.http.put(`${this.URL_API}/activar/${id_medicacion}`, null);
+  }
   
 
 }

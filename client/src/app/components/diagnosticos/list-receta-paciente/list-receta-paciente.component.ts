@@ -5,6 +5,7 @@ import { AddRecetaService } from 'src/app/core/services/add-receta.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
 import { ModalsService } from 'src/app/core/services/modals.service';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
+import { CookieService } from 'ngx-cookie-service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -33,13 +34,15 @@ export class ListRecetaPacienteComponent {
   cedulaSeleccionada: string = '';
 
   private destroy$ = new Subject<any>();
+  tokenData: any;
 
   
 
-  constructor (public srvReceta:AddRecetaService, public srvUser:AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService, public srvRec: AddRecetaService) { }
+  constructor (public srvReceta:AddRecetaService, public srvUser:AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService, public srvRec: AddRecetaService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
     initFlowbite();
+    this.getTokenData();
     this.pasarPagina(1)
     this.srvUser.SeleccionarConfirmEdit$.pipe(
       takeUntil(this.destroy$)
@@ -52,6 +55,17 @@ export class ListRecetaPacienteComponent {
         console.log(err);
       }
     });
+  }
+
+  getTokenData() {
+    const token = this.cookieService.get('token'); // Reemplaza 'nombre_de_la_cookie' con el nombre real de tu cookie
+    if (token) {
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      this.tokenData = tokenPayload;
+      // console.log('Valores del token:', this.tokenData);
+    } else {
+      // console.log('Token no encontrado en las cookies.');
+    }
   }
 
   imputModal(title: string, name: string) {
