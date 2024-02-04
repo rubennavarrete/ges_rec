@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { RecetasComponent } from './recetas/recetas.component';
+import { SessionGuard } from 'src/app/core/guards/session.guard';
 
 
 
@@ -13,16 +13,25 @@ const routes: Routes = [
         path: 'medicos',
         loadChildren: () =>
           import('./medicos/medicos.module').then((m) => m.MedicosModule),
+          data: {
+            role: 'Administrador'
+          },
       },
       {
         path: 'usuarios',
         loadChildren: () =>
           import('./usuarios/usuarios.module').then((m) => m.UsuariosModule),
+          data: {
+            role: 'Administrador'
+          },
       },
       {
         path: 'farmacias',
         loadChildren: () =>
           import('./farmacias/farmacias.module').then((m) => m.FarmaciasModule),
+          data: {
+            role: 'Administrador'
+          },
       },
       {
         path: 'medicaciones',
@@ -30,6 +39,10 @@ const routes: Routes = [
           import('./medicaciones/medicaciones.module').then(
             (m) => m.MedicacionesModule
           ),
+          data: {
+            role: 'Administrador'
+          },
+          canActivate: [SessionGuard]
       },
       {
         path: 'diagnosticos',
@@ -37,6 +50,9 @@ const routes: Routes = [
           import('./diagnosticos/diagnosticos.module').then(
             (m) => m.DiagnosticosModule
           ),
+          data: {
+            role: 'Administrador'
+          }
       },
       {
         path: 'recetas',
@@ -44,6 +60,9 @@ const routes: Routes = [
           import('./recetas/recetas.module').then(
             (m) => m.RecetasModule
           ),
+          data: {
+            role: 'Administrador'
+          },
       },
     ],
   },

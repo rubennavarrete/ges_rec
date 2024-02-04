@@ -20,9 +20,10 @@ export class LoginComponent implements OnInit, OnDestroy{
   showPassword: boolean = false;
   LoginError: string = '';
   loginForm = this.fb.group({
-    cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]\d*$/)]],
+    cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(13), Validators.pattern(/^[0-9]\d*$/)]],
     password: ['', [Validators.required]],
   });
+  tokenData: any;
 
   get cedula() {
     return this.loginForm.controls.cedula
@@ -50,10 +51,28 @@ export class LoginComponent implements OnInit, OnDestroy{
           if(data.status == "success"){
 
             this.cookieService.set('token', data.token);
-            // this.router.navigate(['/admin']);
+
+            this.getTokenData();
+
+            console.log('Valores del token:', this.tokenData);
+
+            if(this.tokenData.rol == 'Administrador'){
             window.location.href = config.URL_BASE_PATH + '/admin';
             this.loginForm.reset();
-          }
+            }
+            if(this.tokenData.rol == 'Medico'){
+              window.location.href = config.URL_BASE_PATH + '/medicos';
+              this.loginForm.reset();
+              }
+            }
+            if(this.tokenData.rol == 'Paciente'){
+              window.location.href = config.URL_BASE_PATH + '/pacientes';
+              this.loginForm.reset();
+            }
+            if(this.tokenData.rol == 'Farmacia'){
+              window.location.href = config.URL_BASE_PATH + '/farmacias';
+              this.loginForm.reset();
+            }
         },
         error: (error) => {
           console.log(error);
@@ -64,6 +83,17 @@ export class LoginComponent implements OnInit, OnDestroy{
     }else{
       this.loginForm.markAllAsTouched();
       alert("Debe ingresar los datos correctamente");
+    }
+  }
+
+  getTokenData() {
+    const token = this.cookieService.get('token'); // Reemplaza 'nombre_de_la_cookie' con el nombre real de tu cookie
+    if (token) {
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      this.tokenData = tokenPayload;
+      // console.log('Valores del token:', this.tokenData);
+    } else {
+      // console.log('Token no encontrado en las cookies.');
     }
   }
   ngOnDestroy(): void {

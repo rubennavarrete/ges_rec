@@ -5,7 +5,6 @@ import { createUsuario, getMedicos, getPacientes, getUsuario, updateUsuario, del
 const router = Router();
 
 
-
 router.get("/medicos", getMedicos)
 router.get("/pacientes", getPacientes)
 router.get("/usuarios/:cedula", getUsuario)

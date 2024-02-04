@@ -33,7 +33,7 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
   private destroy$ = new Subject<any>();
   
 
-  dataUser: any;
+  dataUser: any[] = [];
 
   constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService, private router: Router) { }
 
@@ -45,11 +45,10 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
     ).subscribe({
       next: (data) => {
         if(data){
-          this.getPacientes({}); 
+          this.getPacientes({size: 10, page: 1, parameter: '', data: 0}); 
         }
       }
     });
-
   }
 
 
@@ -65,7 +64,6 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
     )
     .subscribe({
       next: (data: any) => {
-        //console.log(data);
         this.srvUser.dataU = data.body
         this.metadata = data.total
         this.dataUser = data.body;

@@ -1,8 +1,8 @@
 <div class="content-image">
     <img src="https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png" alt="">
 </div>
-<form [formGroup]="editProfile" novalidate autocomplete="off"  class="content-user" > 
-           
+
+<form [formGroup]="editProfile" novalidate autocomplete="off"  class="content-user" >        
     <div class="grid gap-6 md:grid-cols-2">
         <div>
             <label for="first_name" class="block  text-sm font-medium text-gray-900 dark:text-white">Nombres *</label>
@@ -198,12 +198,26 @@
     </div> 
     <div class="mb-3">
         <label for="password" class="block  text-sm font-medium text-gray-900 dark:text-white">Contraseña *</label>
-        <input formControlName="password"  type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••">
+        <input formControlName="password"  type="{{ showPassword ? 'text' : 'password' }}" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••">
     </div>
+    <div class="mb-3">
+        <label for="password" class="block  text-sm font-medium text-gray-900 dark:text-white">Confirmar Contraseña *</label>
+        <input formControlName="confirmPassword" type="{{ showPassword ? 'text' : 'password' }}" id="confirmpassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••">
+    </div>
+    <div class="mb-3 relative">
+        <button type="button" (click)="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer ">
+            <label class="text-sm font-light text-gray-900 dark:text-black mr-2">Mostrar Contraseña</label>
+            <span *ngIf="showPassword" aria-hidden="true" class="material-symbols-outlined">
+                toggle_on
+            </span>
+            <span *ngIf="!showPassword" aria-hidden="true"  class="material-symbols-outlined">
+                toggle_off
+            </span>
+        </button>
+    </div> 
     <div class="flex justify-center">
     <button (click)="updateUsuario()" class="w-64 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-bold rounded-lg text-sm px-8 py-2.5 text-center mr-2">Actualizar Perfil</button>
     </div>
 </form>
-
 
 

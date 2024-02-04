@@ -6,6 +6,7 @@ import { ModalsService } from 'src/app/core/services/modals.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { jwtDecode} from 'jwt-decode';
+import { Router } from '@angular/router';
 
 
 
@@ -18,12 +19,14 @@ import { jwtDecode} from 'jwt-decode';
 export class SimpleSidebarComponent implements OnInit,  OnDestroy {
   cedulaSeleccionada: string = '';
   private destroy$ = new Subject<any>();
+  tokenData: any;
 
 
   constructor(
     private cookieService: CookieService, 
     private srvModals:ModalsService,
-    private srvUser:AddUserService) { }
+    private srvUser:AddUserService,
+    private router: Router) { }
 
 
   editarUsuario(): void {
@@ -63,6 +66,60 @@ export class SimpleSidebarComponent implements OnInit,  OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getTokenData();
+
+  }
+
+  //OBTENER TOKEN
+  getTokenData() {
+    const token = this.cookieService.get('token'); // Reemplaza 'nombre_de_la_cookie' con el nombre real de tu cookie
+    if (token) {
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      this.tokenData = tokenPayload;
+      // console.log('Valores del token:', this.tokenData);
+    } else {
+      // console.log('Token no encontrado en las cookies.');
+    }
+  }
+
+  listarPacientes(): string {
+    if (this.tokenData.rol === 'Administrador') {
+      return 'admin/medicos';
+    } else if (this.tokenData.rol === 'Medico') {
+      return 'medicos/pacientes';
+    } else {
+      // Puedes manejar otro caso o redirigir a una ruta predeterminada si es necesario
+      return 'ruta-predeterminada';
+    }
+  }
+
+  listarRecetas(): string {
+    if (this.tokenData.rol === 'Administrador') {
+      return 'admin/medicos';
+    } else if (this.tokenData.rol === 'Medico') {
+      return 'medicos/pacientes';
+    } else if (this.tokenData.rol === 'Farmacia') {
+      return 'farmacias/recetas';
+    }else{
+      // Puedes manejar otro caso o redirigir a una ruta predeterminada si es necesario
+      return 'ruta-predeterminada';
+    }
+  }
+
+  addReceta(cedula: string): void {
+    this.srvUser.getUsuario(cedula)
+    .pipe(
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (data) => {
+        this.srvUser.setConfirmEdit(data);
+        this.router.navigate(['pacientes', 'mis_recetas']);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
   }
 
   imputModal(title: string, name: string) {

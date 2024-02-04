@@ -33,7 +33,7 @@ export class ListUserComponent implements OnInit,  OnDestroy {
   metadata: any;
   mapFiltersToRequest: any = {};
 
-  dataUser: any;
+  dataUser: any[] = [];
   
 
   private destroy$ = new Subject<any>();

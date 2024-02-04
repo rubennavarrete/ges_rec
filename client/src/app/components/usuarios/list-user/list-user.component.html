@@ -1,6 +1,6 @@
 <div class="content-list">
     <div class="title">
-        <h4>Listado de Usuarios</h4>
+        <h4>Listado de Medicos</h4>
         <button (click)="imputModal('Agregar Usuario','agregarlista')" type="button" class=" flex text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
             <svg class="flex-shrink-0 w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                 <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-2V5a1 1 0 0 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 0 0 2 0V9h2a1 1 0 1 0 0-2Z"/>
@@ -21,13 +21,13 @@
                         <li>
                             <div class="flex items-center p-2 rounded hover:bg-purple-300 dark:hover:bg-gray-600">
                             <input id="default-radio-4" type="radio" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" (change)="changeEstadoA()">
-                            <label for="default-radio-4" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Activo</label>
+                            <label for="default-radio-4" class="w-full p-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Activo</label>
                             </div>
                         </li>
                         <li>
                             <div class="flex items-center p-2 rounded hover:bg-purple-300 dark:hover:bg-gray-600">
                             <input id="default-radio-5" type="radio" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" (change)="changeEstadoI()">
-                            <label for="default-radio-5" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Inactivo</label>
+                            <label for="default-radio-5" class="w-full p-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Inactivo</label>
                             </div>
                         </li>
                     </ul>
@@ -72,6 +72,11 @@
                 </tr>
             </thead>
             <tbody>
+                <tr *ngIf="dataUser.length === 0">
+                    <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-white">
+                        No hay datos disponibles.
+                    </td>
+                </tr>
                 <tr *ngFor="let item of dataUser ; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                     <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{item.str_cedula}}
@@ -114,7 +119,7 @@
                 </tr>
             </tbody>
         </table>
-        <div>
+        <div class="mt-5">
             <app-pagination
             (nextPage)="pasarPagina($event)"
             ></app-pagination>
