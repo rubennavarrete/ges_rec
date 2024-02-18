@@ -10,7 +10,15 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: 'medicos',
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+          data: {
+            role: 'Administrador'
+          },
+      },
+      {
+        path: 'pacientes',
         loadChildren: () =>
           import('./medicos/medicos.module').then((m) => m.MedicosModule),
           data: {
@@ -18,7 +26,7 @@ const routes: Routes = [
           },
       },
       {
-        path: 'usuarios',
+        path: 'medicos',
         loadChildren: () =>
           import('./usuarios/usuarios.module').then((m) => m.UsuariosModule),
           data: {

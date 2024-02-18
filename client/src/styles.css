@@ -55,3 +55,7 @@ body {
       top: 5% !important;
   }
   }
+
+  td, th {
+    text-align: center;
+  }

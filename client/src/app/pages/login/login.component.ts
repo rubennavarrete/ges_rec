@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy{
             console.log('Valores del token:', this.tokenData);
 
             if(this.tokenData.rol == 'Administrador'){
-            window.location.href = config.URL_BASE_PATH + '/admin';
+            window.location.href = config.URL_BASE_PATH + '/admin/dashboard';
             this.loginForm.reset();
             }
             if(this.tokenData.rol == 'Medico'){

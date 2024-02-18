@@ -84,7 +84,7 @@ export class SimpleSidebarComponent implements OnInit,  OnDestroy {
 
   listarPacientes(): string {
     if (this.tokenData.rol === 'Administrador') {
-      return 'admin/medicos';
+      return 'admin/pacientes';
     } else if (this.tokenData.rol === 'Medico') {
       return 'medicos/pacientes';
     } else {
@@ -95,9 +95,9 @@ export class SimpleSidebarComponent implements OnInit,  OnDestroy {
 
   listarRecetas(): string {
     if (this.tokenData.rol === 'Administrador') {
-      return 'admin/medicos';
+      return 'admin/recetas';
     } else if (this.tokenData.rol === 'Medico') {
-      return 'medicos/pacientes';
+      return 'medicos/recetas';
     } else if (this.tokenData.rol === 'Farmacia') {
       return 'farmacias/recetas';
     }else{

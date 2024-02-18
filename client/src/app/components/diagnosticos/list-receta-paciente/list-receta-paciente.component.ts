@@ -55,6 +55,17 @@ export class ListRecetaPacienteComponent {
         console.log(err);
       }
     });
+
+    this.srvReceta.SeleccionarConfirmAdd$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (data) => {
+        this.getRecetasPaciente();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   getTokenData() {

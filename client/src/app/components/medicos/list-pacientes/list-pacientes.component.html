@@ -94,12 +94,18 @@
                         {{item.str_celular}}
                     </td>
                     <td class="px-6 py-2">
-                        <div class="flex items-center">
-                            <div *ngIf="item.bln_estado; else inactivo" class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+                        <div class="flex justify-center">
+                            <span *ngIf="item.bln_estado; else inactivo" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                Activo
+                            </span>
+                            
                             <ng-template #inactivo>
-                                <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
+                                <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                                    <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                    Inactivo
+                                </span>
                             </ng-template>
-                            {{item.bln_estado ? 'Activo' : 'Inactivo'}}
                         </div>
                     </td>
                     <td class="px-6 py-2 flex justify-center">
@@ -115,7 +121,7 @@
                                 <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-6a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2Z"/>
                             </svg>
                         </button>
-                        <button *ngIf="!item.bln_estado" (click)="activarUsuario(item.str_cedula)" type="button" class="focus:outline-none text-white bg-green-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                        <button *ngIf="!item.bln_estado" (click)="activarUsuario(item.str_cedula)" type="button" class="focus:outline-none text-white bg-green-400 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
                             <svg class="flex-shrink-0 w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
                                 <path d="M17 9a1 1 0 0 0-1 1 6.994 6.994 0 0 1-11.89 5H7a1 1 0 0 0 0-2H2.236a1 1 0 0 0-.585.07c-.019.007-.037.011-.055.018-.018.007-.028.006-.04.014-.028.015-.044.042-.069.06A.984.984 0 0 0 1 14v5a1 1 0 1 0 2 0v-2.32A8.977 8.977 0 0 0 18 10a1 1 0 0 0-1-1ZM2 10a6.994 6.994 0 0 1 11.89-5H11a1 1 0 0 0 0 2h4.768a.992.992 0 0 0 .581-.07c.019-.007.037-.011.055-.018.018-.007.027-.006.04-.014.028-.015.044-.042.07-.06A.985.985 0 0 0 17 6V1a1 1 0 1 0-2 0v2.32A8.977 8.977 0 0 0 0 10a1 1 0 1 0 2 0Z"/>
                             </svg>

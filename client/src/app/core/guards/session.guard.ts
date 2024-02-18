@@ -37,7 +37,7 @@ export class SessionGuard implements CanActivate {
       return true;
     }else  
     {
-      this.router.navigate(['/error404']);
+      this.router.navigate(['error404']);
       return false;
     }
 
