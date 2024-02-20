@@ -49,11 +49,19 @@
             <div *ngSwitchCase="'editarListaMedicamento'">
               <app-update-medicaciones></app-update-medicaciones>
             </div>
+            <div *ngSwitchCase="'editarReceta'">
+              <app-edit-receta></app-edit-receta>
+            </div>
 
             <!-- MODALS PARA VOLVER A RECETAR -->
 
             <div *ngSwitchCase="'volverRecetar'">
               <app-edit-receta></app-edit-receta>
+            </div>
+
+            <!-- MODALS PARA VENDER RECETA -->
+            <div *ngSwitchCase="'venderReceta'">
+              <app-sell-receta></app-sell-receta>
             </div>
 
 

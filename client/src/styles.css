@@ -1,10 +1,12 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
 
 .ng-valid:not(form).ng-touched  {
     border-left: 5px solid #42A948; /* green */

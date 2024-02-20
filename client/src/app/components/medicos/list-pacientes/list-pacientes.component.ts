@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { initFlowbite } from 'flowbite';
+import { CookieService } from 'ngx-cookie-service';
 import { Subject, takeUntil } from 'rxjs';
 import { AddUserService } from 'src/app/core/services/add-user.service';
 import { ModalsService } from 'src/app/core/services/modals.service';
@@ -31,15 +32,17 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
 
   cedulaSeleccionada: string = '';
   private destroy$ = new Subject<any>();
+  tokenData: any;
   
 
   dataUser: any[] = [];
 
-  constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService, private router: Router) { }
+  constructor(public srvUser: AddUserService, public srvPaginacion: PaginacionService, public srvModals: ModalsService, private router: Router, private cookieService: CookieService) { }
 
   ngOnInit(): void {
     initFlowbite();
     this.pasarPagina(1)
+    this.getTokenData();
     this.srvUser.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
@@ -49,6 +52,17 @@ export class ListPacientesComponent implements OnInit, OnDestroy{
         }
       }
     });
+  }
+
+  getTokenData() {
+    const token = this.cookieService.get('token'); // Reemplaza 'nombre_de_la_cookie' con el nombre real de tu cookie
+    if (token) {
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      this.tokenData = tokenPayload;
+      // console.log('Valores del token:', this.tokenData);
+    } else {
+      // console.log('Token no encontrado en las cookies.');
+    }
   }
 
 
@@ -142,7 +156,13 @@ limpiarFiltro() {
     .subscribe({
       next: (data) => {
         this.srvUser.setConfirmEdit(data);
-        this.router.navigate(['admin', 'diagnosticos']);
+
+        if(this.tokenData.rol === 'Administrador'){
+          this.router.navigate(['admin', 'diagnosticos']);
+        }else{
+          this.router.navigate(['medicos', 'diagnosticos']);
+        }
+        
       },
       error: (error) => {
         console.log(error);

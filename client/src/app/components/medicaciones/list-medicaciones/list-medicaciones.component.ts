@@ -84,7 +84,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
     )
     .subscribe({
       next: (data) => {
-        //console.log(data);
+        /* console.log(data); */
         this.srvMed.setConfirmEdit(data);
       },
       error: (error) => {
@@ -136,7 +136,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
   }
   
 
-  eliminarFarmacia(id_medicacion: number): void {
+  eliminarMedicacion(id_medicacion: number): void {
     Swal.fire({
       title: '¿Está seguro de eliminar el Medicamento?',
       text: 'No podrá recuperar los datos del medicamento',
@@ -190,7 +190,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
     });
   }
 
-  activarFarmacia(id_medicacion: number): void {
+  activarMedicacion(id_medicacion: number): void {
     Swal.fire({
       title: '¿Está seguro de activar el medicamento?',
       text: 'El medicamento se activará correctamente',

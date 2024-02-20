@@ -44,14 +44,17 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
   get dosisM() {
     return this.medicamentoform.controls['dosisM'];
   }
-  get duracionM() {
-    return this.medicamentoform.controls['duracionM'];
+  get tipoM() {
+    return this.medicamentoform.controls['tipoM'];
   }
   get indicacionesM() {
     return this.medicamentoform.controls['indicacionesM'];
   }
   get diagnostico() {
     return this.editrecetaform.controls['diagnostico'];
+  }
+   get cie () {
+    return this.editrecetaform.controls['cie'];
   }
 
   private destroy$ = new Subject<any>();
@@ -70,14 +73,16 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
     ).subscribe({
       next: (data) => {
         this.editrecetaform = this.fb.group({
+          id_receta: [data.int_id_receta],
           id_medico: [data.int_id_medico] ,
           id_paciente: [data.int_id_paciente],
           diagnostico: [data.txt_diagnostico],
+          cie: [data.str_cie],
           medicamentos: this.medicamentoform = this.fb.group({
             nombreM: ['', Validators.required],
             cantidadM: ['', Validators.required],
             dosisM: ['', Validators.required],
-            duracionM: ['', Validators.required],
+            tipoM: ['', Validators.required],
             indicacionesM: ['', Validators.required]
           }),
         });
@@ -100,15 +105,17 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
           const nuevoMedicamento: Medicamentos = {
             nombre: medData.str_nombre_comercial ,
             id_medicacion: medData.int_id_medicacion,
-            cantidad: medData.str_cantidad,
+            cantidad: medData.int_cantidad,
+            vendidos: medData.int_vendidos,
             dosis: medData.str_dosis,
-            duracion: medData.str_duracion,
+            tipo: medData.str_tipo,
             indicaciones: medData.str_indicacion,
             int_id_medicacion: 0,
             str_nombre_comercial: '',
-            str_cantidad: '',
+            int_cantidad: 0,
+            int_vendidos: 0,
             str_dosis: '',
-            str_duracion: '',
+            str_tipo: '',
             txt_indicaciones: '',
           };
           this.medicamento.push(nuevoMedicamento);
@@ -123,14 +130,16 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
 
   constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, private srvModal: ModalsService, public srvMed: AddMedicacionesService, ) {
     this.editrecetaform = this.fb.group({
+      id_receta: [''],
       id_medico: [''] ,
       id_paciente: [''],
       diagnostico: ['', Validators.required],
+      cie: ['', Validators.required],
       medicamentos: this.medicamentoform = this.fb.group({
         nombreM: ['', Validators.required],
         cantidadM: ['', Validators.required],
         dosisM: ['', Validators.required],
-        duracionM: ['', Validators.required],
+        tipoM: ['', Validators.required],
         indicacionesM: ['', Validators.required]
       }),
     });
@@ -194,7 +203,7 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
       this.medicamentoSeleccionado.nombre = this.medicamentoform.value.nombreM;
       this.medicamentoSeleccionado.cantidad = this.medicamentoform.value.cantidadM;
       this.medicamentoSeleccionado.dosis = this.medicamentoform.value.dosisM;
-      this.medicamentoSeleccionado.duracion = this.medicamentoform.value.duracionM;
+      this.medicamentoSeleccionado.tipo = this.medicamentoform.value.tipoM;
       this.medicamentoSeleccionado.indicaciones = this.medicamentoform.value.indicacionesM;
   
       this.medicamentoSeleccionado = null; // Reiniciar el objeto seleccionado
@@ -205,14 +214,16 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
         nombre: this.medicamentoform.value.nombreM ,
         id_medicacion:  this.idseleccionada,
         cantidad: this.medicamentoform.value.cantidadM,
+        vendidos: 0,
         dosis: this.medicamentoform.value.dosisM,
-        duracion: this.medicamentoform.value.duracionM,
+        tipo: this.medicamentoform.value.tipoM,
         indicaciones: this.medicamentoform.value.indicacionesM,
         int_id_medicacion: 0,
         str_nombre_comercial: '',
-        str_cantidad: '',
+        int_cantidad: 0,
+        int_vendidos: 0,
         str_dosis: '',
-        str_duracion: '',
+        str_tipo: '',
         txt_indicaciones: '',
       };
       this.medicamento.push(nuevoMedicamento);
@@ -230,7 +241,7 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
       nombreM: med.nombre,
       cantidadM: med.cantidad,
       dosisM: med.dosis,
-      duracionM: med.duracion,
+      tipoM: med.tipo,
       indicacionesM: med.indicaciones
     });
   }
@@ -245,39 +256,37 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
  
 
   //Crear receta
-  postReceta() {
+  editarReceta() {
     Swal.fire({
-      title: '¿Está seguro que desea crear esta Receta?',
+      title: '¿Está seguro que desea modificar esta Receta?',
       showDenyButton: true,
-      confirmButtonText: 'Crear',
+      confirmButtonText: 'Modificar',
       denyButtonText: `Cancelar`,
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         Swal.fire({
-          title: 'Creando Receta',
+          title: 'Modificando Receta',
           didOpen: () => {
             Swal.showLoading();
           },
         });
         this.editrecetaform.value.medicamentos = this.medicamento;
         console.log(this.editrecetaform.value);
-          this.srvRec.postReceta(this.editrecetaform.value).pipe(takeUntil(this.destroy$)).subscribe({
+          this.srvRec.updateReceta(this.editrecetaform.value).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: RecetaResponse) => {
               //console.log(data);
               if (data.status === 'success') {
               Swal.fire({
-                title: 'Receta registrada',
-                text: 'La Receta se ha registrado correctamente',
+                title: 'Receta modificada',
+                text: 'La Receta se ha modificado correctamente',
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
               });
-
-              
               } else {
                 Swal.fire({
                   title: 'Error',
-                  text: 'No se pudo crear la Receta',
+                  text: 'No se pudo modificar la Receta',
                   icon: 'error',
                   confirmButtonText: 'Aceptar'
                 });

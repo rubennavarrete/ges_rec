@@ -1,32 +1,36 @@
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, catchError, map } from 'rxjs';
 import { EditReceta, Medicamentos, Receta, RecetaResponse } from '../models/receta';
-import { EditUser } from '../models/user';
 import config from 'config/config';
 import { Medicacion, MedicacionResponse } from '../models/medicacion';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 
 const confirmAdd:boolean = false;
 const confirmEdit: EditReceta = {
+  int_id_receta: 0,
   int_id_paciente: 0,
   int_id_medico: 0,
   txt_diagnostico: '',
+  str_cie: '',
+  txt_nota: '',
 };
 const confirmEditMed: Medicamentos = {
   int_id_medicacion: 0,
   str_nombre_comercial: '',
-  str_cantidad: '',
+  int_cantidad: 0,
+  int_vendidos: 0,
   str_dosis: '',
-  str_duracion: '',
+  str_tipo: '',
   txt_indicaciones: '',
   id_medicacion: 0,
   nombre: '',
-  cantidad: '',
+  cantidad: 0,
+  vendidos: 0,
   dosis: '',
-  duracion: '',
+  tipo: '',
   indicaciones: '',
 };
 
@@ -132,5 +136,31 @@ export class AddRecetaService {
     getPdfReceta(id_receta: number): Observable<any>{
       return this.http.get(`${this.URL_API5}/${id_receta}`);
     }
-    
+
+    //ACTUALIZARE RECETA
+
+
+    updateReceta(dataFormReceta: Receta): Observable<RecetaResponse> {
+      return this.http.put<RecetaResponse>(
+        `${this.URL_API}/${dataFormReceta.id_receta}`,
+        dataFormReceta)
+      }
+
+      venderReceta(dataFormReceta: Receta): Observable<RecetaResponse> {
+        return this.http.put<RecetaResponse>(
+          `${this.URL_API}/ventas/${dataFormReceta.id_receta}`,
+          dataFormReceta)
+        }
+
+
+    //ACTIVAR RECETA
+    activarReceta(id_receta: number) {
+      return this.http.put(`${this.URL_API}/activar/${id_receta}`, null);
+    }
+
+
+    //DESACTIVAR RECETA
+    deleteReceta(id_receta: number) {
+      return this.http.put(`${this.URL_API}/desactivar/${id_receta}`, null);
+    }
   }

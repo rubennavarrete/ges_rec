@@ -102,7 +102,20 @@ export class SimpleSidebarComponent implements OnInit,  OnDestroy {
       return 'farmacias/recetas';
     }else{
       // Puedes manejar otro caso o redirigir a una ruta predeterminada si es necesario
-      return 'ruta-predeterminada';
+      return 'error404';
+    }
+  }
+
+  listarMedicamentos(): string {
+    if (this.tokenData.rol === 'Administrador') {
+      return 'admin/medicaciones';
+    } else if (this.tokenData.rol === 'Medico') {
+      return 'medicos/medicaciones';
+    } else if (this.tokenData.rol === 'Farmacia') {
+      return 'farmacias/medicamentos';
+    }else{
+      // Puedes manejar otro caso o redirigir a una ruta predeterminada si es necesario
+      return 'error404';
     }
   }
 

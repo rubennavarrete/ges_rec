@@ -61,16 +61,16 @@ export class LoginComponent implements OnInit, OnDestroy{
             this.loginForm.reset();
             }
             if(this.tokenData.rol == 'Medico'){
-              window.location.href = config.URL_BASE_PATH + '/medicos';
+              window.location.href = config.URL_BASE_PATH + '/medicos/recetas';
               this.loginForm.reset();
               }
             }
             if(this.tokenData.rol == 'Paciente'){
-              window.location.href = config.URL_BASE_PATH + '/pacientes';
+              window.location.href = config.URL_BASE_PATH + '/pacientes/mis_recetas';
               this.loginForm.reset();
             }
             if(this.tokenData.rol == 'Farmacia'){
-              window.location.href = config.URL_BASE_PATH + '/farmacias';
+              window.location.href = config.URL_BASE_PATH + '/farmacias/recetas';
               this.loginForm.reset();
             }
         },

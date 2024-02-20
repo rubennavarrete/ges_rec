@@ -13,20 +13,21 @@ import Swal from 'sweetalert2';
 })
 export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
 
+  get nombre_comercial() {
+    return this.editFormMed.controls['nombre_comercial'];
+  }
   get nombre_generico() {
     return this.editFormMed.controls['nombre_generico'];
   }
 
-  get nombre_comercial() {
-    return this.editFormMed.controls['nombre_comercial'];
-  }
-
   editFormMed: FormGroup;
   UserError: string = '';
+
   constructor(private fb:FormBuilder, public srvMed:AddMedicacionesService, private srvModal: ModalsService) {
     this.editFormMed = this.fb.group({
-      str_nombre_comercial: ['', Validators.required],
-      str_nombre_generico: ['', Validators.required],
+      id_medicacion: [0],
+      nombre_comercial: ['', Validators.required],
+      nombre_generico: ['', Validators.required],
     });
   }
   private destroy$ = new Subject<any>();
@@ -94,10 +95,12 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
     ).subscribe({
       next: (data) => {
         this.editFormMed = this.fb.group({
-          id_medicacion: [data.int_id_medicacion],
+          id_medicacion: [data.int_id_medicacion, Validators.required],
           nombre_comercial: [data.str_nombre_comercial, Validators.required],
           nombre_generico: [data.str_nombre_generico, Validators.required],
         });
+        console.log('LLEGUE BIEN',data);
+        console.log('ME LLENE?',this.editFormMed);
       },
       error: (err) => {
         console.log(err);

@@ -11,7 +11,7 @@ const confirmAdd: boolean = false;
 const confirmEdit: EditMedicacion = {
   int_id_medicacion: 0,
   str_nombre_comercial: '',
-  str_nombre_generico: ''
+  str_nombre_generico: '',
 };
 
 @Injectable({

@@ -7,6 +7,7 @@ import { Medicamentos, RecetaResponse } from 'src/app/core/models/receta';
 import { AddRecetaService } from 'src/app/core/services/add-receta.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
 import { ModalsService } from 'src/app/core/services/modals.service';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -41,8 +42,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
   get dosisM() {
     return this.medicamentoform.controls['dosisM'];
   }
-  get duracionM() {
-    return this.medicamentoform.controls['duracionM'];
+  get tipoM() {
+    return this.medicamentoform.controls['tipoM'];
   }
   get indicacionesM() {
     return this.medicamentoform.controls['indicacionesM'];
@@ -50,10 +51,14 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
   get diagnostico() {
     return this.recetaform.controls['diagnostico'];
   }
+   get cie () {
+    return this.recetaform.controls['cie'];
+  }
 
   private destroy$ = new Subject<any>();
   
   ngOnInit(): void {
+    
 
     this.getTokenData();
 
@@ -72,11 +77,12 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
           id_medico: [this.tokenData.id_usuario] ,
           id_paciente: [data.int_id_usuario],
           diagnostico: ['', Validators.required],
+          cie: ['', Validators.required],
           medicamentos: this.medicamentoform = this.fb.group({
             nombreM: ['', Validators.required],
-            cantidadM: ['', Validators.required],
+            cantidadM: ['',[Validators.required, Validators.pattern(/^[0-9]+$/)]],
             dosisM: ['', Validators.required],
-            duracionM: ['', Validators.required],
+            tipoM: ['', Validators.required],
             indicacionesM: ['', Validators.required]
           }),
         });
@@ -92,15 +98,17 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       id_medico: [''] ,
       id_paciente: [''],
       diagnostico: ['', Validators.required],
+      cie: ['', Validators.required],
       medicamentos: this.medicamentoform = this.fb.group({
         nombreM: ['', Validators.required],
-        cantidadM: ['', Validators.required],
+        cantidadM: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
         dosisM: ['', Validators.required],
-        duracionM: ['', Validators.required],
+        tipoM: ['', Validators.required],
         indicacionesM: ['', Validators.required]
       }),
     });
   }
+
 
   //OBTENER TOKEN
   getTokenData() {
@@ -161,7 +169,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       this.medicamentoSeleccionado.nombre = this.medicamentoform.value.nombreM;
       this.medicamentoSeleccionado.cantidad = this.medicamentoform.value.cantidadM;
       this.medicamentoSeleccionado.dosis = this.medicamentoform.value.dosisM;
-      this.medicamentoSeleccionado.duracion = this.medicamentoform.value.duracionM;
+      this.medicamentoSeleccionado.tipo = this.medicamentoform.value.tipoM;
       this.medicamentoSeleccionado.indicaciones = this.medicamentoform.value.indicacionesM;
   
       this.medicamentoSeleccionado = null; // Reiniciar el objeto seleccionado
@@ -171,14 +179,16 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
         nombre: this.medicamentoform.value.nombreM,
         id_medicacion:  this.idseleccionada,
         cantidad: this.medicamentoform.value.cantidadM,
+        vendidos: 0,
         dosis: this.medicamentoform.value.dosisM,
-        duracion: this.medicamentoform.value.duracionM,
+        tipo: this.medicamentoform.value.tipoM,
         indicaciones: this.medicamentoform.value.indicacionesM,
         int_id_medicacion: 0,
         str_nombre_comercial: '',
-        str_cantidad: '',
+        int_cantidad: 0,
+        int_vendidos: 0,
         str_dosis: '',
-        str_duracion: '',
+        str_tipo: '',
         txt_indicaciones: '',
       };
       this.medicamento.push(nuevoMedicamento);
@@ -195,7 +205,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     this.medicamentoform.patchValue({
       nombreM: med.nombre,
       dosisM: med.dosis,
-      duracionM: med.duracion,
+      cantidadM: med.cantidad,
+      tipoM: med.tipo,
       indicacionesM: med.indicaciones
     });
   }

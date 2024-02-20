@@ -14,6 +14,14 @@ const routes: Routes = [
             role: 'Farmacia'  
           },
       },
+      {
+        path: 'medicamentos',
+        loadChildren: () =>
+          import('./lista-medicamentos/lista-medicamentos.module').then((m) => m.ListaMedicamentosModule),
+          data: {
+            role: 'Farmacia'  
+          },
+      },
     ]
   }
 ];

@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   templateUrl: './list-receta-paciente.component.html',
   styleUrls: ['./list-receta-paciente.component.css']
 })
-export class ListRecetaPacienteComponent {
+export class ListRecetaPacienteComponent implements OnInit, OnDestroy {
 
   elementPagina: {
     dataLength: number,
@@ -49,18 +49,18 @@ export class ListRecetaPacienteComponent {
     ).subscribe({
       next: (data) => {
         this.id_usuario = data.int_id_usuario;
-        this.getRecetasPaciente();
+        this.getRecetasPaciente({size: 10, page: 1, parameter: '', data: 0});
       },
       error: (err) => {
         console.log(err);
       }
     });
-
+    
     this.srvReceta.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
-        this.getRecetasPaciente();
+        this.getRecetasPaciente({size: 10, page: 1, parameter: '', data: 0});
       },
       error: (err) => {
         console.log(err);
@@ -73,6 +73,7 @@ export class ListRecetaPacienteComponent {
     if (token) {
       const tokenPayload = JSON.parse(atob(token.split('.')[1]));
       this.tokenData = tokenPayload;
+      this.id_usuario = this.tokenData.id_usuario;
       // console.log('Valores del token:', this.tokenData);
     } else {
       // console.log('Token no encontrado en las cookies.');
@@ -86,7 +87,8 @@ export class ListRecetaPacienteComponent {
 
   // Función para obtener las recetas del paciente
 
-  getRecetasPaciente() {
+  getRecetasPaciente(id_usuario: any) {
+
     this.srvReceta.getRecetasPaciente(this.id_usuario)
     .pipe(
       takeUntil(this.destroy$)
@@ -95,13 +97,14 @@ export class ListRecetaPacienteComponent {
       next: (data:any) => {
         this.srvReceta.dataR = data;
         this.dataReceta = data;
-        console.log(data);
       },
       error: (error) => {
         console.log(error);
       }
     });
   }
+
+  
 
   dataPagina() {
     this.elementPagina.dataLength = this.srvReceta.dataR ? this.srvReceta.dataR.length : 0;
@@ -113,25 +116,9 @@ export class ListRecetaPacienteComponent {
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
     // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
-    /* this.getRecetasPaciente(this.mapFiltersToRequest); */
+    this.getRecetasPaciente(this.mapFiltersToRequest); 
   }
 
-  // Función para obtener la receta
-  volverRecetar(id_receta: number): void {
-    this.srvRec.getReceta(id_receta)
-    .pipe(
-      takeUntil(this.destroy$)
-    )
-    .subscribe({
-      next: (data) => {
-        console.log(data);
-        this.srvRec.setConfirmEdit(data);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
-  }
 
   // Función para obtener la medicación de la receta
   obtenerMedicacion(id_medicacion:number): void {
@@ -143,6 +130,36 @@ export class ListRecetaPacienteComponent {
       next: (data) => {
         console.log(data);
         this.srvRec.setConfirmEditMed(data);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  editarReceta(id_receta: number): void {
+    this.srvRec.getReceta(id_receta)
+    .pipe(
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (data) => {
+        this.srvRec.setConfirmEdit(data);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  volverRecetar(id_receta: number): void {
+    this.srvRec.getReceta(id_receta)
+    .pipe(
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (data) => {
+        this.srvRec.setConfirmEdit(data);
       },
       error: (error) => {
         console.log(error);
@@ -197,6 +214,112 @@ export class ListRecetaPacienteComponent {
           console.log(error);
         }
       });
+  }
+
+  eliminarReceta(id_receta: number): void {
+    Swal.fire({
+      title: '¿Está seguro de eliminar la receta?',
+      text: 'No podrá recuperar los datos de la receta',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'No, cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Espere un momento',
+          text: 'Estamos eliminando la receta',
+          icon: 'info',
+          allowOutsideClick: false
+        });
+        this.srvRec.deleteReceta(id_receta).pipe(
+          takeUntil(this.destroy$)
+        ).subscribe({
+          next: (data: any) => {
+            if(data.status == "success"){
+              Swal.close();
+              Swal.fire({
+                title: 'Receta eliminada',
+                text: 'La receta se ha eliminado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }else{
+              Swal.close();
+              Swal.fire({
+                title: 'Error',
+                text: 'La receta no se ha eliminado correctamente',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+          complete: () => {
+            console.log('complete');
+          }
+        });
+      } else if (result.isDenied) {
+        Swal.fire('Los cambios no se han guardado', '', 'info');
+      }
+    });
+  }
+
+  activarReceta(id_receta: number): void {
+    Swal.fire({
+      title: '¿Está seguro de activar a receta?',
+      text: 'La receta se activará correctamente',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, activar',
+      cancelButtonText: 'No, cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Espere un momento',
+          text: 'Estamos activando la receta',
+          icon: 'info',
+          allowOutsideClick: false
+        });
+        this.srvRec.activarReceta(id_receta).pipe(
+          takeUntil(this.destroy$)
+        ).subscribe({
+          next: (data: any) => {
+            if(data.status == "success"){
+              Swal.close();
+              Swal.fire({
+                title: 'Receta activada',
+                text: 'La receta se ha activado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }else{
+              Swal.close();
+              Swal.fire({
+                title: 'Error',
+                text: 'La receta no se ha activado correctamente',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+          complete: () => {
+            console.log('complete');
+          }
+        });
+      } else if (result.isDenied) {
+        Swal.fire('Los cambios no se han guardado', '', 'info');
+      }
+    });
   }
   
 
