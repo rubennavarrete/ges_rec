@@ -1,9 +1,8 @@
 import { sequelize } from "../database/database.js";
 import { Recetas } from "../models/Recetas.js";
-import { createReceta_med } from "./recetas_med.controller.js";
-import { paginarDatosExtras } from "../utils/paginacionData.utils.js";
-import PDF from 'pdfkit';
-import fs from 'fs';
+import { updateReceta_med, createReceta_med } from "./recetas_med.controller.js";
+import { paginarDatosRecetas } from "../utils/paginacion.utils.js";
+
 
 
 
@@ -46,7 +45,7 @@ export const getRecetas = async (req, res) => {
         const paginationData = req.query;
         if(paginationData.page === "undefined" || isNaN(paginationData.page)){
             paginationData.page = 1;
-            const { datos, total } = await paginarDatosExtras(1, 10, Recetas, '', '');
+            const { datos, total } = await paginarDatosRecetas(1, 10, '', '');
             return res.json({
                 status: true,
                 message: "Recetas obtenidas correctamente",
@@ -54,7 +53,7 @@ export const getRecetas = async (req, res) => {
                 total: total
             });
         }
-        const recetas = await Recetas.findAll();
+        const recetas = await sequelize.query('SELECT * FROM obtener_datos_recetas();', { type: sequelize.QueryTypes.SELECT });
 
         
         if(recetas.length === 0 || !recetas){
@@ -63,10 +62,10 @@ export const getRecetas = async (req, res) => {
                 message: "No se encontraron recetas"
             });
         }else {
-            const { datos, total } = await paginarDatosExtras(
+            const { datos, total } = await paginarDatosRecetas(
                 paginationData.page,
                 paginationData.size,
-                Recetas,
+                recetas,
                 paginationData.parameter,
                 paginationData.data
             );
@@ -88,7 +87,7 @@ export const getRecetaCompleta = async (req, res) => {
     try {
         const {id_receta} = req.params;
         const query = `
-        SELECT * FROM ObtenerDatosReceta(:id_receta);
+        SELECT * FROM obtenerdatosreceta(:id_receta);
         `;
 
         const receta = await sequelize.query(query, {
@@ -109,7 +108,7 @@ export const getRecetaCompleta = async (req, res) => {
 //CREAR UNA RECETA Y LISTA DE MEDICAMENTOS
 
 export const createReceta = async (req, res) => {
-    const { id_paciente, id_medico, diagnostico } = req.body;
+    const { id_paciente, id_medico, diagnostico, cie } = req.body;
     const t = await sequelize.transaction();
     try {
         const newReceta = await Recetas.create(
@@ -117,6 +116,9 @@ export const createReceta = async (req, res) => {
                 int_id_paciente: id_paciente,
                 int_id_medico: id_medico,
                 txt_diagnostico: diagnostico,
+                str_cie: cie,
+                bln_vigencia: true,
+                str_estado: 'SIN DESPACHAR',
             },
             { transaction: t }
         );
@@ -139,9 +141,122 @@ export const createReceta = async (req, res) => {
     }
 };
 
-export const pdfReceta = async (req, res) => {
-    const doc = new PDF();
-    doc.text('Hello world!', 100, 100);
-    doc.pipe(fs.createWriteStream('receta.pdf'));
-    doc.end();
+//ACTUALIZAR UNA RECETA
+
+export const updateReceta = async (req, res) => {
+    const { id_receta } = req.params;
+    const { id_medico, diagnostico, cie } = req.body;
+    const t = await sequelize.transaction();
+    try {
+        const updateReceta = await Recetas.findOne({
+            where: {
+                int_id_receta: id_receta
+            }
+        });
+
+        if (!updateReceta) {
+            return res.status(404).json({ message: "No se ha encontrado la receta" });
+        }
+
+        updateReceta.int_id_medico = id_medico;
+        updateReceta.txt_diagnostico = diagnostico;
+        updateReceta.str_cie = cie;
+        await updateReceta.save();
+        await updateReceta_med(updateReceta.int_id_receta, req, t);
+        await t.commit();
+
+        
+        
+
+        return res.json({
+            message: "Se ha actualizado la receta",
+            status: 'success',
+            data: updateReceta,
+        });
+    } catch (error) {
+        console.error('Error al actualizar la receta médica', error);
+        return res.status(500).json({ error: 'Error al actualizar la receta médica' });
+    }
+}
+
+//COMPRAR UNA RECETA
+
+export const comprarReceta = async (req, res) => {
+    const { id_receta } = req.params;
+    const { nota } = req.body;
+    try {
+        const updateReceta = await Recetas.findOne({
+            where: {
+                int_id_receta: id_receta
+            }
+        });
+
+        if (!updateReceta) {
+            return res.status(404).json({ message: "No se ha encontrado la receta" });
+        }
+
+        if(!nota){
+            updateReceta.bln_vigencia = false;
+            updateReceta.str_estado = 'DESPACHADA';
+        }else{
+            updateReceta.bln_vigencia = true;
+            updateReceta.txt_nota = nota;
+            updateReceta.str_estado = 'PARCIALMENTE DESPACHADA';
+        }
+        await updateReceta.save();
+        return res.json({
+            message: "Se ha actualizado la receta",
+            status: 'success',
+            data: updateReceta,
+        });
+    } catch (error) {
+        console.error('Error al actualizar la receta médica', error);
+        return res.status(500).json({ error: 'Error al actualizar la receta médica' });
+    }
+}
+
+
+//ACTIVAR RECETA
+
+export const activarReceta = async(req,res) => {
+    const {id_receta} = req.params;   
+    try {
+        const updateReceta = await Recetas.findOne({
+            where: {
+                int_id_receta: id_receta,
+            },
+        });
+        
+        updateReceta.bln_vigencia= true;
+        await updateReceta.save();
+        res.json({
+            status: "success",
+            data: updateReceta,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message});
+    }
+};
+
+
+//DESACTIVAR RECETA
+
+export const deleteReceta = async(req,res) => {
+    const {id_receta} = req.params;   
+    try {
+        const updateReceta = await Recetas.findOne({
+            where: {
+                int_id_receta: id_receta,
+            },
+        });
+        
+        updateReceta.bln_vigencia= false;
+        await updateReceta.save();
+        res.json({
+            status: "success",
+            data: updateReceta,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message});
+    }
 };

@@ -5,10 +5,10 @@ async function paginarDatosExtras(page, size, modelo, columna, parametro) {
 
     let where = {}; 
 
-    if(parametro == 'ACTIVO' || parametro == 'INACTIVO'){
+    if(parametro == 'true' || parametro == 'false'){
         where = { [columna]: parametro };
     } else if(columna && parametro){
-        where = { [columna]: { [Op.like]: `%${parametro}%` }};
+        where = { [columna]: { [Op.iLike]: `%${parametro}%` }};
     }
 
     const [datos, total] = await Promise.all([

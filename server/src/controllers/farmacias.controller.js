@@ -2,17 +2,18 @@ import { sequelize } from "../database/database.js";
 import { Farmacias } from "../models/Farmacias.js";
 import { paginarDatos } from "../utils/paginacion.utils.js";
 import bcrypt from "bcrypt";
+import { paginarDatosExtras } from "../utils/paginacionData.utils.js";
 
 //RECIBIR TODAS LAS FARMACIAS
 export const getFarmacias = async (req, res) => {
 
-    console.log(req.query);
-
     try {
         const paginationData = req.query;
 
+        console.log(req.query);
+
         if(paginationData.page === "undefined") {
-            const { datos, total } = await paginarDatos(1, 10, Bienes, '', '');
+            const { datos, total } = await paginarDatosExtras(1, 10, Farmacias, '', '');
             return res.json({
                 status: true,
                 message:  "Farmacias obtenidas correctamente",
@@ -22,16 +23,17 @@ export const getFarmacias = async (req, res) => {
         }
 
         const farmacias = await Farmacias.findAll();
+        
         if(farmacias.length === 0 || !farmacias) {
             return res.json({
                 status: false,
                 message: "No se encontraron farmacias"
             });
         } else {
-            const { datos, total } = await paginarDatos(
+            const { datos, total } = await paginarDatosExtras(
                 paginationData.page,
                 paginationData.size,
-                farmacias,
+                Farmacias,
                 paginationData.parameter,
                 paginationData.data
             );
@@ -113,7 +115,7 @@ export const createFarmacia = async (req, res) => {
 export const updateFarmacia = async (req, res) => {
     try {
         const {ruc} = req.params;
-        const { nombre, direccion, telefono, celular, correo, representante, celular_representante, password } = req.body;
+        const { nombre, direccion, telefono, celular, correo, nombre_representante, celular_representante, password } = req.body;
         const updateFarmacia= await Farmacias.findOne({
             where: {
                 str_ruc: ruc,
@@ -129,7 +131,7 @@ export const updateFarmacia = async (req, res) => {
         updateFarmacia.str_telefono_institucion = telefono;
         updateFarmacia.str_celular_institucion = celular;
         updateFarmacia.str_correo_institucion = correo;
-        updateFarmacia.str_nombre_representante = representante;
+        updateFarmacia.str_nombre_representante = nombre_representante;
         updateFarmacia.str_celular_representante = celular_representante;
         await updateFarmacia.save();
         res.json({

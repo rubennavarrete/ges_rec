@@ -27,6 +27,7 @@ export const pdfReceta = async (req, res) => {
         // Calcular la edad del paciente a partir de su fecha de nacimiento
         const fechaNacimientoPaciente = receta[0]?.dt_fecha_nac_paciente;
         const edadPaciente = fechaNacimientoPaciente ? calcularEdad(new Date(fechaNacimientoPaciente)) : '';
+        const qrCodeImageUrl = "https://www.codesyntax.com/es/blog/como-medir-el-exito-de-tus-codigos-qr/@@images/88f0dea0-0385-42c6-8caf-cabbe13dd458.png";
 
         // Construir el HTML del documento
         const html = `
@@ -47,10 +48,11 @@ export const pdfReceta = async (req, res) => {
                     display: flex;
                     flex-direction: column;
                     min-height: 100vh; /* Establecer la altura mínima de la vista para ocupar la pantalla completa */
+                    margin-bottom: 50px; /* Ajustar el margin-bottom para dejar espacio para el footer */
+                    position: relative; /* Establecer la posición relativa para que el footer esté posicionado correctamente */
                 }
 
-                header,
-                footer {
+                header {
                     background-color: #0da1af; /* Color del header */
                     color: #ffffff; /* Color del texto en el header */
                     padding: 8px;
@@ -142,6 +144,23 @@ export const pdfReceta = async (req, res) => {
                 .medicamentos td {
                     color: #333;
                 }
+
+                img.qr-code {
+                    max-width: 70%; /* Ajustar el tamaño máximo al contenedor */
+                    height: auto; /* Mantener la proporción de aspecto */
+                    margin: 0 auto 20px; /* Margen para centrar verticalmente y espaciado superior e inferior */
+                    display: block; /* Hacer que la imagen sea un elemento de bloque para que margin: auto funcione */
+                }
+                
+                footer {
+                    background-color: #fffff; /* Color del footer */
+                    color: #fffffff; /* Color del texto en el footer */
+                    padding: 8px;
+                    text-align: center;
+                    width: 100%; /* Ocupar todo el ancho de la página */
+                    display: block; /* Fijar el footer en la parte inferior de la página */
+                    bottom: 0; /* Alinear el footer en la parte inferior */
+                }
             </style>
         </head>
 
@@ -186,9 +205,9 @@ export const pdfReceta = async (req, res) => {
                             <th>Nombre Comercial</th>
                             <th>Nombre Genérico</th>
                             <th>Cantidad</th>
+                            <th>Tipo</th>
                             <th>Dosis</th>
                             <th>Indicación</th>
-                            <th>Duración</th>
                         </tr>
                         ${medicamentos
                             .map(
@@ -196,19 +215,25 @@ export const pdfReceta = async (req, res) => {
                                     <tr>
                                         <td>${med.str_nombre_comercial}</td>
                                         <td>${med.str_nombre_generico}</td>
-                                        <td>${med.str_cantidad}</td>
+                                        <td>${med.int_cantidad}</td>
+                                        <td>${med.str_tipo}</td>
                                         <td>${med.str_dosis}</td>
                                         <td>${med.str_indicacion}</td>
-                                        <td>${med.str_duracion}</td>
                                     </tr>
                                 `
                             )
                             .join('')}
                     </table>
+                    <br><br>
+                    <label>Medicina Faltante por vender: ${receta[0]?.txt_nota}</label>
                 </div>
             </div>
+            <img src="${qrCodeImageUrl}" alt="Código QR" class="qr-code">
+            <footer>
+            <p>Receta generada por el sistema SAVELIFE</p>
+            <p></p>© 2021 SAVELIFE. Todos los derechos reservados.</p>
+        </footer>
         </body>
-
         </html>
 
         `;

@@ -22,10 +22,12 @@ export const createReceta_med = async (id_receta, req, t) => {
                 {
                     int_id_receta: id_receta,
                     int_id_medicacion: medicamento.id_medicacion,
-                    str_cantidad: medicamento.cantidad,
+                    int_cantidad: medicamento.cantidad,
                     str_dosis: medicamento.dosis,
-                    str_duracion: medicamento.duracion,
+                    str_tipo: medicamento.tipo,
                     str_indicacion: medicamento.indicaciones,
+                    int_vendidos: 0,
+                    str_estado: "SIN DESPACHAR",    
                 },
                 { transaction: t }
             );
@@ -34,6 +36,19 @@ export const createReceta_med = async (id_receta, req, t) => {
         throw new Error(error.message);
     }
 };
+
+//EDITAR LISTA DE MEDICAMENTOS
+export const updateReceta_med = async (id_receta, req, t) => {
+    const { medicamentos } = req.body;
+    try {
+        await Recetas_medicacion.destroy({ where: { int_id_receta: id_receta } }, { transaction: t });
+        await createReceta_med(id_receta, req, t);
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
 
 
 

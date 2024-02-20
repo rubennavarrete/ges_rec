@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createMedicacion, getMedicaciones, getMedicacion, updateMedicacion, deleteMedicacion, getMedicacionByName } from "../controllers/medicaciones.controller.js";
+import { createMedicacion, getMedicaciones, getMedicacion, updateMedicacion, deleteMedicacion, getMedicacionByName, activarMedicacion } from "../controllers/medicaciones.controller.js";
 
 
 
@@ -10,6 +10,7 @@ router.get("/medicaciones/:id_medicacion", getMedicacion)
 router.get("/medicacion/busqueda",getMedicacionByName)
 router.post("/medicaciones", createMedicacion)
 router.put("/medicaciones/:id_medicacion",updateMedicacion)
-router.delete("/medicaciones/:id_medicacion",deleteMedicacion)
+router.put("/medicaciones/activar/:id_medicacion",activarMedicacion)
+router.put("/medicaciones/desactivar/:id_medicacion",deleteMedicacion)
 
 export default router;
