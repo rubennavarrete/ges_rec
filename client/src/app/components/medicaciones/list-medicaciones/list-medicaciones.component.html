@@ -52,10 +52,13 @@
             <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
                 <tr >
                     <th scope="col" class="px-6 py-3">
+                        Código
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Nombre Comercial
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Nombre Genérico
+                        Tipo
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Vigencia
@@ -72,11 +75,14 @@
                 </tr>
                 <tr *ngFor="let item of dataMed ; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
                     <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{item.str_cod_registro}}
+                    </th>
+                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{item.str_nombre_comercial}}
                     </th>
-                    <td class="px-6 py-2">
-                        {{item.str_nombre_generico}}
-                    </td>
+                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{item.str_forma_farmaceutica}}
+                    </th>
                     <td class="px-6 py-2">
                         <div class="flex justify-center">
                             <span *ngIf="item.bln_vigencia; else inactivo" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">

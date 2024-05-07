@@ -18,8 +18,11 @@ export class AddMedicacionesComponent implements OnDestroy, OnInit {
   MedError: string = '';
   medicamentoform: FormGroup;
 
-  get nombre_generico() {
-    return this.medicamentoform.controls['nombre_generico'];
+  get tipo() {
+    return this.medicamentoform.controls['tipo'];
+  }
+  get codigo_registro() {
+    return this.medicamentoform.controls['codigo_registro'];
   }
 
   get nombre_comercial() {

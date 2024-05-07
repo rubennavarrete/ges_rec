@@ -158,6 +158,9 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     this.medicacionSelec = item;
     this.src = item.str_nombre_comercial;
     this.idseleccionada = item.int_id_medicacion;
+    this.medicamentoform.patchValue({
+      tipoM: item.str_forma_farmaceutica,
+    });
     this.searchStarted = false; // Oculta la lista de medicamentos después de seleccionar uno
   }
 

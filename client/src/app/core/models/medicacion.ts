@@ -1,10 +1,12 @@
 export interface Medicacion {
     id_medicacion: number;
     nombre_comercial: string;
-    nombre_generico: string;
+    tipo: string;
+    codigo_registro: string;
     int_id_medicacion: number;
     str_nombre_comercial: string;
-    str_nombre_generico: string;
+    str_forma_farmaceutica: string;
+    str_cod_registro: string;
 }
 
 export interface MedicacionResponse {
@@ -16,5 +18,7 @@ export interface MedicacionResponse {
 export interface EditMedicacion {
     int_id_medicacion: number;
     str_nombre_comercial: string;
-    str_nombre_generico: string;
+    str_forma_farmaceutica: string;
+    str_cod_registro: string;
+
 }

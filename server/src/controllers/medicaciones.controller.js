@@ -67,7 +67,7 @@ export const getMedicacion= async (req, res) => {
 export const getMedicacionByName= async (req, res) => {
     try {
         const { nombre } = req.query;
-        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%') AND bln_vigencia = true ORDER BY str_nombre_comercial ASC`;
+        const query = `SELECT int_id_medicacion, str_nombre_comercial, str_forma_farmaceutica FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%') AND bln_vigencia = true ORDER BY str_nombre_comercial ASC`;
 
         const medicamento = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT
@@ -87,11 +87,12 @@ export const getMedicacionByName= async (req, res) => {
 
 //CREAR UN MEDICAMENTO
 export const createMedicacion = async (req, res) => {
-    const { nombre_comercial, nombre_generico} = req.body;
+    const { nombre_comercial, tipo, codigo_registro} = req.body;
     try {
         const newMedicamento = await Medicaciones.create({
+            str_codigo_registro: codigo_registro,
             str_nombre_comercial: nombre_comercial,
-            str_nombre_generico: nombre_generico,
+            str_forma_farmaceutica: tipo,
         });
         res.json({ 
             message: "Se ha creado un nuevo medicamento",
@@ -106,7 +107,7 @@ export const createMedicacion = async (req, res) => {
 //ACTUALIZAR UN MEDICAMENTO
 export const updateMedicacion= async (req, res) => {
     const { id_medicacion } = req.params;
-    const { nombre_comercial, nombre_generico } = req.body;
+    const { nombre_comercial} = req.body;
     try {
         const medicamento = await Medicaciones.findOne({
             where: {
@@ -119,7 +120,6 @@ export const updateMedicacion= async (req, res) => {
         const updateMedicamento = await Medicaciones.update(
             {
                 str_nombre_comercial: nombre_comercial,
-                str_nombre_generico: nombre_generico,
             },
             {
                 where: {

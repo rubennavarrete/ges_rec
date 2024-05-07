@@ -16,8 +16,11 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
   get nombre_comercial() {
     return this.editFormMed.controls['nombre_comercial'];
   }
-  get nombre_generico() {
-    return this.editFormMed.controls['nombre_generico'];
+  get tipo() {
+    return this.editFormMed.controls['tipo'];
+  }
+  get codigo_registro() {
+    return this.editFormMed.controls['codigo_registro'];
   }
 
   editFormMed: FormGroup;
@@ -26,8 +29,9 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
   constructor(private fb:FormBuilder, public srvMed:AddMedicacionesService, private srvModal: ModalsService) {
     this.editFormMed = this.fb.group({
       id_medicacion: [0],
+      codigo_registro: ['', Validators.required],
       nombre_comercial: ['', Validators.required],
-      nombre_generico: ['', Validators.required],
+      tipo: ['', Validators.required],
     });
   }
   private destroy$ = new Subject<any>();
@@ -97,7 +101,8 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
         this.editFormMed = this.fb.group({
           id_medicacion: [data.int_id_medicacion, Validators.required],
           nombre_comercial: [data.str_nombre_comercial, Validators.required],
-          nombre_generico: [data.str_nombre_generico, Validators.required],
+          tipo: [data.str_forma_farmaceutica, Validators.required],
+          codigo_registro: [data.str_cod_registro, Validators.required],
         });
         console.log('LLEGUE BIEN',data);
         console.log('ME LLENE?',this.editFormMed);

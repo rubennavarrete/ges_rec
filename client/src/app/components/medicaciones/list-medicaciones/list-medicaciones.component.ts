@@ -86,6 +86,7 @@ export class ListMedicacionesComponent implements OnInit, OnDestroy {
       next: (data) => {
         /* console.log(data); */
         this.srvMed.setConfirmEdit(data);
+        console.log(data);
       },
       error: (error) => {
         console.log(error);
