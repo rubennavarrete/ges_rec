@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { initFlowbite } from 'flowbite';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject, debounceTime, finalize, takeUntil } from 'rxjs';
 import { Medicacion } from 'src/app/core/models/medicacion';
@@ -31,6 +32,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
 
   idseleccionada: number = 0;
 
+  tipoMedicamentyo: string = '';
+
   tokenData: any;
 
   get nombreM() {
@@ -58,6 +61,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
   
   ngOnInit(): void {
+    initFlowbite();
     
 
     this.getTokenData();
@@ -82,7 +86,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             nombreM: ['', Validators.required],
             cantidadM: ['',[Validators.required, Validators.pattern(/^[0-9]+$/)]],
             dosisM: ['', Validators.required],
-            tipoM: ['', Validators.required],
+            tipoM: [{ value: '', disabled: true }, Validators.required],
             indicacionesM: ['', Validators.required]
           }),
         });
@@ -91,6 +95,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
         console.log(err);
       }
     });
+
   }
 
   constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, private srvModal: ModalsService) {
@@ -149,8 +154,14 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
   onSearchInputChange(event: Event) {
     const value = (event.target as HTMLInputElement).value.trim();
     this.searchInputSubject.next(value);
-    this.searchStarted = value.length > 0;
-  }
+    if (value.length === 0) {
+        this.searchStarted = false; // Si no hay valor en el input, desactiva la búsqueda
+    } else {
+        this.searchStarted = true; // Si hay valor en el input, activa la búsqueda
+    }
+}
+
+
 
   medicacionSelec: Medicacion | null = null;
 
@@ -161,46 +172,73 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     this.medicamentoform.patchValue({
       tipoM: item.str_forma_farmaceutica,
     });
+    this.tipoMedicamentyo = item.str_forma_farmaceutica;
     this.searchStarted = false; // Oculta la lista de medicamentos después de seleccionar uno
   }
 
 
   //Agregar medicamento
   addMedicamento() {
+    const nombreM = this.medicamentoform.value.nombreM;
+    const cantidadM = this.medicamentoform.value.cantidadM;
+    const dosisM = this.medicamentoform.value.dosisM;
+    const tipoM = this.tipoMedicamentyo;
+    const indicacionesM = this.medicamentoform.value.indicacionesM;
+
+    let campoVacio = '';
+
+    // Verificar qué campo está vacío
+    if (!nombreM) {
+        campoVacio = 'Nombre';
+    } else if (!cantidadM) {
+        campoVacio = 'Cantidad';
+    } else if (!dosisM) {
+        campoVacio = 'Dosis';
+    } else if (!indicacionesM) {
+        campoVacio = 'Indicaciones';
+    }
+
+    // Si algún campo está vacío, mostrar mensaje de alerta
+    if (campoVacio) {
+        alert(`Por favor, complete el campo ${campoVacio} antes de agregar el medicamento.`);
+        return; // Detener la ejecución si hay algún campo vacío
+    }
+
     if (this.medicamentoSeleccionado) {
-      // Editar el objeto seleccionado
-      this.medicamentoSeleccionado.nombre = this.medicamentoform.value.nombreM;
-      this.medicamentoSeleccionado.cantidad = this.medicamentoform.value.cantidadM;
-      this.medicamentoSeleccionado.dosis = this.medicamentoform.value.dosisM;
-      this.medicamentoSeleccionado.tipo = this.medicamentoform.value.tipoM;
-      this.medicamentoSeleccionado.indicaciones = this.medicamentoform.value.indicacionesM;
-  
-      this.medicamentoSeleccionado = null; // Reiniciar el objeto seleccionado
+        // Editar el objeto seleccionado
+        this.medicamentoSeleccionado.nombre = nombreM;
+        this.medicamentoSeleccionado.cantidad = cantidadM;
+        this.medicamentoSeleccionado.dosis = dosisM;
+        this.medicamentoSeleccionado.tipo = tipoM;
+        this.medicamentoSeleccionado.indicaciones = indicacionesM;
+
+        this.medicamentoSeleccionado = null; // Reiniciar el objeto seleccionado
     } else {
-      // Crear un nuevo objeto y agregarlo al array
-      const nuevoMedicamento: Medicamentos = {
-        nombre: this.medicamentoform.value.nombreM,
-        id_medicacion:  this.idseleccionada,
-        cantidad: this.medicamentoform.value.cantidadM,
-        vendidos: 0,
-        dosis: this.medicamentoform.value.dosisM,
-        tipo: this.medicamentoform.value.tipoM,
-        indicaciones: this.medicamentoform.value.indicacionesM,
-        int_id_medicacion: 0,
-        str_nombre_comercial: '',
-        int_cantidad: 0,
-        int_vendidos: 0,
-        str_dosis: '',
-        str_tipo: '',
-        txt_indicaciones: '',
-      };
-      this.medicamento.push(nuevoMedicamento);
+        // Crear un nuevo objeto y agregarlo al array
+        const nuevoMedicamento: Medicamentos = {
+            nombre: nombreM,
+            id_medicacion: this.idseleccionada,
+            cantidad: cantidadM,
+            vendidos: 0,
+            dosis: dosisM,
+            tipo: tipoM,
+            indicaciones: indicacionesM,
+            int_id_medicacion: 0,
+            str_nombre_comercial: '',
+            int_cantidad: 0,
+            int_vendidos: 0,
+            str_dosis: '',
+            str_tipo: '',
+            txt_indicaciones: '',
+        };
+        this.medicamento.push(nuevoMedicamento);
     }
 
     // console.log(this.medicamento);
-  
+
     this.medicamentoform.reset();
-  }
+}
+
 
     //Editar medicamento
   editarMedicamento(med: Medicamentos) {

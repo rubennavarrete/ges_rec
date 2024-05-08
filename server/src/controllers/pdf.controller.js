@@ -147,7 +147,7 @@ export const pdfReceta = async (req, res) => {
 
                 img.qr-code {
                     max-width: 70%; /* Ajustar el tamaño máximo al contenedor */
-                    height: auto; /* Mantener la proporción de aspecto */
+                    height: 80px; /* Mantener la proporción de aspecto */
                     margin: 0 auto 20px; /* Margen para centrar verticalmente y espaciado superior e inferior */
                     display: block; /* Hacer que la imagen sea un elemento de bloque para que margin: auto funcione */
                 }
@@ -203,7 +203,6 @@ export const pdfReceta = async (req, res) => {
                     <table>
                         <tr>
                             <th>Nombre Comercial</th>
-                            <th>Nombre Genérico</th>
                             <th>Cantidad</th>
                             <th>Tipo</th>
                             <th>Dosis</th>
@@ -214,7 +213,6 @@ export const pdfReceta = async (req, res) => {
                                 med => `
                                     <tr>
                                         <td>${med.str_nombre_comercial}</td>
-                                        <td>${med.str_nombre_generico}</td>
                                         <td>${med.int_cantidad}</td>
                                         <td>${med.str_tipo}</td>
                                         <td>${med.str_dosis}</td>

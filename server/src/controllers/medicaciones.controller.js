@@ -67,7 +67,7 @@ export const getMedicacion= async (req, res) => {
 export const getMedicacionByName= async (req, res) => {
     try {
         const { nombre } = req.query;
-        const query = `SELECT int_id_medicacion, str_nombre_comercial, str_forma_farmaceutica FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%') AND bln_vigencia = true ORDER BY str_nombre_comercial ASC`;
+        const query = `SELECT int_id_medicacion, str_nombre_comercial, str_forma_farmaceutica FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%') AND bln_vigencia = true ORDER BY str_nombre_comercial ASC LIMIT 4;`;
 
         const medicamento = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT

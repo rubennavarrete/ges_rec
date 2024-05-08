@@ -46,29 +46,29 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="searchStarted" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <ul>
-                        <li *ngFor="let item of data$">
-                            <a (click)="select(item)" class="cursor-pointer">
-                                {{item.str_nombre_comercial}}
-                                
-                            </a>
-                        </li>
-                        
-                    </ul>
+                <div class="container">      
+                    <!-- Contenedor flotante -->
+                    <div *ngIf="searchStarted" class="floating-container">
+                        <ul>
+                            <li *ngFor="let item of data$">
+                                <a (click)="select(item)" class="block bg-gray-100 w-full px-4 py-2 border-b border-gray-300 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white text-sm"> <!-- Aquí añadí la clase text-sm para reducir el tamaño de la fuente -->
+                                    {{item.str_nombre_comercial}}
+                                </a>
+                            </li>
+                            <li>
+                                <a (click)="searchStarted = false" class="block w-full px-4 py-2 border-t border-gray-600 cursor-pointer hover:bg-gray-100 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white text-sm"> <!-- También aquí -->
+                                    Agregar nuevo medicamento
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+                
+                
+                
             </div>
             <div>
                 <input formControlName="tipoM"  type="text" id="tipoM" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Capsulas, Jarabe, Polvo..." required>
-                <div *ngIf="tipoM.invalid && (tipoM.dirty || tipoM.touched)">
-                    <div *ngIf="tipoM.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
-                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                        <span class="sr-only">Info</span>
-                        <div>
-                            <span class="font-medium">Tipo Requerido</span> 
-                        </div>
-                    </div>
-                </div>
             </div> 
             <div>
                 <input formControlName="cantidadM" type="text" id="cantidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cantidad" required> 

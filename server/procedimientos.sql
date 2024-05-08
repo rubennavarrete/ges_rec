@@ -82,3 +82,33 @@ BEGIN
 		
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION obtenermedicamentosporreceta(
+	id_receta_param integer)
+    RETURNS TABLE(str_nombre_comercial character varying, int_cantidad integer, str_dosis character varying, str_indicacion character varying, str_tipo character varying, int_vendidos integer) 
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        m.str_nombre_comercial,
+        rm.int_cantidad,
+        rm.str_dosis,
+        rm.str_indicacion,
+        rm.str_tipo,
+		rm.int_vendidos
+    FROM 
+        ges_recetas.receta_medicacion rm
+    INNER JOIN 
+        ges_recetas.medicaciones m ON rm.int_id_medicacion = m.int_id_medicacion
+    WHERE 
+        rm.int_id_receta = id_receta_param;
+END;
+$BODY$;
+
+ALTER FUNCTION public.obtenermedicamentosporreceta(integer)
+    OWNER TO postgres;
