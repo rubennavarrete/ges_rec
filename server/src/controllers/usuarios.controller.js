@@ -115,6 +115,27 @@ export const getUsuario = async(req, res) =>{
     }
 };
 
+//RECIBIR UN USUARIO POR CEDULA
+export const getPacienteByName= async (req, res) => {
+    try {
+        const { cedula } = req.query;
+        const query = `SELECT int_id_usuario, str_nombres, str_apellidos FROM ges_recetas.usuarios WHERE LOWER(str_cedula) LIKE LOWER('${cedula}%') AND bln_estado = true ORDER BY str_cedula ASC LIMIT 4;`;
+
+        const usuario = await sequelize.query(query, {
+            type: sequelize.QueryTypes.SELECT
+        });
+        if (usuario.length === 0) return res.json({status: "error", message: "No se ha encontrado el paciente"});
+        
+        return res.json({
+            data: usuario,
+            status: "success",
+            message: "Se ha encontrado el paciente"
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 
 //CREAR UN USUARIO Y PERFIL
 export const createUsuario = async (req, res) => {

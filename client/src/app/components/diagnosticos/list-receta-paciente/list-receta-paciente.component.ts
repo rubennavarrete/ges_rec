@@ -321,6 +321,10 @@ export class ListRecetaPacienteComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  ocultarInput() {
+    this.srvRec.setConfirmAdd(true);
+  }
   
 
   ngOnDestroy(): void {

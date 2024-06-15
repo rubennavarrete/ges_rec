@@ -13,6 +13,8 @@ const confirmEdit: EditMedicacion = {
   str_nombre_comercial: '',
   str_forma_farmaceutica: '',
   str_cod_registro: '',
+  int_stock: 0,
+  float_precio: 0
 };
 
 @Injectable({

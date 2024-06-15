@@ -4,6 +4,7 @@ import { initFlowbite } from 'flowbite';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject, debounceTime, finalize, takeUntil } from 'rxjs';
 import { Medicacion } from 'src/app/core/models/medicacion';
+import { User } from 'src/app/core/models/user';
 import { Medicamentos, RecetaResponse } from 'src/app/core/models/receta';
 import { AddRecetaService } from 'src/app/core/services/add-receta.service';
 import { AddUserService } from 'src/app/core/services/add-user.service';
@@ -17,24 +18,44 @@ import Swal from 'sweetalert2';
   styleUrls: ['./add-receta.component.css']
 })
 export class AddRecetaComponent implements OnInit, OnDestroy {
-  public isLoading = false;
-  public src: string = '';
-  public data$: any;
-  searchStarted: boolean = false;
-  RecError: string = '';
-  FarmError: string = '';
+
+
+  // Variables para pacientes
+  isLoading2 = false;
+  datas$: any[] = [];
+  private destroy$ = new Subject<void>();
+  private searchInputSubject2 = new Subject<string>();
+  searchStarted2 = false;
+  PacienteSelec: User | null = null;
+  FarmError: any;
+  // Variables para medicamentos
+  isLoading = false;
+  data$ = [];
+  private searchInputSubject = new Subject<string>();
+  searchStarted = false;
+  medicacionSelec: Medicacion | null = null;
+  src: string = '';
+  src2: string = '';
+  idseleccionada: number = 0;
   medicamentoform: FormGroup;
+
+  RecError: string = '';
   recetaform: FormGroup;
 
   medicamento: Medicamentos[] = [] ;
 
   medicamentoSeleccionado: Medicamentos | null = null;
 
-  idseleccionada: number = 0;
 
   tipoMedicamentyo: string = '';
 
   tokenData: any;
+
+  confirmadd: boolean = false;
+
+  get nombreP() {
+    return this.recetaform.controls['nombreP'];
+  }
 
   get nombreM() {
     return this.medicamentoform.controls['nombreM'];
@@ -58,7 +79,6 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     return this.recetaform.controls['cie'];
   }
 
-  private destroy$ = new Subject<any>();
   
   ngOnInit(): void {
     initFlowbite();
@@ -72,12 +92,20 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     ).subscribe((value) => {
       this.buscarMedicamento(value);
     });
+
+     // Buscar Paciente
+     this.searchInputSubject2.pipe(
+      debounceTime(300) // Ajusta el valor en milisegundos según lo necesario
+    ).subscribe((value) => {
+      this.buscarPaciente(value);
+    });
     
     this.srvUser.SeleccionarConfirmEdit$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
         this.recetaform = this.fb.group({
+          nombreP: [''],
           id_medico: [this.tokenData.id_usuario] ,
           id_paciente: [data.int_id_usuario],
           diagnostico: ['', Validators.required],
@@ -87,6 +115,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             cantidadM: ['',[Validators.required, Validators.pattern(/^[0-9]+$/)]],
             dosisM: ['', Validators.required],
             tipoM: [{ value: '', disabled: true }, Validators.required],
+            precioM: 0,
             indicacionesM: ['', Validators.required]
           }),
         });
@@ -96,10 +125,26 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.srvRec.SeleccionarConfirmAdd$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (data) => {
+        if (data === true){
+          this.confirmadd = true;
+        }else{
+          this.confirmadd = false;
+        }
+        
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
-  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, private srvModal: ModalsService) {
+  constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, public srvModals: ModalsService) {
     this.recetaform = this.fb.group({
+      nombreP: [''] ,
       id_medico: [''] ,
       id_paciente: [''],
       diagnostico: ['', Validators.required],
@@ -109,6 +154,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
         cantidadM: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
         dosisM: ['', Validators.required],
         tipoM: ['', Validators.required],
+        precioM: 0,
         indicacionesM: ['', Validators.required]
       }),
     });
@@ -127,6 +173,46 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     }
   }
 
+    // Método de búsqueda de pacientes
+    buscarPaciente(value: string) {
+      this.isLoading2 = true;
+      console.log('ESTOY EN BUSQUUEDA',value);
+      this.srvUser.getPaciente(value).pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.isLoading2 = false;
+        })
+      ).subscribe({
+        next: (data) => {
+          this.datas$ [0]= data;
+        },
+        error: (error) => {
+          console.log(error);
+          this.FarmError = error;
+        }
+      });
+    }
+  
+    onSearchInputChange2(event: Event) {
+      const value = (event.target as HTMLInputElement).value.trim();
+      this.searchInputSubject2.next(value);
+      if (value.length === 0) {
+        this.searchStarted2 = false;
+      } else {
+        this.searchStarted2 = true;
+      }
+    }
+  
+    selectPaciente(item: User) {
+      this.PacienteSelec = item;
+      this.src2 = item.str_cedula;
+      this.recetaform.patchValue({
+        nombreP: item.str_nombres + ' ' + item.str_apellidos
+      });
+      this.searchStarted2 = false;
+    }
+
+
   //Buscar medicamento
   buscarMedicamento(value: string) {
     // console.log(value);
@@ -139,8 +225,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       )
     ).subscribe({
       next: (data) => {
-        this.data$ = data;
-        // //console.log(data);
+        this.datas$[1] = data;
+        console.log(data);
       },
       error: (error) => {
         console.log(error);
@@ -149,7 +235,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
 
     });
   }
-  private searchInputSubject = new Subject<string>();
+
 
   onSearchInputChange(event: Event) {
     const value = (event.target as HTMLInputElement).value.trim();
@@ -161,16 +247,13 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     }
 }
 
-
-
-  medicacionSelec: Medicacion | null = null;
-
   select(item: Medicacion) {
     this.medicacionSelec = item;
     this.src = item.str_nombre_comercial;
     this.idseleccionada = item.int_id_medicacion;
     this.medicamentoform.patchValue({
       tipoM: item.str_forma_farmaceutica,
+      precioM: item.float_precio
     });
     this.tipoMedicamentyo = item.str_forma_farmaceutica;
     this.searchStarted = false; // Oculta la lista de medicamentos después de seleccionar uno
@@ -184,6 +267,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     const dosisM = this.medicamentoform.value.dosisM;
     const tipoM = this.tipoMedicamentyo;
     const indicacionesM = this.medicamentoform.value.indicacionesM;
+    const precioM = this.medicamentoform.value.precioM;
 
     let campoVacio = '';
 
@@ -219,17 +303,17 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             nombre: nombreM,
             id_medicacion: this.idseleccionada,
             cantidad: cantidadM,
-            vendidos: 0,
             dosis: dosisM,
             tipo: tipoM,
             indicaciones: indicacionesM,
+            precio: precioM,
             int_id_medicacion: 0,
             str_nombre_comercial: '',
             int_cantidad: 0,
-            int_vendidos: 0,
             str_dosis: '',
             str_tipo: '',
             txt_indicaciones: '',
+            float_precio: 0,
         };
         this.medicamento.push(nuevoMedicamento);
     }
@@ -256,6 +340,11 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
   eliminarMedicamento(index: number) {
     this.medicamento.splice(index, 1);
     console.log(this.medicamento);
+  }
+
+  imputModal(title: string, name: string) {
+    this.srvModals.setFormModal({ title, name });
+    this.srvModals.openModal();
   }
 
   //Crear receta
@@ -303,7 +392,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             },
             complete: () => {
               this.srvRec.setConfirmAdd(true);
-              this.srvModal.closeModal();
+              this.srvModals.closeModal();
               this.recetaform.reset();
               this.medicamentoform.reset();
             }
@@ -312,10 +401,9 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     });
   }
 
-  
 
   ngOnDestroy(): void {
-    this.destroy$.next({});
+    this.destroy$.next();
     this.destroy$.complete();
   }
 }

@@ -34,6 +34,7 @@ export class ModalsComponent {
     this.title = '';
     this.srvModals.openModal();
     this.srvModals.closeModal();
+    
   }
 
 }

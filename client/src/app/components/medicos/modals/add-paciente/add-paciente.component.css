@@ -2,3 +2,7 @@
     width: 100%;
     
 }
+
+.text-sm {
+    font-size: 0.8rem; /* Este valor es solo un ejemplo. Ajusta el tamaño según tus necesidades */
+}

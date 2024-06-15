@@ -21,17 +21,17 @@ const confirmEditMed: Medicamentos = {
   int_id_medicacion: 0,
   str_nombre_comercial: '',
   int_cantidad: 0,
-  int_vendidos: 0,
   str_dosis: '',
   str_tipo: '',
   txt_indicaciones: '',
+  float_precio: 0,
   id_medicacion: 0,
   nombre: '',
   cantidad: 0,
-  vendidos: 0,
   dosis: '',
   tipo: '',
   indicaciones: '',
+  precio: 0
 };
 
 @Injectable({
@@ -82,6 +82,7 @@ export class AddRecetaService {
     setConfirmEditMed(data: Medicamentos): void {
       this.confirmEditMed$.next(data);
     }
+
 
     
   

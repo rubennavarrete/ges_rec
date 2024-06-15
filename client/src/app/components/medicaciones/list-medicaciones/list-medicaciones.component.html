@@ -2,41 +2,41 @@
     <div class="title">
         <h4>Listado de Medicamentos</h4>
         <button (click)="imputModal('Agregar Medicamento','agregarListaMedicamento')" type="button" class="flex text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-            <svg class="flex-shrink-0 w-5 h-5 text-white dark:text-white"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="flex-shrink-0 w-5 h-5 text-white dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"/>
-              </svg>
+            </svg>
             <span class="flex-1 ms-3 whitespace-nowrap">Agregar Medicamento</span>
         </button>
     </div>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mr-2 ">
-        <div class="flex tems-center justify-between flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900 py-2">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mr-2">
+        <div class="flex items-center justify-between flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900 py-2">
             <div class="flex">
                 <button #dropdownActionButton data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-gray-500 bg-white border border-purple-300 focus:outline-none hover:bg-purple-100 focus:ring-4 focus:ring-purple-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-purple-800 dark:text-purple-400 dark:border-purple-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ml-1 mr-3" type="button">
                     <span class="sr-only">Action button</span>
                     Vigencia: Todos <!-- Inicialmente se mostrará el estado por defecto -->
                 </button>
-                  <!-- Dropdown menu -->
+                <!-- Dropdown menu -->
                 <div id="dropdownAction" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                     <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
                         <li>
                             <div class="flex items-center p-2 rounded hover:bg-purple-300 dark:hover:bg-gray-600">
-                            <input id="default-radio-4" type="radio" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" (change)="changeEstadoA()">
-                            <label for="default-radio-4" class="w-full p-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Activo</label>
+                                <input id="default-radio-4" type="radio" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" (change)="changeEstadoA()">
+                                <label for="default-radio-4" class="w-full p-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Activo</label>
                             </div>
                         </li>
                         <li>
                             <div class="flex items-center p-2 rounded hover:bg-purple-300 dark:hover:bg-gray-600">
-                            <input id="default-radio-5" type="radio" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" (change)="changeEstadoI()">
-                            <label for="default-radio-5" class="w-full p-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Inactivo</label>
+                                <input id="default-radio-5" type="radio" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" (change)="changeEstadoI()">
+                                <label for="default-radio-5" class="w-full p-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Inactivo</label>
                             </div>
                         </li>
                     </ul>
-                </div> 
+                </div>
                 <button (click)="limpiarFiltro()" class="px-3 py-1.5">
-                    <svg class="h-6 w-6 text-gray-400"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                </button>  
+                </button>
             </div>
             <label for="table-search" class="sr-only">Search</label>
             <div class="relative px-2">
@@ -50,46 +50,57 @@
         </div>
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
-                <tr >
-                    <th scope="col" class="px-6 py-3">
-                        Código
+                <tr>
+                    <th scope="col" class="px-4 py-3 w-1/6">
+                        Código 
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-2/6">
                         Nombre Comercial
                     </th>
-                    <th scope="col" class="px-6 py-3">
-                        Tipo
+                    <th scope="col" class="px-4 py-3 w-2/6">
+                        Categoría
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-1/6">
+                        Stock
+                    </th>
+                    <th scope="col" class="px-4 py-3 w-1/6">
+                        Precio
+                    </th>
+                    <th scope="col" class="px-4 py-3 w-1/6">
                         Vigencia
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-1/6">
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngIf="dataMed.length === 0">
-                    <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-white">
+                    <td colspan="6" class="px-4 py-4 text-center text-gray-500 dark:text-white">
                         No hay datos disponibles.
                     </td>
                 </tr>
-                <tr *ngFor="let item of dataMed ; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <tr *ngFor="let item of dataMed; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                    <th scope="row" class="px-4 py-2 font-medium text-gray-900 dark:text-white break-words">
                         {{item.str_cod_registro}}
                     </th>
-                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row" class="px-4 py-2 font-medium break-words">
                         {{item.str_nombre_comercial}}
                     </th>
-                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td class="px-4 py-2 font-medium break-words">
                         {{item.str_forma_farmaceutica}}
-                    </th>
-                    <td class="px-6 py-2">
+                    </td>
+                    <td class="px-4 py-2 font-medium whitespace-nowrap dark:text-white">
+                        {{item.int_stock}}
+                    </td>
+                    <td class="px-4 py-2 font-medium  whitespace-nowrap dark:text-white">
+                        {{item.float_precio | currency:'USD':true:'1.2-2'}}
+                    </td>
+                    <td class="px-4 py-2">
                         <div class="flex justify-center">
                             <span *ngIf="item.bln_vigencia; else inactivo" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                                 <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
                                 Activo
                             </span>
-                            
                             <ng-template #inactivo>
                                 <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
                                     <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
@@ -98,16 +109,16 @@
                             </ng-template>
                         </div>
                     </td>
-                    <td class="px-6 py-2 flex">
+                    <td class="px-4 py-2 flex">
                         <button (click)="editarMedicacion(item.int_id_medicacion)" (click)="imputModal('Editar Medicamento','editarListaMedicamento')" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                             <svg class="flex-shrink-0 w-5 h-5 text-whitedark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
-                              </svg>                           
+                            </svg>
                         </button>
-                        <button *ngIf="item.bln_vigencia" (click)="eliminarMedicacion(item.int_id_medicacion)" type="button"  class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                        <button *ngIf="item.bln_vigencia" (click)="eliminarMedicacion(item.int_id_medicacion)" type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
                             <svg class="w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" d="M8.6 2.6A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4c0-.5.2-1 .6-1.4ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
-                          </svg>
+                                <path fill-rule="evenodd" d="M8.6 2.6A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4c0-.5.2-1 .6-1.4ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
+                            </svg>
                         </button>
                         <button *ngIf="!item.bln_vigencia" (click)="activarMedicacion(item.int_id_medicacion)" type="button" class="focus:outline-none text-white bg-green-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
                             <svg class="flex-shrink-0 w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
@@ -119,11 +130,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mt-5">
-        <app-pagination
-        (nextPage)="pasarPagina($event)"
-        ></app-pagination>
+    <div class="mt-3">
+        <app-pagination (nextPage)="pasarPagina($event)"></app-pagination>
     </div>
 </div>
-
-

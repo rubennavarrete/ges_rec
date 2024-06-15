@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUsuario, getMedicos, getPacientes, getUsuario, updateUsuario, deleteUsuario, activarUsuario } from "../controllers/usuarios.controller.js";
+import { createUsuario, getMedicos, getPacientes, getUsuario, updateUsuario, deleteUsuario, activarUsuario, getPacienteByName } from "../controllers/usuarios.controller.js";
 
 
 const router = Router();
@@ -7,6 +7,7 @@ const router = Router();
 
 router.get("/medicos", getMedicos)
 router.get("/pacientes", getPacientes)
+router.get("/paciente/busqueda", getPacienteByName)
 router.get("/usuarios/:cedula", getUsuario)
 router.post("/usuarios", createUsuario)
 router.put("/usuarios/:cedula",updateUsuario)

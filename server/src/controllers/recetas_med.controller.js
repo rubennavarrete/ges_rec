@@ -27,6 +27,7 @@ export const createReceta_med = async (id_receta, req, t) => {
                     str_tipo: medicamento.tipo,
                     str_indicacion: medicamento.indicaciones,
                     int_vendidos: 0,
+                    float_precio: medicamento.precio,
                     str_estado: "SIN DESPACHAR",    
                 },
                 { transaction: t }

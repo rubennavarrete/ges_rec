@@ -1,6 +1,6 @@
 
     <form [formGroup]="userform" novalidate autocomplete="off"  class="content-user" >            
-        <div class="grid gap-6 md:grid-cols-2">
+        <div class="grid gap-2 md:grid-cols-2">
             <div>
                 <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Nombres *</label>
                 <input formControlName="nombres" type="text" id="nombres" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required>
@@ -143,7 +143,7 @@
                     </div>
                 </div>
             </div>  
-            <div class="mb-3">
+            <div class="mb-2">
                 <label for="visitors" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de nacimiento *</label>
                 <input formControlName="fecha_nac" type="date" id="fecha_nac" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
                 <div *ngIf="fecha_nac.invalid && (fecha_nac.dirty || fecha_nac.touched)">
@@ -164,7 +164,7 @@
                 </div>
             </div>
         </div>
-        <div class="mb-3">
+        <div class=" gap-2 mb-3">
             <label for="email" class="block  text-sm font-medium text-gray-900 dark:text-white">Correo *</label>
             <input formControlName="correo" type="email" id="correo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required>
             <div *ngIf="correo.invalid && (correo.dirty || correo.touched)">
@@ -189,7 +189,7 @@
                 </div>
             </div>
         </div> 
-        <div class="mb-3">
+        <div class="gap-2 mb-3">
             <label for="password" class="block  text-sm font-medium text-gray-900 dark:text-white">Contraseña *</label>
             <input formControlName="password" type="{{ showPassword ? 'text' : 'password' }}"  id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
             <div *ngIf="password.invalid && (password.dirty || password.touched)">
@@ -202,7 +202,7 @@
                 </div>
             </div>
         </div> 
-        <div class="mb-3">
+        <div class=" gap-2 mb-3">
             <label for="password" class="block  text-sm font-medium text-gray-900 dark:text-white">Confirmar Contraseña *</label>
             <input  formControlName="confirmPassword"type="{{ showPassword ? 'text' : 'password' }}"  id="confirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
             <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)">
@@ -215,7 +215,7 @@
                 </div>
             </div>
         </div> 
-        <div class="mb-3 relative">
+        <div class=" gap-2 mb-3 relative">
             <button type="button" (click)="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer ">
                 <label class="text-sm font-light text-gray-900 dark:text-black mr-2">Mostrar Contraseña</label>
                 <span *ngIf="showPassword" aria-hidden="true" class="material-symbols-outlined">
@@ -226,7 +226,7 @@
                 </span>
             </button>
         </div> 
-        <div class="flex justify-center">
+        <div class="mt-5 flex justify-center">
         <button (click)="addUsuario()" class="w-64 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-bold rounded-lg text-sm px-8 py-2.5 text-center mr-2 " [disabled]="!userform.valid">Agregar</button>
         </div>
     </form>

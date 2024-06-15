@@ -39,5 +39,6 @@ export interface EditUser {
 
 export interface DataUser {
     status: string;
-    data: User;
+    message: string;
+    data: User[];
 }

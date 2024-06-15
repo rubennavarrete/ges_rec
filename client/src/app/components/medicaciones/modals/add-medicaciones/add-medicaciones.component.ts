@@ -29,11 +29,23 @@ export class AddMedicacionesComponent implements OnDestroy, OnInit {
     return this.medicamentoform.controls['nombre_comercial'];
   }
 
+  get stock() {
+    return this.medicamentoform.controls['stock'];
+  }
+
+  get precio() {
+    return this.medicamentoform.controls['precio'];
+  }
+
 
   constructor(private fb: FormBuilder, public srvMed:AddMedicacionesService, private srvModal: ModalsService ) {
     this.medicamentoform = this.fb.group({
-      nombre_generico: ['', Validators.required],
+      codigo_registro: ['', Validators.required],
       nombre_comercial: ['', Validators.required],
+      tipo: ['', Validators.required],
+      stock: ['', Validators.required],
+      precio: ['', Validators.required]
+
     });
   }
   

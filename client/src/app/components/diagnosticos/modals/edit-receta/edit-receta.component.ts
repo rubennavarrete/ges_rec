@@ -83,6 +83,7 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
             cantidadM: ['', Validators.required],
             dosisM: ['', Validators.required],
             tipoM: ['', Validators.required],
+            precioM: 0,
             indicacionesM: ['', Validators.required]
           }),
         });
@@ -106,17 +107,17 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
             nombre: medData.str_nombre_comercial ,
             id_medicacion: medData.int_id_medicacion,
             cantidad: medData.int_cantidad,
-            vendidos: medData.int_vendidos,
             dosis: medData.str_dosis,
             tipo: medData.str_tipo,
             indicaciones: medData.str_indicacion,
+            precio: medData.float_precio,
             int_id_medicacion: 0,
             str_nombre_comercial: '',
             int_cantidad: 0,
-            int_vendidos: 0,
             str_dosis: '',
             str_tipo: '',
             txt_indicaciones: '',
+            float_precio: 0,
           };
           this.medicamento.push(nuevoMedicamento);
         }
@@ -140,6 +141,7 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
         cantidadM: ['', Validators.required],
         dosisM: ['', Validators.required],
         tipoM: ['', Validators.required],
+        precioM: 0,
         indicacionesM: ['', Validators.required]
       }),
     });
@@ -205,6 +207,7 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
       this.medicamentoSeleccionado.dosis = this.medicamentoform.value.dosisM;
       this.medicamentoSeleccionado.tipo = this.medicamentoform.value.tipoM;
       this.medicamentoSeleccionado.indicaciones = this.medicamentoform.value.indicacionesM;
+      this.medicamentoSeleccionado.precio = this.medicamentoform.value.precioM;
   
       this.medicamentoSeleccionado = null; // Reiniciar el objeto seleccionado
     } else {
@@ -214,17 +217,18 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
         nombre: this.medicamentoform.value.nombreM ,
         id_medicacion:  this.idseleccionada,
         cantidad: this.medicamentoform.value.cantidadM,
-        vendidos: 0,
         dosis: this.medicamentoform.value.dosisM,
         tipo: this.medicamentoform.value.tipoM,
         indicaciones: this.medicamentoform.value.indicacionesM,
+        precio: this.medicamentoform.value.precioM,
+        
         int_id_medicacion: 0,
         str_nombre_comercial: '',
         int_cantidad: 0,
-        int_vendidos: 0,
         str_dosis: '',
         str_tipo: '',
         txt_indicaciones: '',
+        float_precio: 0,
       };
       this.medicamento.push(nuevoMedicamento);
     }

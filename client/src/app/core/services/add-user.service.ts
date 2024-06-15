@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DataUser, User, EditUser } from '../models/user';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, catchError, map } from 'rxjs';
 import config from 'config/config';
 
 const confirmAdd: boolean = false;
@@ -28,6 +28,7 @@ export class AddUserService {
   private URL_API: string = config.URL_API_BASE + 'usuarios';
   private URL_API2: string = config.URL_API_BASE + 'medicos';
   private URL_API3: string = config.URL_API_BASE + 'pacientes';
+  private URL_API4: string = config.URL_API_BASE + 'paciente';
 
   //BEHAVIOR SUBJECT
   private confirmAdd$ = new BehaviorSubject<boolean>(confirmAdd);
@@ -98,6 +99,13 @@ export class AddUserService {
     return this.http.get<User>(this.URL_API3 + '?' + params, {
       withCredentials: true,
     });
+  }
+
+  getPaciente(cedula : string):Observable<User[]>{ 
+    return this.http.get<DataUser>(`${this.URL_API4}/busqueda?cedula=${cedula}`).pipe(
+      map((res:DataUser)=> res?.data),
+      catchError(() => EMPTY)
+    );
   }
 
   getUsuario(cedula: string) {

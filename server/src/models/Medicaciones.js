@@ -26,6 +26,14 @@ export const Medicaciones = sequelize.define(
             allowNull: false,
             defaultValue: true,
         },
+        int_stock: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        float_precio: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
     },
     {
         schema: "ges_recetas",

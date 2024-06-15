@@ -3,10 +3,14 @@ export interface Medicacion {
     nombre_comercial: string;
     tipo: string;
     codigo_registro: string;
+    stock: number;
+    precio: number;
     int_id_medicacion: number;
     str_nombre_comercial: string;
     str_forma_farmaceutica: string;
     str_cod_registro: string;
+    int_stock: number;
+    float_precio: number;
 }
 
 export interface MedicacionResponse {
@@ -20,5 +24,7 @@ export interface EditMedicacion {
     str_nombre_comercial: string;
     str_forma_farmaceutica: string;
     str_cod_registro: string;
+    int_stock: number;
+    float_precio: number;
 
 }

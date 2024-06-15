@@ -23,6 +23,15 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
     return this.editFormMed.controls['codigo_registro'];
   }
 
+  get stock() {
+    return this.editFormMed.controls['stock'];
+  }
+
+  get precio() {
+    return this.editFormMed.controls['precio'];
+  }
+
+
   editFormMed: FormGroup;
   UserError: string = '';
 
@@ -32,6 +41,8 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
       codigo_registro: ['', Validators.required],
       nombre_comercial: ['', Validators.required],
       tipo: ['', Validators.required],
+      stock: ['', Validators.required],
+      precio: ['', Validators.required]
     });
   }
   private destroy$ = new Subject<any>();
@@ -103,6 +114,8 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
           nombre_comercial: [data.str_nombre_comercial, Validators.required],
           tipo: [data.str_forma_farmaceutica, Validators.required],
           codigo_registro: [data.str_cod_registro, Validators.required],
+          stock: [data.int_stock, Validators.required],
+          precio: [data.float_precio, Validators.required]
         });
         console.log('LLEGUE BIEN',data);
         console.log('ME LLENE?',this.editFormMed);

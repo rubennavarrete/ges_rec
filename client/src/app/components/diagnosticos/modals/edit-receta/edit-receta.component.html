@@ -1,9 +1,9 @@
 
 <!-- Formulario para agregar una receta -->
 <form  [formGroup]="editrecetaform"  novalidate autocomplete="off"  class="content-user" >
-    <div>
+    <div class="mb-2">
         <label for="diagnostico" class="block  text-sm font-medium text-gray-900 dark:text-white">Diagnóstico *</label>
-        <textarea formControlName="diagnostico" id="diagnostico" rows="2" class=" mt-1 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Dolor de Cabeza"></textarea>
+        <textarea formControlName="diagnostico" id="diagnostico" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" placeholder="Dolor de Cabeza"></textarea>
         <div *ngIf="diagnostico.invalid && (diagnostico.dirty || diagnostico.touched)">
             <div *ngIf="diagnostico.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                 <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div> 
-        <div class="mt-3">
+        <div class="mt-1">
             <label for="cie" class="block  text-sm font-medium text-gray-900 dark:text-white">CIE-10 *</label>
             <input formControlName="cie"  type="text" id="cie" class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="100" required>
             <div *ngIf="cie.invalid && (cie.dirty || cie.touched)">
@@ -27,7 +27,6 @@
             </div>
         </div> 
     </div>
-    <br>
 </form>
 
 <!-- Formulario para agregar un medicamento -->
@@ -106,7 +105,7 @@
             </div>
         </div> 
 
-        <button (click)="addMedicamento()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-2 p-2">
+        <button (click)="addMedicamento()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-2 p-1">
             <span class="material-symbols-outlined">
                 add
                 </span>
@@ -118,34 +117,34 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
                 <tr >
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 w-1/6">
                         Medicamento
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 w-1/6">
                         Cantidad
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 w-1/6">
                         Tipo
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 w-1/6">
                         Dosis
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-6 py-3 w-1/6">
                     </th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let med of medicamento; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row" class="px-4 py-2 font-medium text-gray-900 dark:text-white  break-words">
                         {{ med.nombre}}
-                    </td>
-                    <td class="px-6 py-2">
+                    </th>
+                    <td class="px-4 py-2">
                         {{ med.cantidad }}
                     </td>
-                    <td class="px-6 py-2">
+                    <td class="px-4 py-2">
                         {{ med.tipo }}
                     </td>
-                    <td class="px-6 py-2">
+                    <td class="px-4 py-2">
                         {{ med.dosis }}
                     </td>
                     <td class="px-6 py-2 flex justify-center">
