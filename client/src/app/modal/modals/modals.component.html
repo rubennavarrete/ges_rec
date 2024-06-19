@@ -1,0 +1,70 @@
+<div class="modal fade" id="modalGeneral">
+  <div class="modal-dialog" [ngClass]="{'modal-lg': name !== 'venderReceta', 'modal-vender-receta': name === 'venderReceta'}">
+    <div class="modal-content">
+      <div class="modal-header no-print">
+        <h5 class="modal-title" id="modalAgregaUsuario">{{ title }}</h5>
+        <button type="button" (click)="cerrarModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <container-element [ngSwitch]="name">
+
+          <!-- MODALS PARA AGREGAR -->
+          <div *ngSwitchCase="'agregarlista'">
+            <app-usuario></app-usuario>
+          </div>
+          <div *ngSwitchCase="'agregarListaPaciente'">
+            <app-add-paciente></app-add-paciente>
+          </div>
+          <div *ngSwitchCase="'agregarListaFarmacia'">
+            <app-farmacia></app-farmacia>
+          </div>
+          <div *ngSwitchCase="'agregarListaMedicamento'">
+            <app-add-medicaciones></app-add-medicaciones>
+          </div>
+          <div *ngSwitchCase="'agregarListaReceta'">
+            <app-add-receta></app-add-receta>
+          </div>
+
+          <!-- MODALS PARA EDITAR -->
+          <div *ngSwitchCase="'editarListaUsuario'">
+            <app-update-user></app-update-user>
+          </div>
+          <div *ngSwitchCase="'editarPerfil'">
+            <app-edit-profile></app-edit-profile>
+          </div>
+          <div *ngSwitchCase="'editarListaPaciente'">
+            <app-update-paciente></app-update-paciente>
+          </div>
+          <div *ngSwitchCase="'editarListaFarmacia'">
+            <app-update-farm></app-update-farm>
+          </div>
+          <div *ngSwitchCase="'editarListaMedicamento'">
+            <app-update-medicaciones></app-update-medicaciones>
+          </div>
+          <div *ngSwitchCase="'editarReceta'">
+            <app-edit-receta></app-edit-receta>
+          </div>
+
+          <!-- MODALS PARA VOLVER A RECETAR -->
+          <div *ngSwitchCase="'volverRecetar'">
+            <app-edit-receta></app-edit-receta>
+          </div>
+
+          <!-- MODALS PARA VENDER RECETA -->
+          <div *ngSwitchCase="'venderReceta'">
+            <app-sell-receta></app-sell-receta>
+          </div>
+
+          <div *ngSwitchCase="'clear'"></div>
+        </container-element>
+      </div>
+      <div class="modal-footer no-print">
+        <button class="btn btn-cancelar" data-bs-dismiss="modal" (click)="cerrarModal()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

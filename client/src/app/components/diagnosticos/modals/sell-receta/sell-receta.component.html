@@ -1,0 +1,57 @@
+<form  [formGroup]="editrecetaform"  novalidate autocomplete="off"  class="content-user" >
+    <label for="nota" class="block  text-sm font-medium text-gray-900 dark:text-white">Nota </label>
+        <textarea formControlName="nota" id="nota" rows="2" class=" mt-1 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Medicina faltante....."></textarea>
+    <br>
+</form>
+<!-- Formulario para agregar un medicamento -->
+<form [formGroup]="medicamentoform" novalidate autocomplete="off" class="content_user">
+    
+    <div class="relative overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg mt-3" style="max-height: 400px;">
+        <label for="title">Lista de Medicamentos</label>
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mt-3">
+            <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
+                <tr >
+                    <th scope="col" class="px-6 py-3">
+                        Medicamento
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Cantidad
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tipo
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Dosis
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let med of medicamento; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                    <td scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ med.nombre}}
+                    </td>
+                    <td class="px-6 py-2">
+                        {{ med.cantidad }}
+                    </td>
+                    <td class="px-6 py-2">
+                        {{ med.tipo }}
+                    </td>
+                    <td class="px-6 py-2">
+                        {{ med.dosis }}
+                    </td>
+                    <td class="px-6 py-2">
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="flex justify-center">
+        <button (click)="editarReceta()"  class="w-64 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-bold rounded-lg text-sm px-8 py-2.5 text-center mr-2 mb-2">Vender Receta</button>
+    </div>
+</form>
+
+
+
+

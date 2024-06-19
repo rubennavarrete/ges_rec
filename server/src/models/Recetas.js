@@ -25,9 +25,10 @@ export const Recetas = sequelize.define(
             allowNull: false,
         },
 
-        bln_estado:{
+        bln_vigencia:{
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: true,
         },
 
         dt_fecha_creacion : {
@@ -35,6 +36,18 @@ export const Recetas = sequelize.define(
             allowNull: false,
             defaultValue: DataTypes.NOW,
         },
+        str_estado: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+        str_cie: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+        txt_nota: {
+            type: DataTypes.TEXT, 
+            allowNull: true,
+        }
             
     },
     {

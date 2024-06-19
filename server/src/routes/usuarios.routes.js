@@ -1,15 +1,17 @@
 import { Router } from "express";
-import { createUsuario, getUsuarios, getUsuario, updateUsuario, deleteUsuario } from "../controllers/usuarios.controller.js";
+import { createUsuario, getMedicos, getPacientes, getUsuario, updateUsuario, deleteUsuario, activarUsuario, getPacienteByName } from "../controllers/usuarios.controller.js";
 
 
 const router = Router();
 
 
-
-router.get("/usuarios", getUsuarios)
+router.get("/medicos", getMedicos)
+router.get("/pacientes", getPacientes)
+router.get("/paciente/busqueda", getPacienteByName)
 router.get("/usuarios/:cedula", getUsuario)
 router.post("/usuarios", createUsuario)
 router.put("/usuarios/:cedula",updateUsuario)
-router.delete("/usuarios/:cedula",deleteUsuario)
+router.put("/usuarios/desactivar/:cedula",deleteUsuario)
+router.put("/usuarios/activar/:cedula",activarUsuario)
 
 export default router;

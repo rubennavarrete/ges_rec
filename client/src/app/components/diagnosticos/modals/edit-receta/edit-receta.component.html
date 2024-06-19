@@ -1,0 +1,174 @@
+
+<!-- Formulario para agregar una receta -->
+<form  [formGroup]="editrecetaform"  novalidate autocomplete="off"  class="content-user" >
+    <div class="mb-2">
+        <label for="diagnostico" class="block  text-sm font-medium text-gray-900 dark:text-white">Diagnóstico *</label>
+        <textarea formControlName="diagnostico" id="diagnostico" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" placeholder="Dolor de Cabeza"></textarea>
+        <div *ngIf="diagnostico.invalid && (diagnostico.dirty || diagnostico.touched)">
+            <div *ngIf="diagnostico.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
+                <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Info</span>
+                <div>
+                    <span class="font-medium">Diagnóstico Requerido</span> 
+                </div>
+            </div>
+        </div> 
+        <div class="mt-1">
+            <label for="cie" class="block  text-sm font-medium text-gray-900 dark:text-white">CIE-10 *</label>
+            <input formControlName="cie"  type="text" id="cie" class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="100" required>
+            <div *ngIf="cie.invalid && (cie.dirty || cie.touched)">
+                <div *ngIf="cie.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
+                    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                        <span class="font-medium">CIE Requerido</span> 
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</form>
+
+<!-- Formulario para agregar un medicamento -->
+<form [formGroup]="medicamentoform" novalidate autocomplete="off" class="content_user">
+    <label for="title">Lista de Medicamentos</label>
+    <div>
+        <div class="grid gap-2 md:grid-cols-2">
+            <div>
+                <input formControlName="nombreM" [ngClass]="{'loading':isLoading}" [spellcheck]="false"  (input)="onSearchInputChange($event)"  [(ngModel)]="src"  type="text" id="nombre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Paracetamol 500mg" required> 
+                <div *ngIf="nombreM.invalid && (nombreM.dirty || nombreM.touched)">
+                    <div *ngIf="nombreM.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
+                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <span class="font-medium">Medicamento Requerido</span> 
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="searchStarted" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <ul>
+                        <li *ngFor="let item of data$">
+                            <a (click)="select(item)" class="cursor-pointer">
+                                {{item.str_nombre_comercial}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <input formControlName="tipoM"  type="text" id="tipoM" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Capsulas, Jarabe, Polvo..." required>
+                <div *ngIf="tipoM.invalid && (tipoM.dirty || tipoM.touched)">
+                    <div *ngIf="tipoM.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
+                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <span class="font-medium">Tipo Requerido</span> 
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <div>
+                <input formControlName="cantidadM" type="text" id="cantidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cantidad" required> 
+                <div *ngIf="cantidadM.invalid && (cantidadM.dirty || cantidadM.touched)">
+                    <div *ngIf="cantidadM.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
+                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <span class="font-medium">Cantidad Requerida</span> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <input formControlName="dosisM"  type="text" id="dosis" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Dosis" required>
+                <div *ngIf="dosisM.invalid && (dosisM.dirty || dosisM.touched)">
+                    <div *ngIf="dosisM.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
+                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <span class="font-medium">Dosis Requerida</span> 
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+        <div class="mt-1">
+            <input formControlName="indicacionesM"  type="text" id="indicaciones" class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Indicaciones" required>
+            <div *ngIf="indicacionesM.invalid && (indicacionesM.dirty || indicacionesM.touched)">
+                <div *ngIf="indicacionesM.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
+                    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                        <span class="font-medium">Indicacion Requerida</span> 
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <button (click)="addMedicamento()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-2 p-1">
+            <span class="material-symbols-outlined">
+                add
+                </span>
+            Añadir Medicamento
+        </button>
+
+    </div>
+    <div class="relative overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg" style="max-height: 200px;">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
+                <tr >
+                    <th scope="col" class="px-6 py-3 w-1/6">
+                        Medicamento
+                    </th>
+                    <th scope="col" class="px-6 py-3 w-1/6">
+                        Cantidad
+                    </th>
+                    <th scope="col" class="px-6 py-3 w-1/6">
+                        Tipo
+                    </th>
+                    <th scope="col" class="px-6 py-3 w-1/6">
+                        Dosis
+                    </th>
+                    <th scope="col" class="px-6 py-3 w-1/6">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let med of medicamento; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                    <th scope="row" class="px-4 py-2 font-medium text-gray-900 dark:text-white  break-words">
+                        {{ med.nombre}}
+                    </th>
+                    <td class="px-4 py-2">
+                        {{ med.cantidad }}
+                    </td>
+                    <td class="px-4 py-2">
+                        {{ med.tipo }}
+                    </td>
+                    <td class="px-4 py-2">
+                        {{ med.dosis }}
+                    </td>
+                    <td class="px-6 py-2 flex justify-center">
+                        <button (click)="editarMedicamento(med)" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-8000">
+                            <svg class="flex-shrink-0 w-5 h-5 text-whitedark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
+                              </svg>
+                        </button>
+                        <button (click)="eliminarMedicamento(i)" type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                            <svg class="w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M8.6 2.6A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4c0-.5.2-1 .6-1.4ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
+                              </svg>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="flex justify-center">
+        <button (click)="editarReceta()"  class="w-64 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-bold rounded-lg text-sm px-8 py-2.5 text-center mr-2 mb-2">Actualizar receta</button>
+    </div>
+</form>
+
+
+
+

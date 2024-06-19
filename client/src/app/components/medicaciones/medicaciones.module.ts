@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ListMedicacionesComponent } from "./list-medicaciones/list-medicaciones.component";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AddMedicacionesComponent } from "./modals/add-medicaciones/add-medicaciones.component";
 import { UpdateMedicacionesComponent } from "./modals/update-medicaciones/update-medicaciones.component";
 import { DashboardModule } from "src/app/shared/dashboard.module";
@@ -11,7 +11,8 @@ import { DashboardModule } from "src/app/shared/dashboard.module";
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        DashboardModule
+        DashboardModule,
+        FormsModule
     ],
     exports: [AddMedicacionesComponent, UpdateMedicacionesComponent, ListMedicacionesComponent]
 })

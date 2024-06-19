@@ -1,11 +1,46 @@
 import { sequelize } from "../database/database.js";
 import { Medicaciones } from "../models/Medicaciones.js";
+import { paginarDatosExtras } from "../utils/paginacionData.utils.js";
+
 
 //RECIBIR TODOS LOS MEDICAMENTOS
 export const getMedicaciones = async (req, res) => {
     try {
+        const paginationData = req.query;
+
+        if(paginationData.page === "undefined"){
+            const { datos, total } = await paginarDatosExtras(1, 10, Medicaciones, '', '');
+            return res.json({
+                status: true,
+                message: "Medicamentos obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
         const medicamentos = await Medicaciones.findAll();
-        res.json(medicamentos);
+
+        
+        if(medicamentos.length === 0 || !medicamentos){
+            return res.json({
+                status: false,
+                message: "No se encontraron medicamentos"
+            });
+        }else {
+            const { datos, total } = await paginarDatosExtras(
+                paginationData.page,
+                paginationData.size,
+                Medicaciones,
+                paginationData.parameter,
+                paginationData.data
+            );
+
+            return res.json({
+                status: true,
+                message: "Medicamentos obtenidas correctamente",
+                body: datos,
+                total: total
+            });
+        }
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -22,7 +57,7 @@ export const getMedicacion= async (req, res) => {
         });
 
         if (medicamento.length === 0) return res.status(404).json({ message: "No se ha encontrado el medicamento" });
-        res.json(medicamento)
+        res.json(medicamento);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -32,7 +67,7 @@ export const getMedicacion= async (req, res) => {
 export const getMedicacionByName= async (req, res) => {
     try {
         const { nombre } = req.query;
-        const query = `SELECT int_id_medicacion, str_nombre_comercial FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%')`;
+        const query = `SELECT int_id_medicacion, str_nombre_comercial, str_forma_farmaceutica, float_precio FROM ges_recetas.medicaciones WHERE LOWER(str_nombre_comercial) LIKE LOWER('${nombre}%') AND bln_vigencia = true ORDER BY str_nombre_comercial ASC LIMIT 4;`;
 
         const medicamento = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT
@@ -52,11 +87,14 @@ export const getMedicacionByName= async (req, res) => {
 
 //CREAR UN MEDICAMENTO
 export const createMedicacion = async (req, res) => {
-    const { nombre_comercial, nombre_generico} = req.body;
+    const { nombre_comercial, tipo, codigo_registro, stock, precio} = req.body;
     try {
         const newMedicamento = await Medicaciones.create({
+            str_codigo_registro: codigo_registro,
             str_nombre_comercial: nombre_comercial,
-            str_nombre_generico: nombre_generico,
+            str_forma_farmaceutica: tipo,
+            int_stock: stock,
+            float_precio: precio,
         });
         res.json({ 
             message: "Se ha creado un nuevo medicamento",
@@ -71,7 +109,7 @@ export const createMedicacion = async (req, res) => {
 //ACTUALIZAR UN MEDICAMENTO
 export const updateMedicacion= async (req, res) => {
     const { id_medicacion } = req.params;
-    const { nombre_comercial, nombre_generico } = req.body;
+    const { nombre_comercial, tipo, stock, precio} = req.body;
     try {
         const medicamento = await Medicaciones.findOne({
             where: {
@@ -84,7 +122,9 @@ export const updateMedicacion= async (req, res) => {
         const updateMedicamento = await Medicaciones.update(
             {
                 str_nombre_comercial: nombre_comercial,
-                str_nombre_generico: nombre_generico,
+                str_forma_farmaceutica: tipo,
+                int_stock: stock,
+                float_precio: precio,
             },
             {
                 where: {
@@ -103,17 +143,45 @@ export const updateMedicacion= async (req, res) => {
     }
 }
 
-//ELIMINAR UN MEDICAMENTO
-export const deleteMedicacion = async (req, res) => {
-    const { id_medicacion } = req.params;
+//DESACTIVAR MEDICAMENTO
+export const deleteMedicacion = async(req,res) => {
+    const {id_medicacion} = req.params;   
     try {
-        const deleteRowCount = await Medicaciones.destroy({
+        const updateMedicamento = await Medicaciones.findOne({
             where: {
-                int_id_medicamento: id_medicacion,
+                int_id_medicacion: id_medicacion,
             },
         });
-        res.json({ message: "Se ha eliminado el medicamento"});
+        
+        updateMedicamento.bln_vigencia= false;
+        await updateMedicamento.save();
+        res.json({
+            status: "success",
+            data: updateMedicamento,
+        });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message});
     }
-}
+};
+
+
+//ACTIVAR MEDICAMENTO
+export const activarMedicacion = async(req,res) => {
+    const {id_medicacion} = req.params;   
+    try {
+        const updateMedicamento = await Medicaciones.findOne({
+            where: {
+                int_id_medicacion: id_medicacion,
+            },
+        });
+        
+        updateMedicamento.bln_vigencia= true;
+        await updateMedicamento.save();
+        res.json({
+            status: "success",
+            data: updateMedicamento,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message});
+    }
+};

@@ -1,44 +1,52 @@
 import { Medicos } from "../models/Medicos.js";
 import { sequelize } from "../database/database.js";
+import { paginarDatos } from "../utils/paginacion.utils.js";
+import { Usuarios } from "../models/Usuarios.js";
 
 
 //RECIBIR TODOS LOS MEDICOS
 export const getMedicos = async (req, res) => {
     try {
-        const query = `
-        SELECT * FROM ges_recetas.listarMedicos();
-        `;
+        const paginationData = req.query;
 
-        const medicos = await sequelize.query(query, {
-        type: sequelize.QueryTypes.SELECT
-    });
+        if (paginationData.page === "undefined" || isNaN(paginationData.page)) {
+            paginationData.page = 1;
+            const { datos, total } = await paginarDatos(1, 10, Usuarios,'', '');
+            return res.json({
+                status: true,
+                message: "Usuarios obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
 
-        res.json(medicos);
+        const medicos = await sequelize.query('SELECT * FROM obtener_medicos()', { type: sequelize.QueryTypes.SELECT });
+
+        if (medicos.length === 0 || !result) {
+            return res.json({
+                status: false,
+                message: "No se encontraron usuarios"
+            });
+        } else {
+            const { datos, total } = await paginarDatos(
+                paginationData.page,
+                paginationData.size,
+                medicos, // Usar directamente el resultado de la consulta
+                paginationData.parameter,
+                paginationData.data
+            );
+            return res.json({
+                status: true,
+                message: "Usuarios obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 };
 
-//RECIBIR UN MEDICO
-export const getMedico = async (req, res) => {
-    try {
-        const {cedula} = req.params;
-        const query = `
-        SELECT * FROM ges_recetas.listarMedico(:cedula);
-        `;
-
-        const medico = await sequelize.query(query, {
-        type: sequelize.QueryTypes.SELECT,
-        replacements: { cedula } 
-    });
-
-    if(medico.length === 0) return res.status(404).json({ message: "No se ha encontrado el Médico"});
-
-        res.json(medico);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
 
 // CREAR UN MEDICO
 export const createMedico = async (id_usuario, transaction, req) => {

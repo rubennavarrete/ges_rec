@@ -61,6 +61,7 @@ export const Usuarios = sequelize.define(
         bln_estado: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: true,
         },
 
         str_token: {
@@ -69,6 +70,12 @@ export const Usuarios = sequelize.define(
         },
 
         dt_fecha_creacion: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW,
+        },
+
+        dt_fecha_actualizacion: {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: DataTypes.NOW,

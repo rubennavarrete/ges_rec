@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { MedicacionResponse } from 'src/app/core/models/medicacion';
 import { AddMedicacionesService } from 'src/app/core/services/add-medicaciones.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,20 +13,36 @@ import Swal from 'sweetalert2';
 })
 export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
 
-  get nombre_generico() {
-    return this.editFormMed.controls['nombre_generico'];
-  }
-
   get nombre_comercial() {
     return this.editFormMed.controls['nombre_comercial'];
   }
+  get tipo() {
+    return this.editFormMed.controls['tipo'];
+  }
+  get codigo_registro() {
+    return this.editFormMed.controls['codigo_registro'];
+  }
+
+  get stock() {
+    return this.editFormMed.controls['stock'];
+  }
+
+  get precio() {
+    return this.editFormMed.controls['precio'];
+  }
+
 
   editFormMed: FormGroup;
   UserError: string = '';
-  constructor(private fb:FormBuilder, public srvMed:AddMedicacionesService) {
+
+  constructor(private fb:FormBuilder, public srvMed:AddMedicacionesService, private srvModal: ModalsService) {
     this.editFormMed = this.fb.group({
-      str_nombre_comercial: ['', Validators.required],
-      str_nombre_generico: ['', Validators.required],
+      id_medicacion: [0],
+      codigo_registro: ['', Validators.required],
+      nombre_comercial: ['', Validators.required],
+      tipo: ['', Validators.required],
+      stock: ['', Validators.required],
+      precio: ['', Validators.required]
     });
   }
   private destroy$ = new Subject<any>();
@@ -72,8 +89,8 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
             },
             complete: () => {
               this.srvMed.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.editFormMed.reset();
-              
 
             }
           });
@@ -93,10 +110,15 @@ export class UpdateMedicacionesComponent implements OnDestroy, OnInit {
     ).subscribe({
       next: (data) => {
         this.editFormMed = this.fb.group({
-          id_medicacion: [data.int_id_medicacion],
+          id_medicacion: [data.int_id_medicacion, Validators.required],
           nombre_comercial: [data.str_nombre_comercial, Validators.required],
-          nombre_generico: [data.str_nombre_generico, Validators.required],
+          tipo: [data.str_forma_farmaceutica, Validators.required],
+          codigo_registro: [data.str_cod_registro, Validators.required],
+          stock: [data.int_stock, Validators.required],
+          precio: [data.float_precio, Validators.required]
         });
+        console.log('LLEGUE BIEN',data);
+        console.log('ME LLENE?',this.editFormMed);
       },
       error: (err) => {
         console.log(err);

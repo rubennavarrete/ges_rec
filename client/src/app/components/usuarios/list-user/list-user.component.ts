@@ -1,8 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AddUserService } from '../../../core/services/add-user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { EditUser } from 'src/app/core/models/user';
 import { PaginacionService } from 'src/app/core/services/paginacion.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
+import { initFlowbite } from 'flowbite';
+import Swal from 'sweetalert2';
 
 
 
@@ -29,51 +32,39 @@ export class ListUserComponent implements OnInit,  OnDestroy {
   currentPage = 1;
   metadata: any;
   mapFiltersToRequest: any = {};
-  
- 
- 
-  cedulaSeleccionada: string = '';
-  
-  
-  showWindow1: boolean = true;
-  showWindow2: boolean = false;
-  showWindow3: boolean = false;
-  dataUser: any;
+
+  dataUser: any[] = [];
   
 
   private destroy$ = new Subject<any>();
+
   constructor(public srvUser: AddUserService,
-    public srvPaginacion: PaginacionService) { }
-  
-  toggleWindows() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow2 = !this.showWindow2;
-  }
-  toggleWindows2() {
-    this.showWindow1 = !this.showWindow1;
-    this.showWindow3 = !this.showWindow3;
-  }
+  public srvPaginacion: PaginacionService,
+  public srvModals: ModalsService) { }
+
+
   ngOnInit(): void { 
+    initFlowbite();
     this.pasarPagina(1)
     this.srvUser.SeleccionarConfirmAdd$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
         if(data){
-          this.showWindow1 = data;
-          this.getUsuarios(); 
-          this.showWindow2 = !data; 
-          this.showWindow3 = !data;
+          this.getMedicos({size: 10, page: 1, parameter: '', data: 0});
         }
       }
     });
 
-    // this.getUsuarios();
+  }
 
+  imputModal(title: string, name: string) {
+    this.srvModals.setFormModal({ title, name });
+    this.srvModals.openModal();
   }
   
-  getUsuarios() {
-    this.srvUser.getUsuarios(this.mapFiltersToRequest)
+  getMedicos(usuario: any) {
+    this.srvUser.getMedicos(usuario)
     .pipe(
       takeUntil(this.destroy$)
     )
@@ -91,11 +82,51 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     });
   }
 
+@ViewChild('dropdownActionButton', { static: false}) dropdownActionButton: ElementRef | undefined;
+
+changeUser(event: any) {
+  this.mapFiltersToRequest.data = event.target.value;
+  this.mapFiltersToRequest.parameter = 'str_cedula';
+  this.getMedicos(this.mapFiltersToRequest);
+}
+
+changeEstadoA() {
+  this.mapFiltersToRequest.data = 'true';
+  this.mapFiltersToRequest.parameter = 'bln_estado'; // O el nombre correcto del parámetro en tu backend
+  this.getMedicos(this.mapFiltersToRequest);
+  if (this.dropdownActionButton) {
+    this.dropdownActionButton.nativeElement.innerText = 'Estado: Activo';
+  }
+}
+changeEstadoI() {
+  this.mapFiltersToRequest.data = 'false';
+  this.mapFiltersToRequest.parameter = 'bln_estado'; // O el nombre correcto del parámetro en tu backend
+  this.getMedicos(this.mapFiltersToRequest);
+  if (this.dropdownActionButton) {
+    this.dropdownActionButton.nativeElement.innerText = 'Estado: Inactivo';
+  }
+}
+
+limpiarFiltro() {
+  this.mapFiltersToRequest.data = 'all';
+  this.mapFiltersToRequest.parameter = 'bln_estado'; // O el nombre correcto del parámetro en tu backend
+  this.getMedicos(this.mapFiltersToRequest);
+  if (this.dropdownActionButton) {
+    this.dropdownActionButton.nativeElement.innerText = 'Estado: Todos';
+     // Desmarcar los radio buttons
+     const radioActivo = document.getElementById('default-radio-4') as HTMLInputElement;
+     const radioInactivo = document.getElementById('default-radio-5') as HTMLInputElement;
+ 
+     if (radioActivo && radioInactivo) {
+       radioActivo.checked = false;
+       radioInactivo.checked = false;
+     }
+  }
+}
 
 
   editarUsuario(cedula: string): void {
-    this.cedulaSeleccionada = cedula;
-    this.srvUser.getUsuario(this.cedulaSeleccionada)
+    this.srvUser.getUsuario(cedula)
     .pipe(
       takeUntil(this.destroy$)
     )
@@ -110,6 +141,113 @@ export class ListUserComponent implements OnInit,  OnDestroy {
     });
   }
 
+  eliminarUsuario(cedula: string): void {
+    Swal.fire({
+      title: '¿Está seguro de eliminar el usuario?',
+      text: 'No podrá recuperar los datos del usuario',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'No, cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Espere un momento',
+          text: 'Estamos eliminando el usuario',
+          icon: 'info',
+          allowOutsideClick: false
+        });
+        this.srvUser.deleteUsuario(cedula).pipe(
+          takeUntil(this.destroy$)
+        ).subscribe({
+          next: (data: any) => {
+            if(data.status == "success"){
+              Swal.close();
+              Swal.fire({
+                title: 'Usuario eliminado',
+                text: 'El usuario se ha eliminado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }else{
+              Swal.close();
+              Swal.fire({
+                title: 'Error',
+                text: 'El usuario no se ha eliminado correctamente',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+          complete: () => {
+            this.changeEstadoA();
+            console.log('complete');
+          }
+        });
+      } else if (result.isDenied) {
+        Swal.fire('Los cambios no se han guardado', '', 'info');
+      }
+    });
+  }
+
+  activarUsuario(cedula: string): void {
+    Swal.fire({
+      title: '¿Está seguro de activar el usuario?',
+      text: 'El usuario se activará correctamente',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, activar',
+      cancelButtonText: 'No, cancelar',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Espere un momento',
+          text: 'Estamos activando el usuario',
+          icon: 'info',
+          allowOutsideClick: false
+        });
+        this.srvUser.activarUsuario(cedula).pipe(
+          takeUntil(this.destroy$)
+        ).subscribe({
+          next: (data: any) => {
+            if(data.status == "success"){
+              Swal.close();
+              Swal.fire({
+                title: 'Usuario activado',
+                text: 'El usuario se ha activado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              });
+            }else{
+              Swal.close();
+              Swal.fire({
+                title: 'Error',
+                text: 'El usuario no se ha activado correctamente',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+              });
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+          complete: () => {
+            this.changeEstadoA();
+            console.log('complete');
+          }
+        });
+      } else if (result.isDenied) {
+        Swal.fire('Los cambios no se han guardado', '', 'info');
+      }
+    });
+  }
 
 
   dataPagina() {
@@ -121,13 +259,15 @@ export class ListUserComponent implements OnInit,  OnDestroy {
 
   pasarPagina(page: number) {
     this.mapFiltersToRequest = { size: 10, page, parameter: '', data: 0  };
-    // console.log('mapFiltersToRequest', this.mapFiltersToRequest);
-    this.getUsuarios();
+/*     console.log('mapFiltersToRequest', this.mapFiltersToRequest);*/ 
+    this.getMedicos(this.mapFiltersToRequest);
   }
-
 
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.unsubscribe();
   }
+
+  
+  
 }

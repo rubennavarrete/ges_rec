@@ -18,7 +18,7 @@
                 <form autocomplete="off" [formGroup]="loginForm" novalidate class="space-y-4 md:space-y-6" action="#">
                     <p class="text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400">{{LoginError}}</p>
                     <div>
-                        <label for="cedula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Cédula</label>
+                        <label for="cedula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Cédula o RUC</label>
                         <input type="text" formControlName="cedula"  name="cedula" id="cedula" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0000000000" required="">
                         <div *ngIf="cedula.invalid && (cedula.dirty || cedula.touched)">
                             <div *ngIf="cedula.errors?.['required']" class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -37,28 +37,22 @@
                             </div>
                         </div> 
                     </div>
-                    <div>
+                    <div >
                         <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Contraseña</label>
-                        <input type="password" formControlName="password"  name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
-                        <div *ngIf="password.invalid && (password.dirty || password.touched)">
-                            <div *ngIf="password.errors?.['required']" class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
-                                <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                                <span class="sr-only">Info</span>
-                                <div>
-                                    <span class="font-medium">Contraseña Requerida</span> 
-                                </div>
-                            </div>
-                        </div>
+                        <input type="{{ showPassword ? 'text' : 'password' }}" formControlName="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
                     </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-start">
-                            <!-- <div class="flex items-center h-5">
-                                <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required="">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="remember" class="text-gray-500 dark:text-gray-300">Remember me</label>
-                            </div> -->
-                        </div>
+                    <div class="flex items-center justify-between relative">
+                        <button type="button" (click)="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer ">
+                            <label class="text-sm font-light text-gray-900 dark:text-black mr-2">Mostrar Contraseña</label>
+                            <span *ngIf="showPassword" aria-hidden="true" class="material-symbols-outlined">
+                                toggle_on
+                            </span>
+                            <span *ngIf="!showPassword" aria-hidden="true"  class="material-symbols-outlined">
+                                toggle_off
+                            </span>
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between relative">
                         <a href="/reset" class="text-sm font-medium text-primary-600 hover:underline text-color-reset">¿Olvidaste tu password?</a>
                     </div>
                     <button (click)="login()" class="w-full text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-bold rounded-lg text-sm px-8 py-2.5 text-center mr-2 mb-2" >INGRESAR</button>

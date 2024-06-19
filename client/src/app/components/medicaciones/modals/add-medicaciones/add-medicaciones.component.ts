@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { MedicacionResponse } from 'src/app/core/models/medicacion';
 import { AddMedicacionesService } from 'src/app/core/services/add-medicaciones.service';
+import { ModalsService } from 'src/app/core/services/modals.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,19 +18,34 @@ export class AddMedicacionesComponent implements OnDestroy, OnInit {
   MedError: string = '';
   medicamentoform: FormGroup;
 
-  get nombre_generico() {
-    return this.medicamentoform.controls['nombre_generico'];
+  get tipo() {
+    return this.medicamentoform.controls['tipo'];
+  }
+  get codigo_registro() {
+    return this.medicamentoform.controls['codigo_registro'];
   }
 
   get nombre_comercial() {
     return this.medicamentoform.controls['nombre_comercial'];
   }
 
+  get stock() {
+    return this.medicamentoform.controls['stock'];
+  }
 
-  constructor(private fb: FormBuilder, public srvMed:AddMedicacionesService ) {
+  get precio() {
+    return this.medicamentoform.controls['precio'];
+  }
+
+
+  constructor(private fb: FormBuilder, public srvMed:AddMedicacionesService, private srvModal: ModalsService ) {
     this.medicamentoform = this.fb.group({
-      nombre_generico: ['', Validators.required],
+      codigo_registro: ['', Validators.required],
       nombre_comercial: ['', Validators.required],
+      tipo: ['', Validators.required],
+      stock: ['', Validators.required],
+      precio: ['', Validators.required]
+
     });
   }
   
@@ -76,6 +92,7 @@ export class AddMedicacionesComponent implements OnDestroy, OnInit {
             },
             complete: () => {
               this.srvMed.setConfirmAdd(true);
+              this.srvModal.closeModal();
               this.medicamentoform.reset();
               // this.location.back();
             }

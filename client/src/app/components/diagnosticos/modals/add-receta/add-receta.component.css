@@ -1,0 +1,23 @@
+.container {
+    position: relative; /* Hace que el contenedor sea un marco de referencia para el posicionamiento absoluto del contenedor flotante */
+}
+
+.floating-container {
+    position: absolute; /* Hace que el contenedor flotante se posicione absolutamente con respecto al contenedor */
+    z-index: 999; /* Asegura que esté por encima del resto del contenido */
+    background-color: white; /* Puedes ajustar el color de fondo según sea necesario */
+    /* Ajusta la posición y el tamaño según sea necesario */
+    top: calc(100% + 5px); /* Coloca el contenedor justo debajo del input de búsqueda */
+    left: 0;
+    width: 100%;
+    /* Puedes agregar otros estilos como margen, sombra, etc. */
+}
+
+.text-sm {
+    font-size: 0.8rem; /* Este valor es solo un ejemplo. Ajusta el tamaño según tus necesidades */
+}
+
+
+#table {
+    font-size: 0.7rem;
+}

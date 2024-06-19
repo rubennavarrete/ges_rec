@@ -5,17 +5,18 @@ import { createMedico } from "./medicos.controller.js";
 import { createPaciente } from "./pacientes.controller.js";
 import { paginarDatos } from "../utils/paginacion.utils.js";
 import bcrypt from "bcrypt";
+import { sentCredenciales } from "./credenciales.controller.js";
 
 
 
-//RECIBIR TODOS LOS USUARIOS
-export const getUsuarios = async (req, res) => {
-    //console.log(req.query);
-    try{
+//RECIBIR TODOS LOS MEDICOS
+export const getMedicos = async (req, res) => {
+    try {
         const paginationData = req.query;
 
-        if(paginationData.page === "undefined"){
-            const { datos, total } = await paginarDatos(1, 10, Usuarios, '', '');
+        if (paginationData.page === "undefined" || isNaN(paginationData.page)) {
+            paginationData.page = 1;
+            const { datos, total } = await paginarDatos(1, 10,'', '');
             return res.json({
                 status: true,
                 message: "Usuarios obtenidos correctamente",
@@ -24,21 +25,21 @@ export const getUsuarios = async (req, res) => {
             });
         }
 
-        const usuarios = await Usuarios.findAll();
-        if(usuarios.length === 0 || !usuarios){
+        const result = await sequelize.query('SELECT * FROM obtener_medicos();', { type: sequelize.QueryTypes.SELECT });
+
+        if (result.length === 0 || !result) {
             return res.json({
                 status: false,
                 message: "No se encontraron usuarios"
             });
-        }else {
+        } else {
             const { datos, total } = await paginarDatos(
                 paginationData.page,
                 paginationData.size,
-                Usuarios,
+                result, // Usar directamente el resultado de la consulta
                 paginationData.parameter,
                 paginationData.data
             );
-
             return res.json({
                 status: true,
                 message: "Usuarios obtenidos correctamente",
@@ -50,6 +51,52 @@ export const getUsuarios = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+//RECIBIR TODOS LOS PACIENTES
+export const getPacientes = async (req, res) => {
+    try {
+        const paginationData = req.query;
+
+        if (paginationData.page === "undefined" || isNaN(paginationData.page)) {
+            paginationData.page = 1;
+            const { datos, total } = await paginarDatos(1, 10,'', '');
+            return res.json({
+                status: true,
+                message: "Usuarios obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
+
+        const result = await sequelize.query('SELECT * FROM obtener_pacientes();', { type: sequelize.QueryTypes.SELECT });
+
+        if (result.length === 0 || !result) {
+            return res.json({
+                status: false,
+                message: "No se encontraron usuarios"
+            });
+        } else {
+            const { datos, total } = await paginarDatos(
+                paginationData.page,
+                paginationData.size,
+                result, // Usar directamente el resultado de la consulta
+                paginationData.parameter,
+                paginationData.data
+            );
+            return res.json({
+                status: true,
+                message: "Usuarios obtenidos correctamente",
+                body: datos,
+                total: total
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+
+
 
 //RECIBIR UN USUARIO
 export const getUsuario = async(req, res) =>{
@@ -67,6 +114,28 @@ export const getUsuario = async(req, res) =>{
         return res.status(500).json({ message: error.message});
     }
 };
+
+//RECIBIR UN USUARIO POR CEDULA
+export const getPacienteByName= async (req, res) => {
+    try {
+        const { cedula } = req.query;
+        const query = `SELECT int_id_usuario, str_nombres, str_apellidos FROM ges_recetas.usuarios WHERE LOWER(str_cedula) LIKE LOWER('${cedula}%') AND bln_estado = true ORDER BY str_cedula ASC LIMIT 4;`;
+
+        const usuario = await sequelize.query(query, {
+            type: sequelize.QueryTypes.SELECT
+        });
+        if (usuario.length === 0) return res.json({status: "error", message: "No se ha encontrado el paciente"});
+        
+        return res.json({
+            data: usuario,
+            status: "success",
+            message: "Se ha encontrado el paciente"
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 
 //CREAR UN USUARIO Y PERFIL
 export const createUsuario = async (req, res) => {
@@ -98,7 +167,6 @@ export const createUsuario = async (req, res) => {
                     txt_direccion: direccion,
                     str_telefono: telefono,
                     str_celular: celular,
-                    bln_estado: true,
                 },
                 { transaction: t }
             );
@@ -112,6 +180,10 @@ export const createUsuario = async (req, res) => {
             } else if (rol === 4) {
                 await createPaciente(newUsuario.int_id_usuario, t, req);
             }
+
+            await sentCredenciales(req);
+
+            
             return  res.json(
                 {
                     status: "success",
@@ -122,6 +194,8 @@ export const createUsuario = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
+
+    
 };
 
 
@@ -129,24 +203,26 @@ export const createUsuario = async (req, res) => {
 //ACTUALIZAR UN USUARIO
 export const updateUsuario = async(req,res) => {
     const {cedula} = req.params;   
-    const { password, nombres, apellidos, fnac, genero, correo, direccion, telefono, celular} = req.body;
+    const { password, nombres, apellidos, fecha_nac, genero, correo, direccion, telefono, celular} = req.body;
     try {
         const updateUsuario = await Usuarios.findOne({
             where: {
                 str_cedula: cedula,
             },
         });
-        const hashedPasss = await bcrypt.hash(password, 10);
-        updateUsuario.str_password = password;
+        
+        if(password){
+            const hashedPasss = await bcrypt.hash(password, 10);
+            updateUsuario.str_password = hashedPasss;
+        }
         updateUsuario.str_nombres = nombres;
         updateUsuario.str_apellidos = apellidos;
-        updateUsuario.dt_fecha_nac = fnac;
+        updateUsuario.dt_fecha_nac = fecha_nac;
         updateUsuario.bln_genero = genero;
         updateUsuario.str_correo = correo;
         updateUsuario.txt_direccion = direccion;
         updateUsuario.str_telefono = telefono;
         updateUsuario.str_celular = celular;
-
         await updateUsuario.save();
         res.json({
             status: "success",
@@ -159,19 +235,44 @@ export const updateUsuario = async(req,res) => {
 };
 
 //ELIMINAR UN USUARIO
-export const deleteUsuario = async (req, res) => {
+export const deleteUsuario = async(req,res) => {
+    const {cedula} = req.params;   
     try {
-        const {cedula} = req.params;
-        const deleteRowCount = await Usuarios.destroy({
+        const updateUsuario = await Usuarios.findOne({
             where: {
                 str_cedula: cedula,
             },
         });
+        
+        updateUsuario.bln_estado= false;
+        await updateUsuario.save();
         res.json({
-            message: "Usuario eliminado",
-            count: deleteRowCount,
+            status: "success",
+            data: updateUsuario,
         });
     } catch (error) {
         return res.status(500).json({ message: error.message});
     }
-}
+};
+
+
+//ACTIVAR USUARIO
+export const activarUsuario = async(req,res) => {
+    const {cedula} = req.params;   
+    try {
+        const updateUsuario = await Usuarios.findOne({
+            where: {
+                str_cedula: cedula,
+            },
+        });
+        
+        updateUsuario.bln_estado= true;
+        await updateUsuario.save();
+        res.json({
+            status: "success",
+            data: updateUsuario,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message});
+    }
+};

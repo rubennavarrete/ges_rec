@@ -1,55 +1,84 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FarmaciasComponent } from './farmacias/farmacias.component';
-import { MedicosComponent } from './medicos/medicos.component';
-import { UsuariosComponent } from './usuarios/usuarios.component';
 import { RouterModule, Routes } from '@angular/router';
-import { MedicacionesComponent } from './medicaciones/medicaciones.component';
+import { SessionGuard } from 'src/app/core/guards/session.guard';
+
+
 
 const routes: Routes = [
   {
-    path:'',
+    path: '',
     children: [
       {
-        path:'medicos',
+        path: 'dashboard',
         loadChildren: () =>
-        import('./medicos/medicos.module').then(
-          (m) => m.MedicosModule
-        )
-      
+          import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+          data: {
+            role: 'Administrador'
+          },
       },
       {
-        path:'usuarios',
+        path: 'pacientes',
         loadChildren: () =>
-        import('./usuarios/usuarios.module').then(
-          (m) => m.UsuariosModule
-        )
+          import('./medicos/medicos.module').then((m) => m.MedicosModule),
+          data: {
+            role: 'Administrador'
+          },
       },
       {
-        path:'farmacias',
+        path: 'medicos',
         loadChildren: () =>
-        import('./farmacias/farmacias.module').then(
-          (m) => m.FarmaciasModule
-        )
+          import('./usuarios/usuarios.module').then((m) => m.UsuariosModule),
+          data: {
+            role: 'Administrador'
+          },
+      },
+      {
+        path: 'farmacias',
+        loadChildren: () =>
+          import('./farmacias/farmacias.module').then((m) => m.FarmaciasModule),
+          data: {
+            role: 'Administrador'
+          },
       },
       {
         path: 'medicaciones',
         loadChildren: () =>
-        import('./medicaciones/medicaciones.module').then(
-          (m) => m.MedicacionesModule
-          )
-      }
-    ]
-  }
-]
+          import('./medicaciones/medicaciones.module').then(
+            (m) => m.MedicacionesModule
+          ),
+          data: {
+            role: 'Administrador'
+          },
+          canActivate: [SessionGuard]
+      },
+      {
+        path: 'diagnosticos',
+        loadChildren: () =>
+          import('./diagnosticos/diagnosticos.module').then(
+            (m) => m.DiagnosticosModule
+          ),
+          data: {
+            role: 'Administrador'
+          }
+      },
+      {
+        path: 'recetas',
+        loadChildren: () =>
+          import('./recetas/recetas.module').then(
+            (m) => m.RecetasModule
+          ),
+          data: {
+            role: 'Administrador'
+          },
+      },
+    ],
+  },
+];
+
 
 @NgModule({
   declarations: [
-    // FarmaciasComponent,
-    // MedicosComponent,
-    // UsuariosComponent
-  
-    // MedicacionesComponent
   ],
   imports: [
     CommonModule,

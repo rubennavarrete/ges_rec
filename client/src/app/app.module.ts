@@ -8,6 +8,7 @@ import { LoginService } from './core/services/login.service';
 
 //MODULES
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ModalModule } from './modal/modal.module';
 
 
 //LAYOUT
@@ -16,7 +17,12 @@ import { LoginModule } from './pages/login/login.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { CookieService } from 'ngx-cookie-service';
 import { InjectSessionInterceptor } from './core/interceptors/inject-session.interceptor';
-import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { MedicosModule } from './pages/medicos/medicos.module';
+import { PacientesModule } from './pages/pacientes/pacientes.module';
+import { FarmaciaModule } from './pages/farmacia/farmacia.module';
+import { Error404Module } from './pages/error404/error404.module';
+
+
 
 
 
@@ -25,11 +31,6 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 @NgModule({
     declarations: [
         AppComponent,
-        // HomeComponent,
-        // FarmaciasComponent,
-        // MedicosComponent,
-        // AdminModule,
-    
     ],
     providers: [
         LoginService,
@@ -51,8 +52,12 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
         ReactiveFormsModule,
         LayoutModule,
         LoginModule,
-        AdminModule
-        
+        AdminModule,
+        MedicosModule,
+        PacientesModule,
+        FarmaciaModule,
+        Error404Module,
+        ModalModule
     ]
 })
 export class AppModule { }

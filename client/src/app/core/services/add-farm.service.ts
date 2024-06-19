@@ -57,8 +57,6 @@ export class AddFarmService {
   // }
 
   getFarmacias( pagination: any) {
-    // console.log('en el servicio ->', pagination)
-    
     const params = new HttpParams()
         .set('page', pagination.page)
         .set('size', pagination.size)
@@ -82,6 +80,14 @@ export class AddFarmService {
 
   putFarmacia(dataFormFarm: Farm) {
     return this.http.put<DataFarm>(`${this.URL_API}/${dataFormFarm.ruc}`, dataFormFarm);
+  }
+
+  deleteFarmacia(ruc: string) {
+    return this.http.put(`${this.URL_API}/desactivar/${ruc}`, null);
+  }
+
+  activarFarmacia(ruc: string) {
+    return this.http.put(`${this.URL_API}/activar/${ruc}`, null);
   }
 
 }

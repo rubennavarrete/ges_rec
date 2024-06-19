@@ -2,17 +2,18 @@ import { sequelize } from "../database/database.js";
 import { Farmacias } from "../models/Farmacias.js";
 import { paginarDatos } from "../utils/paginacion.utils.js";
 import bcrypt from "bcrypt";
+import { paginarDatosExtras } from "../utils/paginacionData.utils.js";
 
 //RECIBIR TODAS LAS FARMACIAS
 export const getFarmacias = async (req, res) => {
 
-    console.log(req.query);
-
     try {
         const paginationData = req.query;
 
+        console.log(req.query);
+
         if(paginationData.page === "undefined") {
-            const { datos, total } = await paginarDatos(1, 10, Bienes, '', '');
+            const { datos, total } = await paginarDatosExtras(1, 10, Farmacias, '', '');
             return res.json({
                 status: true,
                 message:  "Farmacias obtenidas correctamente",
@@ -22,13 +23,14 @@ export const getFarmacias = async (req, res) => {
         }
 
         const farmacias = await Farmacias.findAll();
+        
         if(farmacias.length === 0 || !farmacias) {
             return res.json({
                 status: false,
                 message: "No se encontraron farmacias"
             });
         } else {
-            const { datos, total } = await paginarDatos(
+            const { datos, total } = await paginarDatosExtras(
                 paginationData.page,
                 paginationData.size,
                 Farmacias,
@@ -93,7 +95,7 @@ export const createFarmacia = async (req, res) => {
                     str_nombre_representante: nombre_representante,
                     str_celular_representante: celular_representante,
                     str_password: hashedPasss,
-                    int_id_rol: 2,
+                    int_id_rol: 3,
                 },
                 { transaction: t }
             );
@@ -113,70 +115,75 @@ export const createFarmacia = async (req, res) => {
 export const updateFarmacia = async (req, res) => {
     try {
         const {ruc} = req.params;
-        const { nombre, direccion, telefono, celular, correo, representante, celular_representante, password } = req.body;
-        const farmacia = await Farmacias.findOne({
+        const { nombre, direccion, telefono, celular, correo, nombre_representante, celular_representante, password } = req.body;
+        const updateFarmacia= await Farmacias.findOne({
             where: {
                 str_ruc: ruc,
             },
         });
 
-        if (!farmacia) {
-            return res.status(404).json({ message: 'La farmacia no existe' });
+        if(password){
+            const hashedPasss = await bcrypt.hash(password, 10);
+            updateFarmacia.str_password = hashedPasss;
         }
-
-        const hashedPasss = await bcrypt.hash(password, 10);
-        const updatedFarmacia = await Farmacias.update(
-            {
-                str_nombre_institucion: nombre,
-                txt_direccion_institucion: direccion,
-                str_telefono_institucion: telefono,
-                str_celular_institucion: celular,
-                str_correo_institucion: correo,
-                str_nombre_representante: representante,
-                str_celular_representante: celular_representante,
-                str_password: hashedPasss,
-            },
-            {
-                where: {
-                    str_ruc: ruc,
-                },
-            }
-        );
-        return res.json({
-            status:"success",
-            data: updatedFarmacia,
+        updateFarmacia.str_nombre_institucion = nombre;
+        updateFarmacia.txt_direccion_institucion = direccion;
+        updateFarmacia.str_telefono_institucion = telefono;
+        updateFarmacia.str_celular_institucion = celular;
+        updateFarmacia.str_correo_institucion = correo;
+        updateFarmacia.str_nombre_representante = nombre_representante;
+        updateFarmacia.str_celular_representante = celular_representante;
+        await updateFarmacia.save();
+        res.json({
+            status: "success",
+            data: updateFarmacia,
         });
+        
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
     
 }
 
-//ELIMINAR UNA FARMACIA
-export const deleteFarmacia = async (req, res) => {
+//DESACTIVAR FARMACIA
+export const deleteFarmacia = async(req,res) => {
+    const {ruc} = req.params;   
     try {
-        const {ruc} = req.params;
-        const farmacia = await Farmacias.findOne({
+        const updateFarmacia = await Farmacias.findOne({
             where: {
                 str_ruc: ruc,
             },
         });
-
-        if (!farmacia) {
-            return res.status(404).json({ message: 'La farmacia no existe' });
-        }
-
-        await Farmacias.destroy({
-            where: {
-                str_ruc: ruc,
-            },
-        });
-        return res.json({
-            status:"success",
-            message: "Farmacia eliminada exitosamente",
+        
+        updateFarmacia.bln_estado= false;
+        await updateFarmacia.save();
+        res.json({
+            status: "success",
+            data: updateFarmacia,
         });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message});
     }
-    
-}
+};
+
+
+//ACTIVAR FARMACIA
+export const activarFarmacia = async(req,res) => {
+    const {ruc} = req.params;   
+    try {
+        const updateFarmacia = await Farmacias.findOne({
+            where: {
+                str_ruc: ruc,
+            },
+        });
+        
+        updateFarmacia.bln_estado= true;
+        await updateFarmacia.save();
+        res.json({
+            status: "success",
+            data: updateFarmacia,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message});
+    }
+};

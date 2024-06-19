@@ -4,17 +4,18 @@ import { AddPacienteComponent } from "./modals/add-paciente/add-paciente.compone
 import { ReactiveFormsModule } from "@angular/forms";
 import { UpdatePacienteComponent } from "./modals/update-paciente/update-paciente.component";
 import { ListPacientesComponent } from "./list-pacientes/list-pacientes.component";
-import { AddRecetaComponent } from "./modals/add-receta/add-receta.component";
 import { DashboardModule } from "src/app/shared/dashboard.module";
+import { Router, RouterModule } from "@angular/router";
 
 @NgModule({
-    declarations: [AddPacienteComponent, UpdatePacienteComponent, ListPacientesComponent, AddRecetaComponent],
+    declarations: [AddPacienteComponent, UpdatePacienteComponent, ListPacientesComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        DashboardModule
+        DashboardModule,
+        RouterModule.forChild([])
     ],
-    exports: [AddPacienteComponent, UpdatePacienteComponent, ListPacientesComponent, AddRecetaComponent]
+    exports: [AddPacienteComponent, UpdatePacienteComponent, ListPacientesComponent]
 })
 
 export class MedicoModule { }

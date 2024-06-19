@@ -1,4 +1,8 @@
 .content-user{
     width: 100%;
-    padding: 30px;
+    
+}
+
+.text-sm {
+    font-size: 0.8rem; /* Este valor es solo un ejemplo. Ajusta el tamaño según tus necesidades */
 }

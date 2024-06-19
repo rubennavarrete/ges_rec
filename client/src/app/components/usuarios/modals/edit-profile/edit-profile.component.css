@@ -1,0 +1,11 @@
+.content-user{
+    width: 100%;
+    padding: 30px;
+}
+
+.content-image{
+    height: 140px;
+    display: flex;
+    justify-content: center;
+
+}

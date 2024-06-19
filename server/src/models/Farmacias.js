@@ -53,6 +53,10 @@ export const Farmacias = sequelize.define(
             type: DataTypes.STRING(100),
             allowNull: false,
         },
+        bln_estado: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
 
     },
     {

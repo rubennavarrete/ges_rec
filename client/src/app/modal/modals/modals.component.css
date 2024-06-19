@@ -1,0 +1,13 @@
+/* Estilo general para modals grandes */
+@media (min-width: 992px) {
+  .modal-lg, .modal-xl {
+    --bs-modal-width: 650px;
+  }
+}
+
+/* Estilo específico para el modal venderReceta */
+@media (min-width: 992px) {
+  .modal-vender-receta {
+    --bs-modal-width: 850px; /* Tamaño mayor al de otros modals */
+  }
+}

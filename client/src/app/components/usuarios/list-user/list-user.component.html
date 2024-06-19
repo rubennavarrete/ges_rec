@@ -1,74 +1,136 @@
 <div class="content-list">
-    <div *ngIf="showWindow1">
-        <div class="title">
-            <h4>Listado de Usuarios</h4>
-            <button (click)="toggleWindows()" type="button" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Agregar Usuario</button>
+    <div class="title">
+        <h4>Listado de Medicos</h4>
+        <button (click)="imputModal('Agregar Usuario','agregarlista')" type="button" class=" flex text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+            <svg class="flex-shrink-0 w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-2V5a1 1 0 0 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 0 0 2 0V9h2a1 1 0 1 0 0-2Z"/>
+            </svg>
+            <span class="flex-1 ms-3 whitespace-nowrap">Agregar Médico</span>
+        </button>
+    </div>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="flex tems-center justify-between flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900 py-2">
+            <div class="flex">
+                <button #dropdownActionButton data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-gray-500 bg-white border border-purple-300 focus:outline-none hover:bg-purple-100 focus:ring-4 focus:ring-purple-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-purple-800 dark:text-purple-400 dark:border-purple-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 ml-1 mr-3" type="button">
+                    <span class="sr-only">Action button</span>
+                    Estado: Todos <!-- Inicialmente se mostrará el estado por defecto -->
+                </button>
+                <!-- Dropdown menu -->
+                <div id="dropdownAction" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                    <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownActionButton">
+                        <li>
+                            <div class="flex items-center p-2 rounded hover:bg-purple-300 dark:hover:bg-gray-600">
+                            <input id="default-radio-4" type="radio" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" (change)="changeEstadoA()">
+                            <label for="default-radio-4" class="w-full p-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Activo</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="flex items-center p-2 rounded hover:bg-purple-300 dark:hover:bg-gray-600">
+                            <input id="default-radio-5" type="radio" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" (change)="changeEstadoI()">
+                            <label for="default-radio-5" class="w-full p-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Inactivo</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div> 
+                <button (click)="limpiarFiltro()" class="px-3 py-1.5">
+                    <svg class="h-6 w-6 text-gray-400"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </button>               
+            </div>     
+            <label for="table-search" class="sr-only">Search</label>
+            <div class="relative px-2">
+                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input (input)="changeUser($event)" type="text" id="table-search-users" class="px-5 block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cédula">
+            </div>
         </div>
-        
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
-                    <tr >
-                        <th scope="col" class="px-6 py-3">
-                            Cedula
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Nombres
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Apellidos
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Celular
-                        </th>
-                        <th scope="col" class="px-6 py-3">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
+                <tr >
+                    <th scope="col" class="px-6 py-3">
+                        Cedula
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Nombres
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Apellidos
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Celular
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Estado
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="dataUser.length === 0">
+                    <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-white">
+                        No hay datos disponibles.
+                    </td>
+                </tr>
+                <tr *ngFor="let item of dataUser ; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{item.str_cedula}}
+                    </th>
+                    <td class="px-6 py-2">
+                        {{item.str_nombres}}
+                    </td>
+                    <td class="px-6 py-2">
+                        {{item.str_apellidos}}
+                    </td>
+                    <td class="px-6 py-2">
+                        {{item.str_celular}}
+                    </td>
+                    <td class="px-6 py-2">
+                        <div class="flex justify-center">
+                            <span *ngIf="item.bln_estado; else inactivo" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                Activo
+                            </span>
                             
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of dataUser ; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{item.str_cedula}}
-                        </th>
-                        <td class="px-6 py-4">
-                            {{item.str_nombres}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{item.str_apellidos}}
-                        </td>
-                        <td class="px-6 py-4">
-                            {{item.str_celular}}
-                        </td>
-                        <td class="px-6 py-4">
-                            <button (click)="editarUsuario(item.str_cedula)" (click)="toggleWindows2()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Editar</button>
-                            <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <ng-template #inactivo>
+                                <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                                    <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                    Inactivo
+                                </span>
+                            </ng-template>
+                        </div>
+                    </td>
+                    <td class="px-6 py-2 flex justify-center">
+                        <button (click)="editarUsuario(item.str_cedula)" (click)="imputModal('Editar Usuario','editarListaUsuario')"  type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                            <svg class="flex-shrink-0 w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                                <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm-1.391 7.361.707-3.535a3 3 0 0 1 .82-1.533L7.929 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h4.259a2.975 2.975 0 0 1-.15-1.639ZM8.05 17.95a1 1 0 0 1-.981-1.2l.708-3.536a1 1 0 0 1 .274-.511l6.363-6.364a3.007 3.007 0 0 1 4.243 0 3.007 3.007 0 0 1 0 4.243l-6.365 6.363a1 1 0 0 1-.511.274l-3.536.708a1.07 1.07 0 0 1-.195.023Z"/>
+                                </svg>
+                        </button>
+                        <button *ngIf="item.bln_estado" (click)="eliminarUsuario(item.str_cedula)" type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                            <svg class="flex-shrink-0 w-5 h-5 text-whitedark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                                <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-6a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2Z"/>
+                            </svg>
+                        </button>
+                        <button *ngIf="!item.bln_estado" (click)="activarUsuario(item.str_cedula)" type="button" class="focus:outline-none text-white bg-green-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                            <svg class="flex-shrink-0 w-5 h-5 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                <path d="M17 9a1 1 0 0 0-1 1 6.994 6.994 0 0 1-11.89 5H7a1 1 0 0 0 0-2H2.236a1 1 0 0 0-.585.07c-.019.007-.037.011-.055.018-.018.007-.028.006-.04.014-.028.015-.044.042-.069.06A.984.984 0 0 0 1 14v5a1 1 0 1 0 2 0v-2.32A8.977 8.977 0 0 0 18 10a1 1 0 0 0-1-1ZM2 10a6.994 6.994 0 0 1 11.89-5H11a1 1 0 0 0 0 2h4.768a.992.992 0 0 0 .581-.07c.019-.007.037-.011.055-.018.018-.007.027-.006.04-.014.028-.015.044-.042.07-.06A.985.985 0 0 0 17 6V1a1 1 0 1 0-2 0v2.32A8.977 8.977 0 0 0 0 10a1 1 0 1 0 2 0Z"/>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="mt-5">
+            <app-pagination
+            (nextPage)="pasarPagina($event)"
+            ></app-pagination>
         </div>
-        
-    </div>
-    
-    <div *ngIf="showWindow2" class="content">
-        <div class="btn-regresar">
-            <button (click)="toggleWindows()" type="button" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Regresar</button>
-        </div>
-        <app-usuario></app-usuario>
-    </div>
-    <div *ngIf="showWindow3" class="content">
-        <div class="btn-regresar">
-            <button (click)="toggleWindows2()" type="button" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Regresar</button>
-        </div>
-        <app-update-user></app-update-user>
-    </div>
-    
-    <div>
-        <app-pagination
-        (nextPage)="pasarPagina($event)"
-        ></app-pagination>
-    </div>
+    </div>   
 </div>
 
 

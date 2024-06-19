@@ -1,10 +1,7 @@
-
-<form [formGroup]="userform" novalidate autocomplete="off"  class="content-user" >
-    <div class="text-center"><h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"><span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Agregar</span> Paciente</h1></div>
-        
-    <div class="grid gap-6 mb-6 md:grid-cols-2">
+<form [formGroup]="userform" novalidate autocomplete="off"  class="content-user" >    
+    <div class="grid gap-6  md:grid-cols-2">
         <div>
-            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres *</label>
+            <label for="first_name" class="block  text-sm font-medium text-gray-900 dark:text-white">Nombres *</label>
             <input formControlName="nombres" type="text" id="nombres" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required>
             <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)">
                 <div *ngIf="nombres.errors?.['required']" class="flex p-0.5 text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -17,7 +14,7 @@
             </div> 
         </div>
         <div>
-            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos *</label>
+            <label for="last_name" class="block text-sm font-medium text-gray-900 dark:text-white">Apellidos *</label>
             <input formControlName="apellidos" type="text" id="apellidos" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sevilla" required>
             <div *ngIf="apellidos.invalid && (apellidos.dirty || apellidos.touched)">
                 <div *ngIf="apellidos.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -30,7 +27,7 @@
             </div> 
         </div>
         <div>
-            <label for="company" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cédula *</label>
+            <label for="company" class="block  text-sm font-medium text-gray-900 dark:text-white">Cédula *</label>
             <input formControlName="cedula" type="text" id="cedula" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0876543210" required>
             <div *ngIf="cedula.invalid && (cedula.dirty || cedula.touched)">
                 <div *ngIf="cedula.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -40,8 +37,6 @@
                         <span class="font-medium">Cédula Requerida</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="cedula.invalid && (cedula.dirty || cedula.touched)">
                 <div *ngIf="cedula.errors?.['minlength']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -49,8 +44,6 @@
                         <span class="font-medium">Cédula debe tener 10 dígitos</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="cedula.invalid && (cedula.dirty || cedula.touched)">
                 <div *ngIf="cedula.errors?.['maxlength']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -58,8 +51,6 @@
                         <span class="font-medium">Cédula debe tener 10 dígitos</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="cedula.invalid && (cedula.dirty || cedula.touched)">
                 <div *ngIf="cedula.errors?.['pattern']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -70,11 +61,11 @@
             </div>
         </div>  
         <div>
-            <label for="company" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
+            <label for="company" class="block  text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
             <input formControlName="direccion" type="text" id="direccion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="11 de Noviembre">
         </div>  
         <div>
-            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
+            <label for="phone" class="block text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
             <input formControlName="telefono" type="tel" id="telefono" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-45-678">
             <div *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
                 <div *ngIf="telefono.errors?.['minlength']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -84,8 +75,6 @@
                         <span class="font-medium">Teléfono debe tener 7 o 9 dígitos</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
                 <div *ngIf="telefono.errors?.['maxlength']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -93,8 +82,6 @@
                         <span class="font-medium">Teléfono debe tener 7 o 9 dígitos</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
                 <div *ngIf="telefono.errors?.['pattern']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -105,7 +92,7 @@
             </div>
         </div>
         <div>
-            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular *</label>
+            <label for="phone" class="block  text-sm font-medium text-gray-900 dark:text-white">Celular *</label>
             <input formControlName="celular" type="tel" id="celular" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="0987654321"  required>
             <div *ngIf="celular.invalid && (celular.dirty || celular.touched)">
                 <div *ngIf="celular.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -115,8 +102,6 @@
                         <span class="font-medium">Celular Requerido</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="celular.invalid && (celular.dirty || celular.touched)">
                 <div *ngIf="celular.errors?.['minlength']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -124,8 +109,6 @@
                         <span class="font-medium">Celular debe tener 10 dígitos</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="celular.invalid && (celular.dirty || celular.touched)">
                 <div *ngIf="celular.errors?.['maxlength']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -133,8 +116,6 @@
                         <span class="font-medium">Celular debe tener 10 dígitos</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="celular.invalid && (celular.dirty || celular.touched)">
                 <div *ngIf="celular.errors?.['pattern']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -145,7 +126,7 @@
             </div>
         </div>
         <div>
-            <label for="website" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Género *</label>
+            <label for="website" class="block  text-sm font-medium text-gray-900 dark:text-white">Género *</label>
             <select formControlName="genero" id="genero" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                 <option  value="true">Masculino</option>
                 <option value="false">Femenino</option>
@@ -161,8 +142,8 @@
             </div>
         </div>  
         
-        <div>
-            <label for="visitors" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de nacimiento *</label>
+        <div class="mb-3">
+            <label for="visitors" class="block  text-sm font-medium text-gray-900 dark:text-white">Fecha de nacimiento *</label>
             <input formControlName="fecha_nac" type="date" id="fecha_nac" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
             <div *ngIf="fecha_nac.invalid && (fecha_nac.dirty || fecha_nac.touched)">
                 <div *ngIf="fecha_nac.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -172,8 +153,6 @@
                         <span class="font-medium">Fecha de nacimiento Requerida</span> 
                     </div>
                 </div>
-            </div>
-            <div *ngIf="fecha_nac.invalid && (fecha_nac.dirty || fecha_nac.touched)">
                 <div *ngIf="fecha_nac.errors?.['fechaMaximaActual']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                     <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                     <span class="sr-only">Info</span>
@@ -184,8 +163,8 @@
             </div>
         </div>
     </div>
-    <div class="mb-6">
-        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo *</label>
+    <div class="mb-3">
+        <label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Correo *</label>
         <input formControlName="correo" type="email" id="correo" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required>
         <div *ngIf="correo.invalid && (correo.dirty || correo.touched)">
             <div *ngIf="correo.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
@@ -195,8 +174,6 @@
                     <span class="font-medium">Correo Requerido</span> 
                 </div>
             </div>
-        </div>
-        <div *ngIf="correo.invalid && (correo.dirty || correo.touched)">
             <div *ngIf="correo.errors?.['pattern']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                 <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4
@@ -211,9 +188,9 @@
             </div>
         </div>
     </div> 
-    <div class="mb-6">
-        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña *</label>
-        <input formControlName="password" type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
+    <div class="mb-3">
+        <label for="password" class="block  text-sm font-medium text-gray-900 dark:text-white">Contraseña *</label>
+        <input formControlName="password" type="{{ showPassword ? 'text' : 'password' }}"  id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
         <div *ngIf="password.invalid && (password.dirty || password.touched)">
             <div *ngIf="password.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
                 <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
@@ -224,8 +201,32 @@
             </div>
         </div>
     </div> 
+    <div class="mb-3">
+        <label for="password" class="block  text-sm font-medium text-gray-900 dark:text-white">Confirmar Contraseña *</label>
+        <input  formControlName="confirmPassword"type="{{ showPassword ? 'text' : 'password' }}"  id="confirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
+        <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)">
+            <div *ngIf="confirmPassword.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
+                <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Info</span>
+                <div>
+                    <span class="font-medium">Contraseña Requerida</span> 
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="mb-3 relative">
+        <button type="button" (click)="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer ">
+            <label class="text-sm font-light text-gray-900 dark:text-black mr-2">Mostrar Contraseña</label>
+            <span *ngIf="showPassword" aria-hidden="true" class="material-symbols-outlined">
+                toggle_on
+            </span>
+            <span *ngIf="!showPassword" aria-hidden="true"  class="material-symbols-outlined">
+                toggle_off
+            </span>
+        </button>
+    </div> 
     <div class="flex justify-center">
-    <button (click)="addUsuario()" class="w-64 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-bold rounded-lg text-sm px-8 py-2.5 text-center mr-2 mb-2">Agregar</button>
+    <button (click)="addUsuario()" class="w-64 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-bold rounded-lg text-sm px-8 py-2.5 text-center mr-2 mt-4"> Agregar</button>
     </div>
 </form>
 
