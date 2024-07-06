@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 })
 export class UpdatePacienteComponent {
 
+  showPassword: boolean = false;
+
   get telefono() {
     return this.editform.controls['telefono'];
   }
@@ -137,6 +139,10 @@ export class UpdatePacienteComponent {
         console.log(err);
       }
     });
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
   ngOnDestroy(): void {
     this.destroy$.next({});

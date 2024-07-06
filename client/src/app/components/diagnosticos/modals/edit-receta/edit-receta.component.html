@@ -1,31 +1,37 @@
 
 <!-- Formulario para agregar una receta -->
 <form  [formGroup]="editrecetaform"  novalidate autocomplete="off"  class="content-user" >
-    <div class="mb-2">
-        <label for="diagnostico" class="block  text-sm font-medium text-gray-900 dark:text-white">Diagnóstico *</label>
-        <textarea formControlName="diagnostico" id="diagnostico" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" placeholder="Dolor de Cabeza"></textarea>
-        <div *ngIf="diagnostico.invalid && (diagnostico.dirty || diagnostico.touched)">
-            <div *ngIf="diagnostico.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
-                <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                <span class="sr-only">Info</span>
-                <div>
-                    <span class="font-medium">Diagnóstico Requerido</span> 
-                </div>
-            </div>
-        </div> 
-        <div class="mt-1">
-            <label for="cie" class="block  text-sm font-medium text-gray-900 dark:text-white">CIE-10 *</label>
-            <input formControlName="cie"  type="text" id="cie" class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="100" required>
-            <div *ngIf="cie.invalid && (cie.dirty || cie.touched)">
-                <div *ngIf="cie.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
-                    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+    <div class="mt-3 grid gap-2 md:grid-cols-2">
+        <div class="gap-2 mb-3">
+            <label for="diagnostico" class="block text-sm font-medium text-gray-900 dark:text-white">Diagnóstico *</label>
+            <input formControlName="diagnostico" id="diagnostico" rows="2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" placeholder="Dolor de Cabeza">
+            <div *ngIf="diagnostico.invalid && (diagnostico.dirty || diagnostico.touched)">
+                <div *ngIf="diagnostico.errors?.['required']" class="flex p-0.5 text-sm text-red-800 rounded-lg bg-red-50 dark:text-red-400" role="alert">
+                    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
                     <span class="sr-only">Info</span>
                     <div>
-                        <span class="font-medium">CIE Requerido</span> 
+                        <span class="font-medium">Diagnóstico Requerido</span>
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
+        <div class="gap-2 mb-3">
+            <label for="cie" class="block text-sm font-medium text-gray-900 dark:text-white">CIE-10 *</label>
+            <input formControlName="cie" type="text" id="cie" class="bg-gray-50 border mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="100" required>
+            <div *ngIf="cie.invalid && (cie.dirty || cie.touched)">
+                <div *ngIf="cie.errors?.['required']" class="flex p-0.5 text-sm text-red-800 rounded-lg bg-red-50 dark:text-red-400" role="alert">
+                    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                        <span class="font-medium">CIE Requerido</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
 
@@ -68,13 +74,24 @@
                 </div>
             </div> 
             <div>
-                <input formControlName="cantidadM" type="text" id="cantidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cantidad" required> 
+                <input formControlName="cantidadM" type="number" id="cantidad" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cantidad" required>
                 <div *ngIf="cantidadM.invalid && (cantidadM.dirty || cantidadM.touched)">
-                    <div *ngIf="cantidadM.errors?.['required']" class="flex p-0.5  text-sm text-red-800 rounded-lg bg-red-50  dark:text-red-400" role="alert">
-                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                    <div *ngIf="cantidadM.errors?.['required']" class="flex p-0.5 text-sm text-red-800 rounded-lg bg-red-50 dark:text-red-400" role="alert">
+                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
                         <span class="sr-only">Info</span>
                         <div>
-                            <span class="font-medium">Cantidad Requerida</span> 
+                            <span class="font-medium">Cantidad Requerida</span>
+                        </div>
+                    </div>
+                    <div *ngIf="cantidadM.errors?.['pattern']" class="flex p-0.5 text-sm text-red-800 rounded-lg bg-red-50 dark:text-red-400" role="alert">
+                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Info</span>
+                        <div>
+                            <span class="font-medium">Sólo se ingresan números</span>
                         </div>
                     </div>
                 </div>

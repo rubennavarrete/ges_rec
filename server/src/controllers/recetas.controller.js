@@ -1,6 +1,6 @@
 import { sequelize } from "../database/database.js";
 import { Recetas } from "../models/Recetas.js";
-import { updateReceta_med, createReceta_med } from "./recetas_med.controller.js";
+import { updateReceta_med, createReceta_med, venderReceta } from "./recetas_med.controller.js";
 import { paginarDatosRecetas } from "../utils/paginacion.utils.js";
 
 
@@ -82,7 +82,7 @@ export const getRecetas = async (req, res) => {
 }
 
 
-//RECIBIR UNA RECETA COMPLETA
+/* //RECIBIR UNA RECETA COMPLETA
 export const getRecetaCompleta = async (req, res) => {
     try {
         const {id_receta} = req.params;
@@ -102,6 +102,48 @@ export const getRecetaCompleta = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
     
+}; */
+
+export const getRecetaCompleta = async (req, res) => {
+    try {
+        const { id_receta } = req.params;
+
+        // Define la consulta SQL para llamar a la función obtenerdatosreceta
+        const query = `
+            SELECT * FROM obtenerdatosreceta(:id_receta);
+        `;
+
+        // Ejecuta la consulta con Sequelize
+        const receta = await sequelize.query(query, {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: { id_receta } 
+        });
+
+        // Verifica si se encontraron resultados
+        if (receta.length === 0) {
+            return res.status(404).json({ message: "No se ha encontrado medicamentos" });
+        }
+
+        // Mapea los datos obtenidos para estructurarlos mejor
+        const recetaCompleta = receta.map(item => ({
+            id_receta_medicacion: item.int_id_receta_medicacion,
+            int_id_receta: item.int_id_receta,
+            int_id_medicacion: item.int_id_medicacion,
+            str_nombre_comercial: item.str_nombre_comercial,
+            str_dosis: item.str_dosis,
+            str_tipo: item.str_tipo,
+            str_indicacion: item.str_indicacion,
+            int_cantidad: item.int_cantidad,
+            float_precio: item.float_precio,
+            int_vendidos: item.int_vendidos
+        }));
+
+        // Envía los datos mapeados en formato JSON
+        res.json(recetaCompleta);
+    } catch (error) {
+        // Maneja errores y envía una respuesta con el error
+        return res.status(500).json({ message: error.message });
+    }
 };
 
 
@@ -183,7 +225,8 @@ export const updateReceta = async (req, res) => {
 
 export const comprarReceta = async (req, res) => {
     const { id_receta } = req.params;
-    const { nota } = req.body;
+    const { nota, medicamentos } = req.body;
+    const t = await sequelize.transaction();
     try {
         const updateReceta = await Recetas.findOne({
             where: {
@@ -195,15 +238,8 @@ export const comprarReceta = async (req, res) => {
             return res.status(404).json({ message: "No se ha encontrado la receta" });
         }
 
-        if(!nota){
-            updateReceta.bln_vigencia = false;
-            updateReceta.str_estado = 'DESPACHADA';
-        }else{
-            updateReceta.bln_vigencia = true;
-            updateReceta.txt_nota = nota;
-            updateReceta.str_estado = 'PARCIALMENTE DESPACHADA';
-        }
-        await updateReceta.save();
+        await venderReceta(updateReceta.int_id_receta, req, t);
+        await t.commit();
         return res.json({
             message: "Se ha actualizado la receta",
             status: 'success',
@@ -211,6 +247,7 @@ export const comprarReceta = async (req, res) => {
         });
     } catch (error) {
         console.error('Error al actualizar la receta médica', error);
+        await t.rollback();
         return res.status(500).json({ error: 'Error al actualizar la receta médica' });
     }
 }

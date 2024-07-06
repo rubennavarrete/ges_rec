@@ -44,10 +44,6 @@ export const Recetas = sequelize.define(
             type: DataTypes.STRING(100),
             allowNull: false,
         },
-        txt_nota: {
-            type: DataTypes.TEXT, 
-            allowNull: true,
-        }
             
     },
     {

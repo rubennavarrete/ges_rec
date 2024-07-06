@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Subject, debounceTime, finalize, takeUntil } from 'rxjs';
 import { Medicacion } from 'src/app/core/models/medicacion';
@@ -25,6 +25,10 @@ export class SellRecetaComponent implements OnInit, OnDestroy{
   medicamentoform: FormGroup;
   editrecetaform: FormGroup;
 
+
+  medicamentoVisible: boolean[] = []; // Arreglo para controlar la visibilidad de los botones
+
+
   elementPagina: {
     dataLength: number,
     metaData: number,
@@ -39,74 +43,70 @@ export class SellRecetaComponent implements OnInit, OnDestroy{
 
   medicamento: Medicamentos[] = [];
 
+  medicamento2: Medicamentos[] = [];
+
   medicamentoSeleccionado: Medicamentos | null = null;
   
   idseleccionada: number = 0;
 
   tokenData: any;
   dataMed: any= [];
+ 
 
 
   get nota() {
     return this.editrecetaform.controls['nota'];
   }
 
+  get vendidosM(){
+    return this.medicamentoform.controls['vendidos'];
+  }
+
   private destroy$ = new Subject<any>();
   
   ngOnInit(): void {
+
+    this.medicamentoVisible = new Array(this.medicamento.length).fill(false);
+    this.getTokenData();
+    this.setupSubscriptions();
+  }
+
+  
+
+  private setupSubscriptions() {
     this.srvRec.SeleccionarConfirmEditMed$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
-        
-        // Asignar dataMed a this.dataMed
         this.dataMed = data;
-        this.medicamento = []; // Reiniciar el array de medicamentos
-    
-        // Iterar sobre cada objeto en dataMed y agregarlo a medicamento
-        for (const medData of this.dataMed) {
-          const nuevoMedicamento: Medicamentos = {
-            nombre: medData.str_nombre_comercial ,
-            id_medicacion: medData.int_id_medicacion,
-            cantidad: medData.int_cantidad,
-            dosis: medData.str_dosis,
-            tipo: medData.str_tipo,
-            indicaciones: medData.str_indicacion,
-            precio: medData.float_precio,
-            int_id_medicacion: 0,
-            str_nombre_comercial: '',
-            int_cantidad: 0,
-            str_dosis: '',
-            str_tipo: '',
-            txt_indicaciones: '',
-            float_precio: 0
-          };
-          this.medicamento.push(nuevoMedicamento);
-        }
+        this.medicamento = this.dataMed.map((medData: Medicamentos) => ({
+          nombre: medData.str_nombre_comercial,
+          id_medicacion: medData.int_id_medicacion,
+          cantidad: medData.int_cantidad - medData.int_vendidos,
+          dosis: medData.str_dosis,
+          tipo: medData.str_tipo,
+          indicaciones: medData.txt_indicaciones,
+          precio: medData.float_precio,
+          vendidos: 0,
+        }));
+        this.medicamentoVisible = new Array(this.medicamento.length).fill(false);
       },
       error: (err) => {
         console.log(err);
       }
     });
+
     this.srvRec.SeleccionarConfirmEdit$.pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
-        this.editrecetaform = this.fb.group({
-          id_receta: [data.int_id_receta],
-          id_medico: [data.int_id_medico] ,
-          id_paciente: [data.int_id_paciente],
-          diagnostico: [data.txt_diagnostico],
-          nota: [data.txt_nota],
-          cie: [data.str_cie],
-          medicamentos: this.medicamentoform = this.fb.group({
-            nombreM: ['', Validators.required],
-            cantidadM: ['', Validators.required],
-            vendidosM: [''],
-            dosisM: ['', Validators.required],
-            tipoM: ['', Validators.required],
-            indicacionesM: ['', Validators.required]
-          }),
+        this.editrecetaform.patchValue({
+          id_receta: data.int_id_receta,
+          id_medico: data.int_id_medico,
+          id_paciente: data.int_id_paciente,
+          diagnostico: data.txt_diagnostico,
+          nota: data.txt_nota,
+          cie: data.str_cie
         });
       },
       error: (err) => {
@@ -123,15 +123,17 @@ export class SellRecetaComponent implements OnInit, OnDestroy{
       diagnostico: ['', Validators.required],
       nota:[''],
       cie: ['', Validators.required],
-      medicamentos: this.medicamentoform = this.fb.group({
-        nombreM: ['', Validators.required],
-        cantidadM: ['', Validators.required],
-        vendidosM:[''],
-        dosisM: ['', Validators.required],
-        tipoM: ['', Validators.required],
-        indicacionesM: ['', Validators.required]
-      }),
+      medicamentos: this.fb.array([])
     });
+    this.medicamentoform = this.fb.group({
+      nombreM: ['', Validators.required],
+      cantidadM: ['', Validators.required],
+      vendidosM: ['0'],
+      dosisM: ['', Validators.required],
+      tipoM: ['', Validators.required],
+      indicacionesM: ['', Validators.required]
+    });
+    
   }
 
   //OBTENER TOKEN
@@ -146,10 +148,51 @@ export class SellRecetaComponent implements OnInit, OnDestroy{
     }
   }
 
+  toggleButtons(index: number): void {
+    // Invierte la visibilidad del botón para el índice específico
+    this.medicamentoVisible[index] = !this.medicamentoVisible[index];
+}
+
+eliminarMedicamento(index: number) {
+  this.medicamento2.splice(index, 1);
+  console.log(this.medicamento2);
+}
 
 
-  //Obtener medicamentos de la receta
- 
+sellMedicamento(index: number, value: number): void {
+  const medicamento = this.medicamento[index];
+  const existingMed = this.medicamento2.find(med => med.nombre === medicamento.nombre);
+
+  if (value > medicamento.cantidad) {
+    Swal.fire({
+      title: 'Error',
+      text: 'No puedes vender más medicamentos de los que tienes',
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
+    });
+  } else {
+    if (existingMed) {
+      existingMed.vendidos = value;  // Actualiza la cantidad vendida si ya existe
+    } else {
+      const newMed = { ...medicamento, vendidos: value };
+      this.medicamento2.push(newMed);  // Inserta un nuevo medicamento si no existe
+    }
+    console.log(this.medicamento2);
+  }
+}
+
+checkValue(event: Event, index: number) {
+  const input = event.target as HTMLInputElement;
+  const value = +input.value;  // Convertir el valor a número
+
+  if (value === 0) {
+    this.eliminarMedicamento(index);
+  } else {
+    this.sellMedicamento(index, value);
+  }
+}
+
+
 
   //Crear receta
   editarReceta() {
@@ -167,8 +210,8 @@ export class SellRecetaComponent implements OnInit, OnDestroy{
             Swal.showLoading();
           },
         });
-        this.editrecetaform.value.medicamentos = this.medicamento;
-        console.log(this.editrecetaform.value);
+        this.editrecetaform.value.medicamentos = this.medicamento2;
+        console.log(this.medicamento2);
           this.srvRec.venderReceta(this.editrecetaform.value).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: RecetaResponse) => {
               //console.log(data);
@@ -197,11 +240,14 @@ export class SellRecetaComponent implements OnInit, OnDestroy{
               this.srvModal.closeModal();
               this.editrecetaform.reset();
               this.medicamentoform.reset();
+              this.medicamento2 = [];
+              this.medicamento = [];
             }
           });
       }
     });
   }
+
 
   ngOnDestroy(): void {
     this.destroy$.next({});

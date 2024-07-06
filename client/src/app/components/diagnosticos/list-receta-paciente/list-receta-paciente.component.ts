@@ -32,6 +32,7 @@ export class ListRecetaPacienteComponent implements OnInit, OnDestroy {
   dataReceta: any[] = [];
   id_usuario: number = 0;
   cedulaSeleccionada: string = '';
+  mostrarFormulario: boolean = false;
 
   private destroy$ = new Subject<any>();
   tokenData: any;
@@ -78,6 +79,10 @@ export class ListRecetaPacienteComponent implements OnInit, OnDestroy {
     } else {
       // console.log('Token no encontrado en las cookies.');
     }
+
+  }
+  toggleForm() {
+    this.mostrarFormulario = !this.mostrarFormulario;
   }
 
   imputModal(title: string, name: string) {
@@ -314,6 +319,7 @@ export class ListRecetaPacienteComponent implements OnInit, OnDestroy {
           },
           complete: () => {
             console.log('complete');
+            
           }
         });
       } else if (result.isDenied) {
@@ -324,6 +330,10 @@ export class ListRecetaPacienteComponent implements OnInit, OnDestroy {
 
   ocultarInput() {
     this.srvRec.setConfirmAdd(true);
+  }
+
+  mostarInput() {
+    this.srvRec.setConfirmAdd(false);
   }
   
 

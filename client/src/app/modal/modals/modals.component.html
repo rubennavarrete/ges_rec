@@ -1,15 +1,13 @@
 <div class="modal fade" id="modalGeneral">
-  <div class="modal-dialog" [ngClass]="{'modal-lg': name !== 'venderReceta', 'modal-vender-receta': name === 'venderReceta'}">
+  <div class="modal-dialog" [ngClass]="{'modal-lg': name !== 'venderReceta'|| 'editarReceta', 'modal-vender-receta': name === 'venderReceta' || 'editarReceta'}">
     <div class="modal-content">
       <div class="modal-header no-print">
         <h5 class="modal-title" id="modalAgregaUsuario">{{ title }}</h5>
-        <button type="button" (click)="cerrarModal()">
-          <span class="material-symbols-outlined">close</span>
+        <button type="button" class="btn-close ms-auto" (click)="cerrarModal()">
         </button>
       </div>
       <div class="modal-body">
         <container-element [ngSwitch]="name">
-
           <!-- MODALS PARA AGREGAR -->
           <div *ngSwitchCase="'agregarlista'">
             <app-usuario></app-usuario>

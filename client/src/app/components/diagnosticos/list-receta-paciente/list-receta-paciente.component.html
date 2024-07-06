@@ -1,19 +1,28 @@
 <div class="content-list">
-    <div class="title">
+    <div *ngIf="!mostrarFormulario" class="title">
         <h4>Listado de Recetas</h4>
-        <button *ngIf="tokenData.rol === 'Administrador' || tokenData.rol === 'Medico'" (click)="imputModal('Agregar Receta','agregarListaReceta')" (click)="ocultarInput()" type="button" class="flex text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+        <button *ngIf="tokenData.rol === 'Administrador' || tokenData.rol === 'Medico'" (click)="ocultarInput()" (click)="toggleForm()" type="button" class="flex text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
             <span class="material-symbols-outlined mr-3">
                 post_add
                 </span>Agregar Receta
         </button>
     </div>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mr-2 mt-3 ">
+    <div class=" title" *ngIf="mostrarFormulario" >
+        <h4>Agregar Receta</h4>
+        <button *ngIf="tokenData.rol === 'Administrador' || tokenData.rol === 'Medico'" (click)="mostarInput()" (click)="toggleForm()" type="button" class="flex text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-4 py-2.5 text-center mr-2 mb-2">
+            <span class="material-symbols-outlined mr-3">
+                reply
+                </span>Regresar
+        </button>
+    </div>
+    <div *ngIf="mostrarFormulario" class="form-container">
+        <!-- Aquí va tu componente/formulario de agregar receta -->
+        <app-add-receta></app-add-receta>
+    </div>
+    <div *ngIf="!mostrarFormulario" class="relative overflow-x-auto shadow-md sm:rounded-lg mr-2 mt-3 ">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
                 <tr >
-                    <th scope="col" class="px-6 py-3">
-                        Nombre
-                    </th>
                     <th scope="col" class="px-6 py-3">
                         Diagnostico
                     </th>
@@ -38,9 +47,6 @@
                     </td>
                 </tr>
                 <tr *ngFor="let item of dataReceta ; let i = index"  class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                    <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{item.int_id_paciente}} 
-                    </th>
                     <td class="px-6 py-2">
                         {{item.txt_diagnostico}}
                     </td>
@@ -119,7 +125,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mt-5">
+    <div *ngIf="!mostrarFormulario" class="mt-5">
         <app-pagination
         (nextPage)="pasarPagina($event)"
         ></app-pagination>

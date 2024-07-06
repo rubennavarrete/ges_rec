@@ -35,6 +35,8 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
   tokenData: any;
   dataMed: any= [];
 
+  tipoMedicamento: string = '';
+
   get nombreM() {
     return this.medicamentoform.controls['nombreM'];
   }
@@ -111,9 +113,11 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
             tipo: medData.str_tipo,
             indicaciones: medData.str_indicacion,
             precio: medData.float_precio,
+            vendidos: 0,
             int_id_medicacion: 0,
             str_nombre_comercial: '',
             int_cantidad: 0,
+            int_vendidos: 0,
             str_dosis: '',
             str_tipo: '',
             txt_indicaciones: '',
@@ -194,6 +198,11 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
     this.medicacionSelec = item;
     this.src = item.str_nombre_comercial;
     this.idseleccionada = item.int_id_medicacion;
+    this.medicamentoform.patchValue({
+      tipoM: item.str_forma_farmaceutica,
+      precioM: item.float_precio
+    });
+    this.tipoMedicamento = item.str_forma_farmaceutica;
     this.searchStarted = false; // Oculta la lista de medicamentos después de seleccionar uno
   }
 
@@ -208,6 +217,7 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
       this.medicamentoSeleccionado.tipo = this.medicamentoform.value.tipoM;
       this.medicamentoSeleccionado.indicaciones = this.medicamentoform.value.indicacionesM;
       this.medicamentoSeleccionado.precio = this.medicamentoform.value.precioM;
+      this.medicamentoSeleccionado.id_medicacion = this.idseleccionada;
   
       this.medicamentoSeleccionado = null; // Reiniciar el objeto seleccionado
     } else {
@@ -221,10 +231,11 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
         tipo: this.medicamentoform.value.tipoM,
         indicaciones: this.medicamentoform.value.indicacionesM,
         precio: this.medicamentoform.value.precioM,
-        
+        vendidos: 0,
         int_id_medicacion: 0,
         str_nombre_comercial: '',
         int_cantidad: 0,
+        int_vendidos: 0,
         str_dosis: '',
         str_tipo: '',
         txt_indicaciones: '',
@@ -242,6 +253,7 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
   editarMedicamento(med: Medicamentos) {
     this.medicamentoSeleccionado = med;
     this.medicamentoform.patchValue({
+      idseleccionada : med.id_medicacion,
       nombreM: med.nombre,
       cantidadM: med.cantidad,
       dosisM: med.dosis,
@@ -276,7 +288,6 @@ export class EditRecetaComponent implements OnDestroy, OnInit {
           },
         });
         this.editrecetaform.value.medicamentos = this.medicamento;
-        console.log(this.editrecetaform.value);
           this.srvRec.updateReceta(this.editrecetaform.value).pipe(takeUntil(this.destroy$)).subscribe({
             next: (data: RecetaResponse) => {
               //console.log(data);

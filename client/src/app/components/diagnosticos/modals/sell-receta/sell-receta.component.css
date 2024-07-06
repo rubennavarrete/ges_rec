@@ -1,3 +1,10 @@
-.cantidad{
-    width: 15%;
+
+
+.text-sm {
+    font-size: 0.8rem; /* Este valor es solo un ejemplo. Ajusta el tamaño según tus necesidades */
+}
+
+
+#table {
+    font-size: 0.7rem;
 }

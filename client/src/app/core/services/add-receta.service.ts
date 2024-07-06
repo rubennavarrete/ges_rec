@@ -21,6 +21,7 @@ const confirmEditMed: Medicamentos = {
   int_id_medicacion: 0,
   str_nombre_comercial: '',
   int_cantidad: 0,
+  int_vendidos: 0,
   str_dosis: '',
   str_tipo: '',
   txt_indicaciones: '',
@@ -31,7 +32,8 @@ const confirmEditMed: Medicamentos = {
   dosis: '',
   tipo: '',
   indicaciones: '',
-  precio: 0
+  precio: 0,
+  vendidos: 0
 };
 
 @Injectable({

@@ -213,7 +213,7 @@ export const pdfReceta = async (req, res) => {
                                 med => `
                                     <tr>
                                         <td>${med.str_nombre_comercial}</td>
-                                        <td>${med.int_cantidad}</td>
+                                        <td>${med.int_cantidad - med.int_vendidos}</td>
                                         <td>${med.str_tipo}</td>
                                         <td>${med.str_dosis}</td>
                                         <td>${med.str_indicacion}</td>
@@ -223,7 +223,6 @@ export const pdfReceta = async (req, res) => {
                             .join('')}
                     </table>
                     <br><br>
-                    <label>Medicina Faltante por vender: ${receta[0]?.txt_nota}</label>
                 </div>
             </div>
             <img src="${qrCodeImageUrl}" alt="Código QR" class="qr-code">

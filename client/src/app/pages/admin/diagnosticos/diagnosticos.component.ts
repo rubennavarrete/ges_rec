@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-diagnosticos',
@@ -6,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./diagnosticos.component.css']
 })
 export class DiagnosticosComponent {
+
+  
 
 }

@@ -51,22 +51,22 @@
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-purple-400 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-1/6">
                         RUC
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-1/6">
                         Nombre
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-1/6">
                         Direccion
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-1/6">
                         Teléfono
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-1/6">
                         Estado
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <th scope="col" class="px-4 py-3 w-1/6">
                         
                     </th>
                 </tr>
@@ -81,25 +81,31 @@
             
                 <!-- Mostrar datos si hay alguno -->
                 <tr *ngFor="let item of dataFarmacia; let i = index" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row" class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{item.str_ruc}}
                     </th>
-                    <td class="px-6 py-2.5">
+                    <td class="px-4 py-2">
                         {{item.str_nombre_institucion}}
                     </td>
-                    <td class="px-6 py-2.5">
+                    <td class="px-4 py-2 font-medium break-words">
                         {{item.txt_direccion_institucion}}
                     </td>
-                    <td class="px-6 py-2.5">
+                    <td class="px-4 py-2">
                         {{item.str_telefono_institucion}}
                     </td>
-                    <td class="px-6 py-2">
-                        <div class="flex items-center">
-                            <div *ngIf="item.bln_estado; else inactivo" class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+                    <td class="px-4 py-2">
+                        <div class="flex justify-center">
+                            <span *ngIf="item.bln_estado; else inactivo" class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                                Activo
+                            </span>
                             <ng-template #inactivo>
-                            <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
+                                <span class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                                    <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                                    Inactivo
+                                </span>
                             </ng-template>
-                            {{item.bln_estado ? 'Activo' : 'Inactivo'}}
+                            
                         </div>
                     </td>
                     <td class="px-6 py-2 flex justify-center">

@@ -6,6 +6,7 @@ export interface Medicamentos {
     tipo: string;
     indicaciones: string;
     precio: number;
+    vendidos: number;
 
 
     int_id_medicacion: number;
@@ -14,6 +15,7 @@ export interface Medicamentos {
     str_dosis: string;
     str_tipo: string;
     txt_indicaciones: string;
+    int_vendidos: number;
     float_precio: number;
 }
 

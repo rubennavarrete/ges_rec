@@ -47,7 +47,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
   medicamentoSeleccionado: Medicamentos | null = null;
 
 
-  tipoMedicamentyo: string = '';
+  tipoMedicamento: string = '';
 
   tokenData: any;
 
@@ -207,7 +207,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       this.PacienteSelec = item;
       this.src2 = item.str_cedula;
       this.recetaform.patchValue({
-        nombreP: item.str_nombres + ' ' + item.str_apellidos
+        nombreP: item.str_nombres + ' ' + item.str_apellidos,
+        id_paciente: item.int_id_usuario
       });
       this.searchStarted2 = false;
     }
@@ -255,7 +256,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       tipoM: item.str_forma_farmaceutica,
       precioM: item.float_precio
     });
-    this.tipoMedicamentyo = item.str_forma_farmaceutica;
+    this.tipoMedicamento = item.str_forma_farmaceutica;
     this.searchStarted = false; // Oculta la lista de medicamentos después de seleccionar uno
   }
 
@@ -265,7 +266,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
     const nombreM = this.medicamentoform.value.nombreM;
     const cantidadM = this.medicamentoform.value.cantidadM;
     const dosisM = this.medicamentoform.value.dosisM;
-    const tipoM = this.tipoMedicamentyo;
+    const tipoM = this.tipoMedicamento;
     const indicacionesM = this.medicamentoform.value.indicacionesM;
     const precioM = this.medicamentoform.value.precioM;
 
@@ -307,6 +308,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             tipo: tipoM,
             indicaciones: indicacionesM,
             precio: precioM,
+            vendidos: 0,
             int_id_medicacion: 0,
             str_nombre_comercial: '',
             int_cantidad: 0,
@@ -314,6 +316,7 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             str_tipo: '',
             txt_indicaciones: '',
             float_precio: 0,
+            int_vendidos: 0,
         };
         this.medicamento.push(nuevoMedicamento);
     }
@@ -339,7 +342,6 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
   //Eliminar medicamento
   eliminarMedicamento(index: number) {
     this.medicamento.splice(index, 1);
-    console.log(this.medicamento);
   }
 
   imputModal(title: string, name: string) {
@@ -395,6 +397,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
               this.srvModals.closeModal();
               this.recetaform.reset();
               this.medicamentoform.reset();
+              this.confirmadd = true;
+              this.medicamento = [];
             }
           });
       }
