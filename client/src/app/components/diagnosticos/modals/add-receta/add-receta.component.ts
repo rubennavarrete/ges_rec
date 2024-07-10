@@ -119,27 +119,17 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
             indicacionesM: ['', Validators.required]
           }),
         });
+
+        if(this.recetaform.value.id_paciente != 0){
+        this.confirmadd = !this.confirmadd;
+        }
+        console.log(this.recetaform.value);
       },
       error: (err) => {
         console.log(err);
       }
     });
 
-    this.srvRec.SeleccionarConfirmAdd$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (data) => {
-        if (data === true){
-          this.confirmadd = true;
-        }else{
-          this.confirmadd = false;
-        }
-        
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
   }
 
   constructor(private fb: FormBuilder, private srvRec: AddRecetaService, public srvUser:AddUserService, private cookieService: CookieService, public srvModals: ModalsService) {

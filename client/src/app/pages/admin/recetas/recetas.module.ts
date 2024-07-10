@@ -5,14 +5,12 @@ import { DiagnosticoModule } from 'src/app/components/diagnosticos/diagnostico.m
 import { RecetasRoutingModule } from './recetas-routing.module';
 
 
-
 @NgModule({
   declarations: [RecetasComponent],
   imports: [
     CommonModule,
     DiagnosticoModule,
     RecetasRoutingModule
-
   ],
   exports: [RecetasComponent]
 })

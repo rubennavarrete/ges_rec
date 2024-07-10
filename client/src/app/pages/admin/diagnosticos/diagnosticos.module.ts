@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { DiagnosticosComponent } from './diagnosticos.component';
 import { DiagnosticosRoutingModule } from './diagnosticos-routing.module';
 import { DiagnosticoModule } from 'src/app/components/diagnosticos/diagnostico.module';
+import { ListaPacientesModule } from "../../medicos/lista-pacientes/lista-pacientes.module";
 
 
 
@@ -13,8 +14,9 @@ import { DiagnosticoModule } from 'src/app/components/diagnosticos/diagnostico.m
   imports: [
     CommonModule,
     DiagnosticosRoutingModule,
-    DiagnosticoModule
-  ],
+    DiagnosticoModule,
+    ListaPacientesModule
+],
   exports: [DiagnosticosComponent]
 })
 export class DiagnosticosModule { }

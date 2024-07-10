@@ -35,8 +35,6 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
   id_usuario: number = 0;
   cedulaSeleccionada: string = '';
   tokenData: any;
-  mostrarFormulario: boolean = false;
-
   private destroy$ = new Subject<any>();
 
   
@@ -75,9 +73,7 @@ export class ListRecetasComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleForm() {
-    this.mostrarFormulario = !this.mostrarFormulario;
-  }
+
 
   imputModal(title: string, name: string) {
     this.srvModals.setFormModal({ title, name });

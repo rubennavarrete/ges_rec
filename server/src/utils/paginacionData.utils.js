@@ -22,4 +22,5 @@ async function paginarDatosExtras(page, size, modelo, columna, parametro) {
     return { datos, total };
 }
 
+
 export { paginarDatosExtras };

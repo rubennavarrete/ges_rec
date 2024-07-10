@@ -7,6 +7,7 @@ import { paginarDatosRecetas } from "../utils/paginacion.utils.js";
 
 
 
+
 //RECIBIR TODAS LAS RECETAS POR PACIENTE
 export const getRecetasPaciente = async (req, res) => {
     const { id_usuario } = req.params;
@@ -82,27 +83,7 @@ export const getRecetas = async (req, res) => {
 }
 
 
-/* //RECIBIR UNA RECETA COMPLETA
-export const getRecetaCompleta = async (req, res) => {
-    try {
-        const {id_receta} = req.params;
-        const query = `
-        SELECT * FROM obtenerdatosreceta(:id_receta);
-        `;
 
-        const receta = await sequelize.query(query, {
-        type: sequelize.QueryTypes.SELECT,
-        replacements: { id_receta } 
-    });
-
-        if(receta.length === 0) return res.status(404).json({ message: "No se ha encontrado medicamentos"});
-
-        res.json(receta);
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-    
-}; */
 
 export const getRecetaCompleta = async (req, res) => {
     try {
@@ -225,7 +206,6 @@ export const updateReceta = async (req, res) => {
 
 export const comprarReceta = async (req, res) => {
     const { id_receta } = req.params;
-    const { nota, medicamentos } = req.body;
     const t = await sequelize.transaction();
     try {
         const updateReceta = await Recetas.findOne({
@@ -235,13 +215,14 @@ export const comprarReceta = async (req, res) => {
         });
 
         if (!updateReceta) {
+            await t.rollback();
             return res.status(404).json({ message: "No se ha encontrado la receta" });
         }
 
-        await venderReceta(updateReceta.int_id_receta, req, t);
+        const codigoVenta = await venderReceta(updateReceta.int_id_receta, req, t); // Captura el código de venta
         await t.commit();
         return res.json({
-            message: "Se ha actualizado la receta",
+            message: "Su código de venta es " + codigoVenta,
             status: 'success',
             data: updateReceta,
         });
@@ -250,7 +231,7 @@ export const comprarReceta = async (req, res) => {
         await t.rollback();
         return res.status(500).json({ error: 'Error al actualizar la receta médica' });
     }
-}
+};
 
 
 //ACTIVAR RECETA

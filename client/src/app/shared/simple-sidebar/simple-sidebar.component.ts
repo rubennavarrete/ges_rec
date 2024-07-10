@@ -119,6 +119,17 @@ export class SimpleSidebarComponent implements OnInit,  OnDestroy {
     }
   }
 
+  listarVentas(): string {
+    if (this.tokenData.rol === 'Administrador') {
+      return 'admin/ventas';
+    } else if (this.tokenData.rol === 'Farmacia') {
+      return 'farmacias/ventas';
+    }else{
+      // Puedes manejar otro caso o redirigir a una ruta predeterminada si es necesario
+      return 'error404';
+    }
+  }
+
   addReceta(cedula: string): void {
     this.srvUser.getUsuario(cedula)
     .pipe(

@@ -5,6 +5,7 @@ import { SessionGuard } from 'src/app/core/guards/session.guard';
 
 
 
+
 const routes: Routes = [
   {
     path: '',
@@ -72,6 +73,16 @@ const routes: Routes = [
             role: 'Administrador'
           },
       },
+      {
+        path: 'ventas',
+        loadChildren: () =>
+          import('./ventas/ventas.module').then(
+            (m) => m.VentasModule
+          ),
+          data: {
+            role: 'Administrador'
+          },
+      },
     ],
   },
 ];
@@ -79,6 +90,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+
   ],
   imports: [
     CommonModule,

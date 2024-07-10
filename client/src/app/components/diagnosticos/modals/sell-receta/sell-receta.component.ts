@@ -218,7 +218,7 @@ checkValue(event: Event, index: number) {
               if (data.status === 'success') {
               Swal.fire({
                 title: 'Receta vendida',
-                text: 'La Receta se ha vendido correctamente',
+                text: data.message,
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
               });
