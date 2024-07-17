@@ -7,6 +7,7 @@ import { FarmModule } from '../components/farmacias/farm.module';
 import { Medicaciones1Module } from '../components/medicaciones/medicaciones.module';
 import { DiagnosticoModule } from '../components/diagnosticos/diagnostico.module';
 import { RouterModule } from '@angular/router';
+import { VentaModule } from '../components/ventas/ventas.module';
 
 
 
@@ -19,6 +20,7 @@ import { RouterModule } from '@angular/router';
     FarmModule,
     Medicaciones1Module,
     DiagnosticoModule,
+    VentaModule,
     RouterModule.forChild([])
   ],
   exports: [

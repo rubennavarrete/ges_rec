@@ -55,6 +55,13 @@
             <app-sell-receta></app-sell-receta>
           </div>
 
+          <!-- MODALS PARA VER VENTA -->
+          <div *ngSwitchCase="'verVenta'">
+            <app-view-venta></app-view-venta>
+          </div>
+
+
+
           <div *ngSwitchCase="'clear'"></div>
         </container-element>
       </div>

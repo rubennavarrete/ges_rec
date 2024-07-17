@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ListVentasComponent } from './list-ventas/list-ventas.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardModule } from 'src/app/shared/dashboard.module';
+import { ViewVentaComponent } from './modals/view-venta/view-venta.component';
 
 
 
 @NgModule({
   declarations: [
-    ListVentasComponent
+    ListVentasComponent,
+    ViewVentaComponent
   ],
   imports: [
     CommonModule,
@@ -17,7 +19,8 @@ import { DashboardModule } from 'src/app/shared/dashboard.module';
     FormsModule
   ],
   exports: [
-    ListVentasComponent
+    ListVentasComponent,
+    ViewVentaComponent
   ]
 })
 export class VentaModule { }

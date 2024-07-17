@@ -1,12 +1,11 @@
 import { sequelize } from "../database/database.js";
 
-
 export const getVentas = async (req, res) => {
     try {
-        const { page = 1, size = 10, parameter: columna, data: parametro } = req.query; // Parámetros de paginación y filtrado
+        const { page = 1, size = 10, parameter: columna, data: parametro, fechaInicio, fechaFin } = req.query; // Parámetros de paginación y filtrado
 
         // Obtén todas las ventas de la función almacenada
-        const ventas = await sequelize.query('SELECT * FROM ges_recetas.obtener_ventas_resumen()', { type: sequelize.QueryTypes.SELECT });
+        const ventas = await sequelize.query('SELECT * FROM obtener_ventas_resumen()', { type: sequelize.QueryTypes.SELECT });
 
         if (ventas.length === 0) {
             return res.json({
@@ -24,6 +23,27 @@ export const getVentas = async (req, res) => {
             );
         }
 
+        // Filtrar por fecha de inicio y fecha de fin si se proporcionan
+        if (fechaInicio) {
+            const startDate = new Date(fechaInicio);
+            filteredVentas = filteredVentas.filter(venta => {
+                const ventaDate = new Date(venta.dt_fecha_venta);
+                return ventaDate >= startDate;
+            });
+        }
+
+        if (fechaFin) {
+            const endDate = new Date(fechaFin);
+            filteredVentas = filteredVentas.filter(venta => {
+                const ventaDate = new Date(venta.dt_fecha_venta);
+                return ventaDate <= endDate;
+            });
+        }
+        console.log(fechaInicio);
+        console.log('NO ME COGE',fechaFin);
+
+        console.log(filteredVentas);
+
         // Implementar paginación manualmente
         const total = filteredVentas.length;
         const offset = (page - 1) * size;
@@ -39,5 +59,29 @@ export const getVentas = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+export const getVentaByCode = async (req, res) => {
+    try {
+        const { codigo } = req.params;
+
+        const query = 'SELECT * FROM obtener_venta_completa(:codigo)';
+
+        // Obtén la venta por código de la función almacenada
+        const venta = await sequelize.query(query, {
+            type: sequelize.QueryTypes.SELECT,
+            replacements: { codigo },
+        });
+
+        if (venta.length === 0) {
+            return res.json({
+                message: "No se encontró la venta"
+            });
+        }
+
+        return res.json(venta);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
 
 

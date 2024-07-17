@@ -83,6 +83,7 @@ export class AddRecetaService {
     }
     setConfirmEditMed(data: Medicamentos): void {
       this.confirmEditMed$.next(data);
+      console.log(data);
     }
 
 
