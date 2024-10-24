@@ -168,7 +168,8 @@ sellMedicamento(index: number, value: number): void {
       title: 'Error',
       text: 'No puedes vender más medicamentos de los que tienes',
       icon: 'error',
-      confirmButtonText: 'Aceptar'
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#3085d6'
     });
   } else {
     if (existingMed) {
@@ -201,8 +202,9 @@ checkValue(event: Event, index: number) {
       showDenyButton: true,
       confirmButtonText: 'Vender',
       denyButtonText: `Cancelar`,
+      confirmButtonColor: '#28a745',  // Color verde para confirmar
+      denyButtonColor: '#dc3545'      // Color rojo para denegar
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         Swal.fire({
           title: 'Vendiendo Receta',
@@ -212,41 +214,43 @@ checkValue(event: Event, index: number) {
         });
         this.editrecetaform.value.medicamentos = this.medicamento2;
         console.log(this.medicamento2);
-          this.srvRec.venderReceta(this.editrecetaform.value).pipe(takeUntil(this.destroy$)).subscribe({
-            next: (data: RecetaResponse) => {
-              //console.log(data);
-              if (data.status === 'success') {
+        this.srvRec.venderReceta(this.editrecetaform.value).pipe(takeUntil(this.destroy$)).subscribe({
+          next: (data: RecetaResponse) => {
+            if (data.status === 'success') {
               Swal.fire({
                 title: 'Receta vendida',
                 text: data.message,
                 icon: 'success',
-                confirmButtonText: 'Aceptar'
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#3085d6'  // Color azul para aceptar
               });
-              } else {
-                Swal.fire({
-                  title: 'Error',
-                  text: 'No se pudo vender la Receta',
-                  icon: 'error',
-                  confirmButtonText: 'Aceptar'
-                });
-              }
-            },
-            error: (error) => {
-              console.log(error);
-              this.RecError = error;
-            },
-            complete: () => {
-              this.srvRec.setConfirmAdd(true);
-              this.srvModal.closeModal();
-              this.editrecetaform.reset();
-              this.medicamentoform.reset();
-              this.medicamento2 = [];
-              this.medicamento = [];
+            } else {
+              Swal.fire({
+                title: 'Error',
+                text: 'No se pudo vender la Receta',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#e74c3c'  // Color rojo para errores
+              });
             }
-          });
+          },
+          error: (error) => {
+            console.log(error);
+            this.RecError = error;
+          },
+          complete: () => {
+            this.srvRec.setConfirmAdd(true);
+            this.srvModal.closeModal();
+            this.editrecetaform.reset();
+            this.medicamentoform.reset();
+            this.medicamento2 = [];
+            this.medicamento = [];
+          }
+        });
       }
     });
-  }
+}
+
 
 
   ngOnDestroy(): void {

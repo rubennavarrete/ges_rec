@@ -346,6 +346,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
       showDenyButton: true,
       confirmButtonText: 'Crear',
       denyButtonText: `Cancelar`,
+      confirmButtonColor: '#28a745',  // Color verde para confirmar
+      denyButtonColor: '#dc3545'      // Color rojo para denegar
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -365,7 +367,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
                 title: 'Receta registrada',
                 text: 'La Receta se ha registrado correctamente',
                 icon: 'success',
-                confirmButtonText: 'Aceptar'
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#3085d6'
               });
 
               
@@ -374,7 +377,8 @@ export class AddRecetaComponent implements OnInit, OnDestroy {
                   title: 'Error',
                   text: 'No se pudo crear la Receta',
                   icon: 'error',
-                  confirmButtonText: 'Aceptar'
+                  confirmButtonText: 'Aceptar',
+                  confirmButtonColor: '#3085d6'
                 });
               }
             },

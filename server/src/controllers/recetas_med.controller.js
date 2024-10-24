@@ -65,28 +65,40 @@ const generateVentaCode = async () => {
     const year = String(date.getFullYear()).slice(-2);
     const dateCode = `${month}${day}${year}`;
 
-    // Obtener el último contador de la base de datos y aumentarlo
-    const lastVenta = await Ventas.findOne({
-        attributes: ['str_cod_venta']
-    });
-
     let counter = 1;
-    if (lastVenta) {
-        const lastCode = lastVenta.str_cod_venta;
-        const lastCounter = parseInt(lastCode.slice(6)) || 0;
-        counter = lastCounter + 1;
+    let ventaCode;
+
+    while (true) {
+        // Generar el código de venta
+        ventaCode = `${dateCode}${String(counter).padStart(2, '0')}`;
+
+        // Comprobar si el código de venta ya existe en la base de datos
+        const existingVenta = await Ventas.findOne({
+            where: { str_cod_venta: ventaCode },
+            attributes: ['str_cod_venta']
+        });
+
+        if (!existingVenta) {
+            // Si no existe, salir del bucle
+            break;
+        }
+
+        // Si existe, incrementar el contador y volver a intentarlo
+        counter++;
     }
 
-    // Generar el nuevo código
-    const ventaCode = `${dateCode}${String(counter).padStart(2, '0')}`;
     return ventaCode;
 };
+
+
+
+//VENTA DE RECETA
 
 export const venderReceta = async (id_receta, req, res, t) => {
     const { medicamentos } = req.body;
     try {
+        
         const codigo = await generateVentaCode(); // Genera un código de venta único
-        console.log('HOLAAAAAAAAAAAAAAAAA', codigo);
         for (const medicamento of medicamentos) {
             const existingRecord = await Recetas_medicacion.findOne({
                 where: {
